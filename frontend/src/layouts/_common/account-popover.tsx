@@ -2,9 +2,7 @@ import { m } from 'framer-motion';
 // @mui
 import { alpha } from '@mui/material/styles';
 import Box from '@mui/material/Box';
-import Stack from '@mui/material/Stack';
 import Avatar from '@mui/material/Avatar';
-import Divider from '@mui/material/Divider';
 import MenuItem from '@mui/material/MenuItem';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
@@ -17,23 +15,6 @@ import { useAuthContext } from 'src/auth/hooks';
 // components
 import { varHover } from 'src/components/animate';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
-
-// ----------------------------------------------------------------------
-
-const OPTIONS = [
-  {
-    label: 'Home',
-    linkTo: '/',
-  },
-  {
-    label: 'Profile',
-    linkTo: '/#1',
-  },
-  {
-    label: 'Settings',
-    linkTo: '/#2',
-  },
-];
 
 // ----------------------------------------------------------------------
 
@@ -54,11 +35,6 @@ export default function AccountPopover() {
     } catch (error) {
       console.error(error);
     }
-  };
-
-  const handleClickItem = (path: string) => {
-    popover.onClose();
-    router.push(path);
   };
 
   return (
@@ -100,18 +76,6 @@ export default function AccountPopover() {
             {user?.email}
           </Typography>
         </Box>
-
-        <Divider sx={{ borderStyle: 'dashed' }} />
-
-        <Stack sx={{ p: 1 }}>
-          {OPTIONS.map((option) => (
-            <MenuItem key={option.label} onClick={() => handleClickItem(option.linkTo)}>
-              {option.label}
-            </MenuItem>
-          ))}
-        </Stack>
-
-        <Divider sx={{ borderStyle: 'dashed' }} />
 
         <MenuItem
           onClick={handleLogout}

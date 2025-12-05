@@ -18,8 +18,6 @@ import { HEADER, NAV } from '../config-layout';
 import Searchbar from './searchbar';
 import AccountPopover from './account-popover';
 import SettingsButton from './settings-button';
-import LanguagePopover from './language-popover';
-import ContactsPopover from './contacts-popover';
 import NotificationsPopover from './notifications-popover';
 
 // ----------------------------------------------------------------------
@@ -62,11 +60,7 @@ export default function Header({ onOpenNav }: Props) {
         justifyContent="flex-end"
         spacing={{ xs: 0.5, sm: 1 }}
       >
-        <LanguagePopover />
-
         <NotificationsPopover />
-
-        <ContactsPopover />
 
         <SettingsButton />
 
