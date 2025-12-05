@@ -1,7 +1,7 @@
 import { Suspense, lazy } from 'react';
 import { Outlet } from 'react-router-dom';
 // auth
-import { AuthGuard } from 'src/auth/guard';
+import { InvestorGuard } from 'src/auth/guard';
 // layouts
 import InvestorLayout from 'src/layouts/investor';
 // components
@@ -19,13 +19,13 @@ export const investorDashboardRoutes = [
   {
     path: 'investor',
     element: (
-      <AuthGuard>
+      <InvestorGuard>
         <InvestorLayout>
           <Suspense fallback={<LoadingScreen />}>
             <Outlet />
           </Suspense>
         </InvestorLayout>
-      </AuthGuard>
+      </InvestorGuard>
     ),
     children: [
       { element: <InvestorPage />, index: true },

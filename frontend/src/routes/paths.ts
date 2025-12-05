@@ -40,4 +40,8 @@ export const paths = {
     earnings: `${ROOTS.INVESTOR}/earnings`,
     settings: `${ROOTS.INVESTOR}/settings`,
   },
+  // ERROR
+  error: {
+    noPermission: '/no-permission',
+  },
 };

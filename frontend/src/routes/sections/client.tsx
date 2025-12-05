@@ -1,7 +1,7 @@
 import { Suspense, lazy } from 'react';
 import { Outlet } from 'react-router-dom';
 // auth
-import { AuthGuard } from 'src/auth/guard';
+import { ClientGuard } from 'src/auth/guard';
 // layouts
 import ClientLayout from 'src/layouts/client';
 // components
@@ -20,13 +20,13 @@ export const clientRoutes = [
   {
     path: 'client',
     element: (
-      <AuthGuard>
+      <ClientGuard>
         <ClientLayout>
           <Suspense fallback={<LoadingScreen />}>
             <Outlet />
           </Suspense>
         </ClientLayout>
-      </AuthGuard>
+      </ClientGuard>
     ),
     children: [
       { element: <ClientPage />, index: true },
