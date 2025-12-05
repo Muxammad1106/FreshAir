@@ -19,8 +19,8 @@ export const setSession = (accessToken: string | null) => {
   if (accessToken) {
     sessionStorage.setItem('accessToken', accessToken);
 
-    // Set axios header for consistency (even though we're mocking)
-    axios.defaults.headers.common.Authorization = `Bearer ${accessToken}`;
+    // Set axios header with Token format (as required by Django backend)
+    axios.defaults.headers.common.Authorization = `Token ${accessToken}`;
   } else {
     sessionStorage.removeItem('accessToken');
 
