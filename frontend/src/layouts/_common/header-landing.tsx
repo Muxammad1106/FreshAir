@@ -29,7 +29,7 @@ type HeaderLandingProps = {
   navItems?: Array<{ label: string; href: string }>;
   ctaLabel?: string;
   ctaHref?: string;
-  signInRole?: 'client' | 'investor';
+  signInRole?: 'customer' | 'investor';
 };
 
 export default function HeaderLanding({ navItems = [], ctaLabel, ctaHref, signInRole }: HeaderLandingProps) {

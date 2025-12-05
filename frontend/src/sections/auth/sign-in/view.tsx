@@ -35,18 +35,18 @@ export default function SignInView() {
   const [searchParams] = useSearchParams();
 
   const [errorMsg, setErrorMsg] = useState('');
-  const [role, setRole] = useState<'client' | 'investor'>('client');
+  const [role, setRole] = useState<'customer' | 'investor'>('customer');
 
   const password = useBoolean();
 
   // Get role from query parameter or storage
   useEffect(() => {
     const roleParam = searchParams.get('role');
-    if (roleParam === 'investor' || roleParam === 'client') {
+    if (roleParam === 'investor' || roleParam === 'customer') {
       setRole(roleParam);
       sessionStorage.setItem('userRole', roleParam);
     } else {
-      const storedRole = (sessionStorage.getItem('userRole') as 'client' | 'investor') || 'client';
+      const storedRole = (sessionStorage.getItem('userRole') as 'customer' | 'investor') || 'customer';
       setRole(storedRole);
     }
   }, [searchParams]);
@@ -76,14 +76,11 @@ export default function SignInView() {
     async (data: FormValuesProps) => {
       try {
         setErrorMsg('');
-        await login?.(data.email, data.password, role);
+        // Login returns role from backend response
+        const userRole = await login?.(data.email, data.password, role);
 
-        // Get role from user context after login (role is determined by backend)
-        const userRole = sessionStorage.getItem('userRole') as 'client' | 'investor';
-        const redirectRole = userRole || role;
-
-        // Redirect based on actual user role
-        if (redirectRole === 'investor') {
+        // Redirect based on role from backend response
+        if (userRole === 'investor') {
           navigate(paths.investor.root);
         } else {
           navigate(paths.client.root);
@@ -113,7 +110,7 @@ export default function SignInView() {
       <Stack direction="row" spacing={0.5}>
         <Typography variant="body2">New user?</Typography>
 
-        <Link component={RouterLink} href={paths.auth.signUp} variant="subtitle2">
+        <Link component={RouterLink} href={`${paths.auth.signUp}?role=${role}`} variant="subtitle2">
           Create an account
         </Link>
       </Stack>

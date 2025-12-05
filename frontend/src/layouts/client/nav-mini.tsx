@@ -50,7 +50,7 @@ export default function ClientNavMini() {
         <NavSectionMini
           data={navData}
           config={{
-            currentRole: (user?.role as string) || 'client',
+            currentRole: (user?.role as string) || 'customer',
           }}
         />
       </Stack>

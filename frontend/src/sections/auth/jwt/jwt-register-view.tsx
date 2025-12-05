@@ -32,6 +32,7 @@ type FormValuesProps = {
   password: string;
   firstName: string;
   lastName: string;
+  phone?: string;
 };
 
 export default function JwtRegisterView() {
@@ -39,7 +40,7 @@ export default function JwtRegisterView() {
   const navigate = useNavigate();
 
   const [errorMsg, setErrorMsg] = useState('');
-  const [role, setRole] = useState<'client' | 'investor'>('client');
+  const [role, setRole] = useState<'customer' | 'investor'>('customer');
 
   const searchParams = useSearchParams();
 
@@ -50,11 +51,11 @@ export default function JwtRegisterView() {
   // Get role from query parameter
   useEffect(() => {
     const roleParam = searchParams.get('role');
-    if (roleParam === 'investor' || roleParam === 'client') {
+    if (roleParam === 'investor' || roleParam === 'customer') {
       setRole(roleParam);
       sessionStorage.setItem('userRole', roleParam);
     } else {
-      sessionStorage.setItem('userRole', 'client');
+      sessionStorage.setItem('userRole', 'customer');
     }
   }, [searchParams]);
 
@@ -63,6 +64,7 @@ export default function JwtRegisterView() {
     lastName: Yup.string().required('Last name required'),
     email: Yup.string().required('Email is required').email('Email must be a valid email address'),
     password: Yup.string().required('Password is required'),
+    phone: Yup.string(),
   });
 
   const defaultValues = {
@@ -70,6 +72,7 @@ export default function JwtRegisterView() {
     lastName: '',
     email: '',
     password: '',
+    phone: '',
   };
 
   const methods = useForm<FormValuesProps>({
@@ -87,10 +90,10 @@ export default function JwtRegisterView() {
     async (data: FormValuesProps) => {
       try {
         setErrorMsg('');
-        await register?.(data.email, data.password, data.firstName, data.lastName, role);
+        await register?.(data.email, data.password, data.firstName, data.lastName, role, data.phone);
 
         // Get role from user context after registration (role is determined by backend)
-        const userRole = sessionStorage.getItem('userRole') as 'client' | 'investor';
+        const userRole = sessionStorage.getItem('userRole') as 'customer' | 'investor';
         const redirectRole = userRole || role;
 
         // Redirect based on role
@@ -157,6 +160,8 @@ export default function JwtRegisterView() {
         </Stack>
 
         <RHFTextField name="email" label="Email address" />
+
+        <RHFTextField name="phone" label="Phone (optional)" />
 
         <RHFTextField
           name="password"

@@ -1,6 +1,3 @@
-// utils
-import axios from 'src/utils/axios';
-
 // ----------------------------------------------------------------------
 
 /**
@@ -28,20 +25,19 @@ export const isValidToken = (accessToken: string): boolean => {
 
 /**
  * Set authentication session
- * Stores token in sessionStorage and sets axios default header
+ * Stores token in sessionStorage
+ * Note: Token is automatically added by axios interceptor for protected endpoints
  * @param accessToken - Token string or null to clear session
  */
 export const setSession = (accessToken: string | null): void => {
   if (accessToken) {
     sessionStorage.setItem('accessToken', accessToken);
-
-    // Set axios header with Token format (as required by Django backend)
-    axios.defaults.headers.common.Authorization = `Token ${accessToken}`;
+    // Token will be automatically added by axios interceptor for protected endpoints
+    // We don't set it globally to avoid sending it to public endpoints (login, register)
   } else {
     sessionStorage.removeItem('accessToken');
     sessionStorage.removeItem('userRole');
-
-    delete axios.defaults.headers.common.Authorization;
+    // Token removal is handled by interceptor checking sessionStorage
   }
 };
 
@@ -49,6 +45,4 @@ export const setSession = (accessToken: string | null): void => {
  * Get stored access token
  * @returns Token string or null if not found
  */
-export const getSession = (): string | null => {
-  return sessionStorage.getItem('accessToken');
-};
+export const getSession = (): string | null => sessionStorage.getItem('accessToken');

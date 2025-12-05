@@ -40,7 +40,7 @@ function ClientNavHorizontal() {
         <NavSectionHorizontal
           data={navData}
           config={{
-            currentRole: (user?.role as string) || 'client',
+            currentRole: (user?.role as string) || 'customer',
           }}
         />
       </Toolbar>

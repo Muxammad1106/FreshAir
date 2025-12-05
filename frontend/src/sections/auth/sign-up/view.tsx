@@ -30,6 +30,7 @@ type FormValuesProps = {
   password: string;
   firstName: string;
   lastName: string;
+  phone?: string;
 };
 
 export default function SignUpView() {
@@ -38,18 +39,18 @@ export default function SignUpView() {
   const [searchParams] = useSearchParams();
 
   const [errorMsg, setErrorMsg] = useState('');
-  const [role, setRole] = useState<'client' | 'investor'>('client');
+  const [role, setRole] = useState<'customer' | 'investor'>('customer');
 
   const password = useBoolean();
 
   // Get role from query parameter
   useEffect(() => {
     const roleParam = searchParams.get('role');
-    if (roleParam === 'investor' || roleParam === 'client') {
+    if (roleParam === 'investor' || roleParam === 'customer') {
       setRole(roleParam);
       sessionStorage.setItem('userRole', roleParam);
     } else {
-      sessionStorage.setItem('userRole', 'client');
+      sessionStorage.setItem('userRole', 'customer');
     }
   }, [searchParams]);
 
@@ -58,6 +59,7 @@ export default function SignUpView() {
     lastName: Yup.string().required('Last name required'),
     email: Yup.string().required('Email is required').email('Email must be a valid email address'),
     password: Yup.string().required('Password is required'),
+    phone: Yup.string(),
   });
 
   const defaultValues = {
@@ -65,6 +67,7 @@ export default function SignUpView() {
     lastName: '',
     email: '',
     password: '',
+    phone: '',
   };
 
   const methods = useForm<FormValuesProps>({
@@ -82,10 +85,10 @@ export default function SignUpView() {
     async (data: FormValuesProps) => {
       try {
         setErrorMsg('');
-        await register?.(data.email, data.password, data.firstName, data.lastName, role);
+        await register?.(data.email, data.password, data.firstName, data.lastName, role, data.phone);
 
         // Get role from user context after registration (role is determined by backend)
-        const userRole = sessionStorage.getItem('userRole') as 'client' | 'investor';
+        const userRole = sessionStorage.getItem('userRole') as 'customer' | 'investor';
         const redirectRole = userRole || role;
 
         // Redirect based on actual user role
@@ -121,7 +124,7 @@ export default function SignUpView() {
       <Stack direction="row" spacing={0.5}>
         <Typography variant="body2">Already have an account?</Typography>
 
-        <Link href={paths.auth.signIn} component={RouterLink} variant="subtitle2">
+        <Link href={`${paths.auth.signIn}?role=${role}`} component={RouterLink} variant="subtitle2">
           Sign in
         </Link>
       </Stack>
@@ -139,6 +142,8 @@ export default function SignUpView() {
         </Stack>
 
         <RHFTextField name="email" label="Email address" />
+
+        <RHFTextField name="phone" label="Phone (optional)" />
 
         <RHFTextField
           name="password"

@@ -24,7 +24,7 @@ export default function ClientLandingLayout({ children }: Props) {
         navItems={homeNavItems}
         ctaLabel="Стать инвестором"
         ctaHref={paths.home.investor}
-        signInRole="client"
+        signInRole="customer"
       />
       <Box component="main">{children}</Box>
     </>

@@ -52,7 +52,7 @@ export default function ClientNavVertical({ openNav, onCloseNav }: Props) {
       <NavSectionVertical
         data={navData}
         config={{
-          currentRole: (user?.role as string) || 'client',
+          currentRole: (user?.role as string) || 'customer',
         }}
       />
 

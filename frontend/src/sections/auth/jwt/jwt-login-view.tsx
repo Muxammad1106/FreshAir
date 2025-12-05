@@ -35,7 +35,7 @@ export default function JwtLoginView() {
   const navigate = useNavigate();
 
   const [errorMsg, setErrorMsg] = useState('');
-  const [role, setRole] = useState<'client' | 'investor'>('client');
+  const [role, setRole] = useState<'customer' | 'investor'>('customer');
 
   const searchParams = useSearchParams();
 
@@ -46,11 +46,11 @@ export default function JwtLoginView() {
   // Get role from query parameter or storage
   useEffect(() => {
     const roleParam = searchParams.get('role');
-    if (roleParam === 'investor' || roleParam === 'client') {
+    if (roleParam === 'investor' || roleParam === 'customer') {
       setRole(roleParam);
       sessionStorage.setItem('userRole', roleParam);
     } else {
-      const storedRole = (sessionStorage.getItem('userRole') as 'client' | 'investor') || 'client';
+      const storedRole = (sessionStorage.getItem('userRole') as 'customer' | 'investor') || 'customer';
       setRole(storedRole);
     }
   }, [searchParams]);
@@ -80,17 +80,14 @@ export default function JwtLoginView() {
     async (data: FormValuesProps) => {
       try {
         setErrorMsg('');
-        await login?.(data.email, data.password, role);
+        // Login returns role from backend response
+        const userRole = await login?.(data.email, data.password, role);
 
-        // Get role from user context after login (role is determined by backend)
-        const userRole = sessionStorage.getItem('userRole') as 'client' | 'investor';
-        const redirectRole = userRole || role;
-
-        // Redirect based on role or returnTo
+        // Redirect based on role from backend response or returnTo
         if (returnTo) {
           window.location.href = returnTo;
         } else {
-          const redirectPath = redirectRole === 'investor' ? paths.investor.root : paths.client.root;
+          const redirectPath = userRole === 'investor' ? paths.investor.root : paths.client.root;
           navigate(redirectPath);
         }
       } catch (error: any) {
@@ -111,7 +108,7 @@ export default function JwtLoginView() {
       <Stack direction="row" spacing={0.5}>
         <Typography variant="body2">New user?</Typography>
 
-        <Link component={RouterLink} href={paths.auth.jwt.register} variant="subtitle2">
+        <Link component={RouterLink} href={`${paths.auth.jwt.register}?role=${role}`} variant="subtitle2">
           Create an account
         </Link>
       </Stack>

@@ -1,15 +1,16 @@
 import { useEffect, useReducer, useCallback, useMemo } from 'react';
 //
+import { authService, AuthResponse } from 'src/services';
+//
 import { AuthContext } from './auth-context';
 import { isValidToken, setSession, getSession } from './utils';
-import { ActionMapType, AuthStateType, AuthUserType } from '../../types';
-import { authService, AuthResponse } from 'src/services';
+import { ActionMapType, AuthStateType, AuthUserType, JWTContextType } from '../../types';
 
 // ----------------------------------------------------------------------
 
 // Helper function to transform backend user data to frontend format
 const transformUser = (userData: AuthResponse['user']): AuthUserType => {
-  const role = userData.role === 'CUSTOMER' ? 'client' : 'investor';
+  const role = userData.role === 'CUSTOMER' ? 'customer' : 'investor';
   
   return {
     id: userData.id.toString(),
@@ -105,7 +106,7 @@ export function AuthProvider({ children }: Props) {
           const transformedUser = transformUser(userData);
           
           // Store role for quick access
-          const role = userData.role === 'CUSTOMER' ? 'client' : 'investor';
+          const role = userData.role === 'CUSTOMER' ? 'customer' : 'investor';
           sessionStorage.setItem('userRole', role);
 
           dispatch({
@@ -151,30 +152,28 @@ export function AuthProvider({ children }: Props) {
 
   // LOGIN - Real API implementation
   const login = useCallback(
-    async (email: string, password: string, role: 'client' | 'investor' = 'client') => {
-      try {
-        const response = await authService.signIn({ email, password });
-        
-        // Store token and set session
-        setSession(response.token);
-        
-        // Store role for quick access
-        const userRole = response.role === 'CUSTOMER' ? 'client' : 'investor';
-        sessionStorage.setItem('userRole', userRole);
+    async (email: string, password: string, role: 'customer' | 'investor' = 'customer') => {
+      const response = await authService.signIn({ email, password });
+      
+      // Store token and set session
+      setSession(response.token);
+      
+      // Get role from backend response
+      const userRole = response.role === 'CUSTOMER' ? 'customer' : 'investor';
+      sessionStorage.setItem('userRole', userRole);
 
-        // Transform and dispatch user data
-        const transformedUser = transformUser(response.user);
-        
-        dispatch({
-          type: Types.LOGIN,
-          payload: {
-            user: transformedUser,
-          },
-        });
-      } catch (error) {
-        // Re-throw error to be handled by the component
-        throw error;
-      }
+      // Transform and dispatch user data
+      const transformedUser = transformUser(response.user);
+      
+      dispatch({
+        type: Types.LOGIN,
+        payload: {
+          user: transformedUser,
+        },
+      });
+
+      // Return role from backend response for redirect
+      return userRole;
     },
     []
   );
@@ -186,40 +185,50 @@ export function AuthProvider({ children }: Props) {
       password: string,
       firstName: string,
       lastName: string,
-      role: 'client' | 'investor' = 'client'
+      role: 'customer' | 'investor' = 'customer',
+      phone?: string
     ) => {
-      try {
-        // Convert frontend role to backend role
-        const backendRole = role === 'client' ? 'CUSTOMER' : 'INVESTOR';
-        const fullName = `${firstName} ${lastName}`.trim();
+      // Convert frontend role to backend role
+      const backendRole = role === 'customer' ? 'CUSTOMER' : 'INVESTOR';
+      const fullName = `${firstName} ${lastName}`.trim();
 
-        const response = await authService.signUp({
-          email,
-          password,
-          full_name: fullName,
-          role: backendRole,
-        });
+      // Prepare sign up data
+      const signUpData: {
+        email: string;
+        password: string;
+        full_name: string;
+        role: 'CUSTOMER' | 'INVESTOR';
+        phone?: string;
+      } = {
+        email,
+        password,
+        full_name: fullName,
+        role: backendRole,
+      };
 
-        // Store token and set session
-        setSession(response.token);
-        
-        // Store role for quick access
-        const userRole = response.role === 'CUSTOMER' ? 'client' : 'investor';
-        sessionStorage.setItem('userRole', userRole);
-
-        // Transform and dispatch user data
-        const transformedUser = transformUser(response.user);
-
-        dispatch({
-          type: Types.REGISTER,
-          payload: {
-            user: transformedUser,
-          },
-        });
-      } catch (error) {
-        // Re-throw error to be handled by the component
-        throw error;
+      // Add phone if provided
+      if (phone && phone.trim()) {
+        signUpData.phone = phone.trim();
       }
+
+      const response = await authService.signUp(signUpData);
+
+      // Store token and set session
+      setSession(response.token);
+      
+      // Store role for quick access
+      const userRole = response.role === 'CUSTOMER' ? 'customer' : 'investor';
+      sessionStorage.setItem('userRole', userRole);
+
+      // Transform and dispatch user data
+      const transformedUser = transformUser(response.user);
+
+      dispatch({
+        type: Types.REGISTER,
+        payload: {
+          user: transformedUser,
+        },
+      });
     },
     []
   );
@@ -247,7 +256,7 @@ export function AuthProvider({ children }: Props) {
 
   const status = state.loading ? 'loading' : checkAuthenticated;
 
-  const memoizedValue = useMemo(
+  const memoizedValue = useMemo<JWTContextType>(
     () => ({
       user: state.user,
       method: 'jwt',

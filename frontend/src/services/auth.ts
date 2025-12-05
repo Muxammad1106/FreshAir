@@ -109,6 +109,7 @@ class AuthService {
    * @returns void
    * @throws Error with API error message
    */
+  // eslint-disable-next-line class-methods-use-this
   async signOut(): Promise<void> {
     try {
       await axiosInstance.post(API_ENDPOINTS.users.signOut);
@@ -123,6 +124,7 @@ class AuthService {
    * @param error - Error object from axios
    * @returns Formatted error message
    */
+  // eslint-disable-next-line class-methods-use-this
   private extractErrorMessage(error: any): string {
     if (!error) {
       return 'An unexpected error occurred';

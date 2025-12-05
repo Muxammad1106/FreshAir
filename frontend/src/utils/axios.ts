@@ -6,12 +6,33 @@ import { HOST_API } from 'src/config-global';
 
 const axiosInstance = axios.create({ baseURL: HOST_API });
 
+// Список публичных endpoints, которые не требуют токена
+const PUBLIC_ENDPOINTS = [
+  '/api/v1/users/auth/login',
+  '/api/v1/users/auth/register',
+  '/api/v1/users/sign-in',
+  '/api/v1/users/sign-up',
+  '/api/v1/users/confirm',
+  '/api/v1/users/reset_link',
+  '/api/v1/users/reset_password',
+];
+
+// Проверка, является ли endpoint публичным
+const isPublicEndpoint = (url: string): boolean => {
+  if (!url) return false;
+  return PUBLIC_ENDPOINTS.some((endpoint) => url.includes(endpoint));
+};
+
 // Request interceptor - автоматически добавляет токен из sessionStorage
+// НО НЕ для публичных endpoints (login, register, etc.)
 axiosInstance.interceptors.request.use(
   (config) => {
-    const token = sessionStorage.getItem('accessToken');
-    if (token) {
-      config.headers.Authorization = `Token ${token}`;
+    // Не добавляем токен для публичных endpoints
+    if (!isPublicEndpoint(config.url || '')) {
+      const token = sessionStorage.getItem('accessToken');
+      if (token) {
+        config.headers.Authorization = `Token ${token}`;
+      }
     }
     return config;
   },

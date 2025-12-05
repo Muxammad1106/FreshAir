@@ -18,8 +18,8 @@ export default function GuestGuard({ children }: GuestGuardProps) {
 
   const check = useCallback(() => {
     if (authenticated) {
-      // Redirect based on user role, default to client
-      const role = (sessionStorage.getItem('userRole') as 'client' | 'investor') || 'client';
+      // Redirect based on user role, default to customer
+      const role = (sessionStorage.getItem('userRole') as 'customer' | 'investor') || 'customer';
       const redirectPath = role === 'investor' ? paths.investor.root : paths.client.root;
       router.replace(redirectPath);
     }
