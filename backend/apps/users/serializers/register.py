@@ -5,10 +5,21 @@ from users.models import User
 
 
 class RegisterSerializer(serializers.ModelSerializer):
-    full_name = serializers.CharField(write_only=True, help_text='Полное имя пользователя')
+    full_name = serializers.CharField(write_only=True, required=True, help_text='Полное имя пользователя (обязательное поле)')
     phone = serializers.CharField(write_only=True, required=False, allow_blank=True, help_text='Номер телефона (опционально)')
-    role = serializers.ChoiceField(choices=[User.ROLE_CUSTOMER, User.ROLE_INVESTOR], help_text='Роль пользователя: CUSTOMER или INVESTOR')
-    budget_usd = serializers.DecimalField(write_only=True, max_digits=12, decimal_places=2, required=False, default=0, help_text='Бюджет инвестора в USD (только для INVESTOR)')
+    role = serializers.ChoiceField(
+        choices=[User.ROLE_CUSTOMER, User.ROLE_INVESTOR], 
+        required=True, 
+        help_text='Роль пользователя: CUSTOMER или INVESTOR (ОБЯЗАТЕЛЬНОЕ поле). Определяет тип пользователя и доступные функции.'
+    )
+    budget_usd = serializers.DecimalField(
+        write_only=True, 
+        max_digits=12, 
+        decimal_places=2, 
+        required=False, 
+        default=0, 
+        help_text='Бюджет инвестора в USD (только для INVESTOR, опционально)'
+    )
 
     def validate_email(self, email):
         User.objects.remove_unverified(email)

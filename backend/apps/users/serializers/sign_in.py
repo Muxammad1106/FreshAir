@@ -4,8 +4,8 @@ from toolkit.utils.serializers import BaseSerializer
 
 
 class SignInSerializer(BaseSerializer):
-    email = serializers.EmailField(required=True, trim_whitespace=True)
-    password = serializers.CharField(required=True, trim_whitespace=False)
+    email = serializers.EmailField(required=True, trim_whitespace=True, help_text='Email пользователя')
+    password = serializers.CharField(required=True, trim_whitespace=False, write_only=True, help_text='Пароль пользователя')
 
     def validate(self, attrs):
         user = authenticate(

@@ -7,9 +7,11 @@ from users.models import User
 
 
 class UserSerializer(ModelSerializer):
+    role = serializers.CharField(read_only=True, help_text='Роль пользователя (CUSTOMER или INVESTOR)')
+    
     class Meta:
         model = User
-        fields = ('id', 'first_name', 'last_name', 'email', 'company')
+        fields = ('id', 'first_name', 'last_name', 'email', 'company', 'role')
         extra_kwargs = {'email': {'read_only': True}}
 
 

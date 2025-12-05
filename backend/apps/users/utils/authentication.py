@@ -36,8 +36,10 @@ def sign_in_response(user, token=None, with_user_data=True, with_permissions=Tru
 
     if with_user_data:
         user_data = UserSerializer(user).data
-        user_data['role'] = user.role
+        if 'role' not in user_data:
+            user_data['role'] = user.role
         result['user'] = user_data
+        result['role'] = user.role
 
     if with_permissions:
         result['permissions'] = list(user.get_all_permissions())
