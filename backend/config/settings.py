@@ -175,6 +175,9 @@ DEFAULT_FIXTURES = [
     # when you run `manage.py fixtures` fixtures below will be loaded.
     'company',
     'users_and_tokens',
+    'freshair_data',
+    'freshair_users',
+    'users_and_tokens',
 ]
 JWT_ALGORITHM = 'HS256'
 TOKEN_EXPIRATION = 7200  # seconds

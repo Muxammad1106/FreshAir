@@ -1,0 +1,605 @@
+# CUSTOMER PROFILES
+-
+    model: "core.CustomerProfile"
+    pk: 1
+    fields:
+        user_id: 10
+        phone: "+998901234567"
+        address: "г. Ташкент, ул. Навои, д. 15, кв. 42"
+        created_at: "2024-01-01 00:00:00+00:00"
+        updated_at: "2024-01-01 00:00:00+00:00"
+
+-
+    model: "core.CustomerProfile"
+    pk: 2
+    fields:
+        user_id: 11
+        phone: "+998902345678"
+        address: "г. Самарканд, ул. Регистан, д. 8"
+        created_at: "2024-01-02 00:00:00+00:00"
+        updated_at: "2024-01-02 00:00:00+00:00"
+
+-
+    model: "core.CustomerProfile"
+    pk: 3
+    fields:
+        user_id: 12
+        phone: "+998903456789"
+        address: "г. Бухара, ул. Бахауддин Накшбанд, д. 25"
+        created_at: "2024-01-03 00:00:00+00:00"
+        updated_at: "2024-01-03 00:00:00+00:00"
+
+# INVESTOR PROFILES
+-
+    model: "core.InvestorProfile"
+    pk: 1
+    fields:
+        user_id: 20
+        phone: "+998904567890"
+        budget_usd: "5000.00"
+        created_at: "2024-01-01 00:00:00+00:00"
+        updated_at: "2024-01-01 00:00:00+00:00"
+
+-
+    model: "core.InvestorProfile"
+    pk: 2
+    fields:
+        user_id: 21
+        phone: "+998905678901"
+        budget_usd: "10000.00"
+        created_at: "2024-01-02 00:00:00+00:00"
+        updated_at: "2024-01-02 00:00:00+00:00"
+
+# ROOMS
+-
+    model: "core.Room"
+    pk: 1
+    fields:
+        customer_id: 10
+        name: "Квартира на Афросиаб"
+        room_type: "HOME"
+        area_m2: 120.0
+        ceiling_height_m: 2.7
+        volume_m3: 324.0
+        address: "г. Ташкент, ул. Навои, д. 15, кв. 42"
+        city: "Ташкент"
+        notes: "Живём втроём, есть дети"
+        created_at: "2024-01-05 00:00:00+00:00"
+        updated_at: "2024-01-05 00:00:00+00:00"
+
+-
+    model: "core.Room"
+    pk: 2
+    fields:
+        customer_id: 10
+        name: "Офис на Регистане"
+        room_type: "COMMERCIAL"
+        area_m2: 250.0
+        ceiling_height_m: 3.0
+        volume_m3: 750.0
+        address: "г. Самарканд, ул. Регистан, д. 12"
+        city: "Самарканд"
+        notes: "Офисное помещение, 15 сотрудников"
+        created_at: "2024-01-06 00:00:00+00:00"
+        updated_at: "2024-01-06 00:00:00+00:00"
+
+-
+    model: "core.Room"
+    pk: 3
+    fields:
+        customer_id: 11
+        name: "Дом в центре"
+        room_type: "HOME"
+        area_m2: 180.0
+        ceiling_height_m: 2.8
+        volume_m3: 504.0
+        address: "г. Самарканд, ул. Регистан, д. 8"
+        city: "Самарканд"
+        notes: "Частный дом, два этажа"
+        created_at: "2024-01-07 00:00:00+00:00"
+        updated_at: "2024-01-07 00:00:00+00:00"
+
+-
+    model: "core.Room"
+    pk: 4
+    fields:
+        customer_id: 12
+        name: "Производственный цех"
+        room_type: "INDUSTRIAL"
+        area_m2: 1000.0
+        ceiling_height_m: 5.0
+        volume_m3: 5000.0
+        address: "г. Бухара, ул. Бахауддин Накшбанд, д. 25"
+        city: "Бухара"
+        notes: "Большое производственное помещение"
+        created_at: "2024-01-08 00:00:00+00:00"
+        updated_at: "2024-01-08 00:00:00+00:00"
+
+# DEVICE TYPES
+-
+    model: "core.DeviceType"
+    pk: 1
+    fields:
+        name: "Purifier X100"
+        device_category: "PURIFIER"
+        recommended_max_area_m2: 150.0
+        recommended_max_volume_m3: 400.0
+        power_watts: 50.0
+        supports_cleaning: true
+        supports_humidifying: false
+        supports_aroma: false
+        created_at: "2024-01-01 00:00:00+00:00"
+        updated_at: "2024-01-01 00:00:00+00:00"
+
+-
+    model: "core.DeviceType"
+    pk: 2
+    fields:
+        name: "Humidifier H50"
+        device_category: "HUMIDIFIER"
+        recommended_max_area_m2: 100.0
+        recommended_max_volume_m3: 300.0
+        power_watts: 30.0
+        supports_cleaning: false
+        supports_humidifying: true
+        supports_aroma: false
+        created_at: "2024-01-01 00:00:00+00:00"
+        updated_at: "2024-01-01 00:00:00+00:00"
+
+-
+    model: "core.DeviceType"
+    pk: 3
+    fields:
+        name: "Combo Pro 200"
+        device_category: "COMBO"
+        recommended_max_area_m2: 200.0
+        recommended_max_volume_m3: 600.0
+        power_watts: 80.0
+        supports_cleaning: true
+        supports_humidifying: true
+        supports_aroma: true
+        created_at: "2024-01-01 00:00:00+00:00"
+        updated_at: "2024-01-01 00:00:00+00:00"
+
+-
+    model: "core.DeviceType"
+    pk: 4
+    fields:
+        name: "Aroma Deluxe"
+        device_category: "AROMA"
+        recommended_max_area_m2: 80.0
+        recommended_max_volume_m3: 200.0
+        power_watts: 15.0
+        supports_cleaning: false
+        supports_humidifying: false
+        supports_aroma: true
+        created_at: "2024-01-01 00:00:00+00:00"
+        updated_at: "2024-01-01 00:00:00+00:00"
+
+# DEVICE INSTANCES
+-
+    model: "core.DeviceInstance"
+    pk: 1
+    fields:
+        device_type_id: 3
+        room_id: 1
+        customer_id: 10
+        status: "ACTIVE"
+        serial_number: "COMBO-2024-001"
+        internal_code: "D001"
+        is_power_on: true
+        installation_date: "2024-01-10 10:00:00+00:00"
+        last_service_date: "2024-01-10 10:00:00+00:00"
+        created_at: "2024-01-09 00:00:00+00:00"
+        updated_at: "2024-01-10 10:00:00+00:00"
+
+-
+    model: "core.DeviceInstance"
+    pk: 2
+    fields:
+        device_type_id: 1
+        room_id: 2
+        customer_id: 10
+        status: "ACTIVE"
+        serial_number: "PUR-2024-002"
+        internal_code: "D002"
+        is_power_on: true
+        installation_date: "2024-01-11 14:00:00+00:00"
+        last_service_date: "2024-01-11 14:00:00+00:00"
+        created_at: "2024-01-10 00:00:00+00:00"
+        updated_at: "2024-01-11 14:00:00+00:00"
+
+-
+    model: "core.DeviceInstance"
+    pk: 3
+    fields:
+        device_type_id: 2
+        room_id: 3
+        customer_id: 11
+        status: "ACTIVE"
+        serial_number: "HUM-2024-003"
+        internal_code: "D003"
+        is_power_on: true
+        installation_date: "2024-01-12 09:00:00+00:00"
+        last_service_date: "2024-01-12 09:00:00+00:00"
+        created_at: "2024-01-11 00:00:00+00:00"
+        updated_at: "2024-01-12 09:00:00+00:00"
+
+-
+    model: "core.DeviceInstance"
+    pk: 4
+    fields:
+        device_type_id: 3
+        room_id: 4
+        customer_id: 12
+        status: "ACTIVE"
+        serial_number: "COMBO-2024-004"
+        internal_code: "D004"
+        is_power_on: true
+        installation_date: "2024-01-13 11:00:00+00:00"
+        last_service_date: "2024-01-13 11:00:00+00:00"
+        created_at: "2024-01-12 00:00:00+00:00"
+        updated_at: "2024-01-13 11:00:00+00:00"
+
+-
+    model: "core.DeviceInstance"
+    pk: 5
+    fields:
+        device_type_id: 1
+        room_id: 1
+        customer_id: 10
+        status: "INSTALLING"
+        serial_number: "PUR-2024-005"
+        internal_code: "D005"
+        is_power_on: false
+        created_at: "2024-01-14 00:00:00+00:00"
+        updated_at: "2024-01-14 00:00:00+00:00"
+
+# CUSTOMER ORDERS
+-
+    model: "core.CustomerOrder"
+    pk: 1
+    fields:
+        customer_id: 10
+        room_id: 1
+        status: "ACTIVE"
+        comment: "Нужно установить систему до Нового года"
+        created_at: "2024-01-05 10:00:00+00:00"
+        updated_at: "2024-01-10 10:00:00+00:00"
+
+-
+    model: "core.CustomerOrder"
+    pk: 2
+    fields:
+        customer_id: 10
+        room_id: 2
+        status: "ACTIVE"
+        comment: "Офисное помещение"
+        created_at: "2024-01-06 11:00:00+00:00"
+        updated_at: "2024-01-11 14:00:00+00:00"
+
+-
+    model: "core.CustomerOrder"
+    pk: 3
+    fields:
+        customer_id: 11
+        room_id: 3
+        status: "ACTIVE"
+        comment: "Частный дом"
+        created_at: "2024-01-07 12:00:00+00:00"
+        updated_at: "2024-01-12 09:00:00+00:00"
+
+-
+    model: "core.CustomerOrder"
+    pk: 4
+    fields:
+        customer_id: 12
+        room_id: 4
+        status: "PENDING"
+        comment: "Производственное помещение"
+        created_at: "2024-01-08 13:00:00+00:00"
+        updated_at: "2024-01-08 13:00:00+00:00"
+
+# ORDER DEVICES
+-
+    model: "core.OrderDevice"
+    pk: 1
+    fields:
+        order_id: 1
+        device_id: 1
+        created_at: "2024-01-09 00:00:00+00:00"
+        updated_at: "2024-01-09 00:00:00+00:00"
+
+-
+    model: "core.OrderDevice"
+    pk: 2
+    fields:
+        order_id: 2
+        device_id: 2
+        created_at: "2024-01-10 00:00:00+00:00"
+        updated_at: "2024-01-10 00:00:00+00:00"
+
+-
+    model: "core.OrderDevice"
+    pk: 3
+    fields:
+        order_id: 3
+        device_id: 3
+        created_at: "2024-01-11 00:00:00+00:00"
+        updated_at: "2024-01-11 00:00:00+00:00"
+
+-
+    model: "core.OrderDevice"
+    pk: 4
+    fields:
+        order_id: 1
+        device_id: 5
+        created_at: "2024-01-14 00:00:00+00:00"
+        updated_at: "2024-01-14 00:00:00+00:00"
+
+# DEVICE METRICS
+-
+    model: "core.DeviceMetric"
+    pk: 1
+    fields:
+        device_id: 1
+        timestamp: "2024-12-15 10:00:00+00:00"
+        pm25: 12.5
+        humidity: 45.0
+        cleaned_air_volume_m3: 150.5
+        filter_wear_percent: 25.0
+        liquid_level_percent: 80.0
+        created_at: "2024-12-15 10:00:00+00:00"
+        updated_at: "2024-12-15 10:00:00+00:00"
+
+-
+    model: "core.DeviceMetric"
+    pk: 2
+    fields:
+        device_id: 1
+        timestamp: "2024-12-15 11:00:00+00:00"
+        pm25: 10.2
+        humidity: 48.0
+        cleaned_air_volume_m3: 165.3
+        filter_wear_percent: 25.5
+        liquid_level_percent: 78.0
+        created_at: "2024-12-15 11:00:00+00:00"
+        updated_at: "2024-12-15 11:00:00+00:00"
+
+-
+    model: "core.DeviceMetric"
+    pk: 3
+    fields:
+        device_id: 1
+        timestamp: "2024-12-15 12:00:00+00:00"
+        pm25: 8.5
+        humidity: 50.0
+        cleaned_air_volume_m3: 180.0
+        filter_wear_percent: 26.0
+        liquid_level_percent: 75.0
+        created_at: "2024-12-15 12:00:00+00:00"
+        updated_at: "2024-12-15 12:00:00+00:00"
+
+-
+    model: "core.DeviceMetric"
+    pk: 4
+    fields:
+        device_id: 2
+        timestamp: "2024-12-15 10:00:00+00:00"
+        pm25: 15.0
+        humidity: 42.0
+        cleaned_air_volume_m3: 200.0
+        filter_wear_percent: 30.0
+        liquid_level_percent: null
+        created_at: "2024-12-15 10:00:00+00:00"
+        updated_at: "2024-12-15 10:00:00+00:00"
+
+-
+    model: "core.DeviceMetric"
+    pk: 5
+    fields:
+        device_id: 2
+        timestamp: "2024-12-15 11:00:00+00:00"
+        pm25: 13.5
+        humidity: 44.0
+        cleaned_air_volume_m3: 220.5
+        filter_wear_percent: 30.5
+        liquid_level_percent: null
+        created_at: "2024-12-15 11:00:00+00:00"
+        updated_at: "2024-12-15 11:00:00+00:00"
+
+-
+    model: "core.DeviceMetric"
+    pk: 6
+    fields:
+        device_id: 3
+        timestamp: "2024-12-15 10:00:00+00:00"
+        pm25: null
+        humidity: 55.0
+        cleaned_air_volume_m3: null
+        filter_wear_percent: null
+        liquid_level_percent: 90.0
+        created_at: "2024-12-15 10:00:00+00:00"
+        updated_at: "2024-12-15 10:00:00+00:00"
+
+-
+    model: "core.DeviceMetric"
+    pk: 7
+    fields:
+        device_id: 4
+        timestamp: "2024-12-15 10:00:00+00:00"
+        pm25: 20.0
+        humidity: 40.0
+        cleaned_air_volume_m3: 500.0
+        filter_wear_percent: 15.0
+        liquid_level_percent: 85.0
+        created_at: "2024-12-15 10:00:00+00:00"
+        updated_at: "2024-12-15 10:00:00+00:00"
+
+# INVESTMENTS
+-
+    model: "core.Investment"
+    pk: 1
+    fields:
+        investor_id: 20
+        device_id: 1
+        amount_usd: "500.00"
+        status: "PAID"
+        paid_at: "2024-01-15 10:00:00+00:00"
+        created_at: "2024-01-15 09:00:00+00:00"
+        updated_at: "2024-01-15 10:00:00+00:00"
+
+-
+    model: "core.Investment"
+    pk: 2
+    fields:
+        investor_id: 20
+        device_id: 2
+        amount_usd: "750.00"
+        status: "PAID"
+        paid_at: "2024-01-16 11:00:00+00:00"
+        created_at: "2024-01-16 10:00:00+00:00"
+        updated_at: "2024-01-16 11:00:00+00:00"
+
+-
+    model: "core.Investment"
+    pk: 3
+    fields:
+        investor_id: 21
+        device_id: 3
+        amount_usd: "300.00"
+        status: "PAID"
+        paid_at: "2024-01-17 12:00:00+00:00"
+        created_at: "2024-01-17 11:00:00+00:00"
+        updated_at: "2024-01-17 12:00:00+00:00"
+
+-
+    model: "core.Investment"
+    pk: 4
+    fields:
+        investor_id: 21
+        device_id: 4
+        amount_usd: "1000.00"
+        status: "PAID"
+        paid_at: "2024-01-18 13:00:00+00:00"
+        created_at: "2024-01-18 12:00:00+00:00"
+        updated_at: "2024-01-18 13:00:00+00:00"
+
+-
+    model: "core.Investment"
+    pk: 5
+    fields:
+        investor_id: 20
+        device_id: 4
+        amount_usd: "500.00"
+        status: "PENDING"
+        paid_at: null
+        created_at: "2024-12-15 14:00:00+00:00"
+        updated_at: "2024-12-15 14:00:00+00:00"
+
+# PAYMENTS
+-
+    model: "core.Payment"
+    pk: 1
+    fields:
+        investment_id: 1
+        external_id: "PAY-001"
+        transaction_id: "TXN-2024-001"
+        status: "PAID"
+        amount: "500.00"
+        created_at: "2024-01-15 09:30:00+00:00"
+        updated_at: "2024-01-15 10:00:00+00:00"
+
+-
+    model: "core.Payment"
+    pk: 2
+    fields:
+        investment_id: 2
+        external_id: "PAY-002"
+        transaction_id: "TXN-2024-002"
+        status: "PAID"
+        amount: "750.00"
+        created_at: "2024-01-16 10:30:00+00:00"
+        updated_at: "2024-01-16 11:00:00+00:00"
+
+-
+    model: "core.Payment"
+    pk: 3
+    fields:
+        investment_id: 3
+        external_id: "PAY-003"
+        transaction_id: "TXN-2024-003"
+        status: "PAID"
+        amount: "300.00"
+        created_at: "2024-01-17 11:30:00+00:00"
+        updated_at: "2024-01-17 12:00:00+00:00"
+
+-
+    model: "core.Payment"
+    pk: 4
+    fields:
+        investment_id: 4
+        external_id: "PAY-004"
+        transaction_id: "TXN-2024-004"
+        status: "PAID"
+        amount: "1000.00"
+        created_at: "2024-01-18 12:30:00+00:00"
+        updated_at: "2024-01-18 13:00:00+00:00"
+
+# INVESTMENT STAT SNAPSHOTS
+-
+    model: "core.InvestmentStatSnapshot"
+    pk: 1
+    fields:
+        investment_id: 1
+        device_id: 1
+        timestamp: "2024-12-15 12:00:00+00:00"
+        cumulative_cleaned_air_volume_m3: 495.8
+        cumulative_humidity_hours: 143.0
+        projected_return_amount: "125.00"
+        projected_return_date: "2025-06-15"
+        created_at: "2024-12-15 12:00:00+00:00"
+        updated_at: "2024-12-15 12:00:00+00:00"
+
+-
+    model: "core.InvestmentStatSnapshot"
+    pk: 2
+    fields:
+        investment_id: 2
+        device_id: 2
+        timestamp: "2024-12-15 12:00:00+00:00"
+        cumulative_cleaned_air_volume_m3: 420.5
+        cumulative_humidity_hours: 86.0
+        projected_return_amount: "187.50"
+        projected_return_date: "2025-07-16"
+        created_at: "2024-12-15 12:00:00+00:00"
+        updated_at: "2024-12-15 12:00:00+00:00"
+
+-
+    model: "core.InvestmentStatSnapshot"
+    pk: 3
+    fields:
+        investment_id: 3
+        device_id: 3
+        timestamp: "2024-12-15 12:00:00+00:00"
+        cumulative_cleaned_air_volume_m3: 0.0
+        cumulative_humidity_hours: 1.0
+        projected_return_amount: "75.00"
+        projected_return_date: "2025-07-17"
+        created_at: "2024-12-15 12:00:00+00:00"
+        updated_at: "2024-12-15 12:00:00+00:00"
+
+-
+    model: "core.InvestmentStatSnapshot"
+    pk: 4
+    fields:
+        investment_id: 4
+        device_id: 4
+        timestamp: "2024-12-15 12:00:00+00:00"
+        cumulative_cleaned_air_volume_m3: 500.0
+        cumulative_humidity_hours: 1.0
+        projected_return_amount: "250.00"
+        projected_return_date: "2025-07-18"
+        created_at: "2024-12-15 12:00:00+00:00"
+        updated_at: "2024-12-15 12:00:00+00:00"
+

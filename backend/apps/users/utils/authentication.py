@@ -35,7 +35,9 @@ def sign_in_response(user, token=None, with_user_data=True, with_permissions=Tru
     result = {'token': token.key, 'refresh': token.refresh}
 
     if with_user_data:
-        result['user'] = UserSerializer(user).data
+        user_data = UserSerializer(user).data
+        user_data['role'] = user.role
+        result['user'] = user_data
 
     if with_permissions:
         result['permissions'] = list(user.get_all_permissions())

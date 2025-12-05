@@ -6,8 +6,13 @@ from users.views.sign_in import SignInView
 from users.views.sign_out import SignOutView
 from users.views.sign_up import SignUpView, ConfirmView, ResendConfirmationEmailView
 from users.views.users import UsersListView, UserSettingsView, ChangePasswordView
+from users.views.register import RegisterView
+from users.views.me import MeView
 
 urlpatterns = [
+    path('auth/register', RegisterView.as_view(), name='register'),
+    path('auth/login', SignInView.as_view(), name='login'),
+    path('me', MeView.as_view(), name='me'),
     path('sign-in', SignInView.as_view(), name='signin'),
     path('sign-up', SignUpView.as_view(), name='signup'),
     path('refresh', RefreshView.as_view(), name='refresh'),

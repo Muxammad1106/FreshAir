@@ -10,11 +10,11 @@ class SignInSerializer(BaseSerializer):
     def validate(self, attrs):
         user = authenticate(
             request=self.context.get('request'),
-            username=attrs.get('email').lower(),  # Using email as username.
+            username=attrs.get('email').lower(),
             password=attrs.get('password')
         )
 
-        if not user or not user.company:
+        if not user:
             msg = 'Указан неправильный логин или пароль'
             raise serializers.ValidationError(msg, code='authorization')
 

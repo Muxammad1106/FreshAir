@@ -6,6 +6,12 @@ from users.utils.authentication import sign_in_response
 
 
 class SignInView(GenericAPIView):
+    """
+    Вход в систему.
+    
+    Универсальный вход для клиентов и инвесторов.
+    Принимает email и password, возвращает токен и данные пользователя с ролью.
+    """
     permission_classes = (AllowAny,)
     serializer_class = SignInSerializer
 

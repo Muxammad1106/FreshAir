@@ -12,10 +12,18 @@ from users.utils.fields import expires_default, expires_hour
 
 
 class User(AbstractUser):
-    email = models.EmailField(unique=True)  # override default email field
+    ROLE_CUSTOMER = 'CUSTOMER'
+    ROLE_INVESTOR = 'INVESTOR'
+    ROLE_CHOICES = [
+        (ROLE_CUSTOMER, 'Customer'),
+        (ROLE_INVESTOR, 'Investor'),
+    ]
+
+    email = models.EmailField(unique=True)
     confirmation_code = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     verified_at = models.DateTimeField(null=True, blank=True)
     company = models.ForeignKey('core.Company', models.CASCADE, null=True, blank=True)
+    role = models.CharField(max_length=20, choices=ROLE_CHOICES, null=True, blank=True)
     objects = UsersManager()
 
     class Meta(AbstractUser.Meta):

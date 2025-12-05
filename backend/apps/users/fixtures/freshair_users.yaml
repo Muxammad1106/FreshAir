@@ -1,0 +1,109 @@
+# USERS - Customers
+-
+    model: "users.User"
+    pk: 10
+    fields:
+        email: "customer1@freshair.com"
+        username: "customer1@freshair.com"
+        first_name: "Иван"
+        last_name: "Иванов"
+        role: "CUSTOMER"
+        password: "pbkdf2_sha256$120000$Q3ICPM6omVjp$liGZrVdJWPLpkne0vjBLnJr4S+v49AoVABreMeAwNBU="
+        is_active: true
+        date_joined: "2024-01-01 00:00:00+00:00"
+        verified_at: "2024-01-01 00:00:00+00:00"
+
+-
+    model: "users.User"
+    pk: 11
+    fields:
+        email: "customer2@freshair.com"
+        username: "customer2@freshair.com"
+        first_name: "Мария"
+        last_name: "Петрова"
+        role: "CUSTOMER"
+        password: "pbkdf2_sha256$120000$Q3ICPM6omVjp$liGZrVdJWPLpkne0vjBLnJr4S+v49AoVABreMeAwNBU="
+        is_active: true
+        date_joined: "2024-01-02 00:00:00+00:00"
+        verified_at: "2024-01-02 00:00:00+00:00"
+
+-
+    model: "users.User"
+    pk: 12
+    fields:
+        email: "customer3@freshair.com"
+        username: "customer3@freshair.com"
+        first_name: "Алексей"
+        last_name: "Сидоров"
+        role: "CUSTOMER"
+        password: "pbkdf2_sha256$120000$Q3ICPM6omVjp$liGZrVdJWPLpkne0vjBLnJr4S+v49AoVABreMeAwNBU="
+        is_active: true
+        date_joined: "2024-01-03 00:00:00+00:00"
+        verified_at: "2024-01-03 00:00:00+00:00"
+
+# USERS - Investors
+-
+    model: "users.User"
+    pk: 20
+    fields:
+        email: "investor1@freshair.com"
+        username: "investor1@freshair.com"
+        first_name: "Дмитрий"
+        last_name: "Кузнецов"
+        role: "INVESTOR"
+        password: "pbkdf2_sha256$120000$Q3ICPM6omVjp$liGZrVdJWPLpkne0vjBLnJr4S+v49AoVABreMeAwNBU="
+        is_active: true
+        date_joined: "2024-01-01 00:00:00+00:00"
+        verified_at: "2024-01-01 00:00:00+00:00"
+
+-
+    model: "users.User"
+    pk: 21
+    fields:
+        email: "investor2@freshair.com"
+        username: "investor2@freshair.com"
+        first_name: "Елена"
+        last_name: "Смирнова"
+        role: "INVESTOR"
+        password: "pbkdf2_sha256$120000$Q3ICPM6omVjp$liGZrVdJWPLpkne0vjBLnJr4S+v49AoVABreMeAwNBU="
+        is_active: true
+        date_joined: "2024-01-02 00:00:00+00:00"
+        verified_at: "2024-01-02 00:00:00+00:00"
+
+# TOKENS
+-
+    model: "users.Token"
+    pk: 10
+    fields:
+        user_id: 10
+        key: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTAsImVtYWlsIjoiY3VzdG9tZXIxQGZyZXNoYWlyLmNvbSIsInJvbGUiOiJDVVNUT01FUiIsImV4cCI6OTk5OTk5OTk5OX0.customer_token_1"
+        refresh: "customer_refresh_token_1"
+        is_active: true
+        expires_at: "4000-01-01 00:00:00+00:00"
+        created_at: "2024-01-01 00:00:00+00:00"
+        updated_at: "2024-01-01 00:00:00+00:00"
+
+-
+    model: "users.Token"
+    pk: 11
+    fields:
+        user_id: 11
+        key: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTEsImVtYWlsIjoiY3VzdG9tZXIyQGZyZXNoYWlyLmNvbSIsInJvbGUiOiJDVVNUT01FUiIsImV4cCI6OTk5OTk5OTk5OX0.customer_token_2"
+        refresh: "customer_refresh_token_2"
+        is_active: true
+        expires_at: "4000-01-01 00:00:00+00:00"
+        created_at: "2024-01-02 00:00:00+00:00"
+        updated_at: "2024-01-02 00:00:00+00:00"
+
+-
+    model: "users.Token"
+    pk: 20
+    fields:
+        user_id: 20
+        key: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjAsImVtYWlsIjoiaW52ZXN0b3IxQGZyZXNoYWlyLmNvbSIsInJvbGUiOiJJTlZFU1RPUiIsImV4cCI6OTk5OTk5OTk5OX0.investor_token_1"
+        refresh: "investor_refresh_token_1"
+        is_active: true
+        expires_at: "4000-01-01 00:00:00+00:00"
+        created_at: "2024-01-01 00:00:00+00:00"
+        updated_at: "2024-01-01 00:00:00+00:00"
+
