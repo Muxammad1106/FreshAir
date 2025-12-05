@@ -10,6 +10,7 @@ export interface DeviceType {
   supports_cleaning: boolean;
   supports_humidifying: boolean;
   supports_aroma: boolean;
+  price_usd?: string | number;
 }
 
 export interface Room {

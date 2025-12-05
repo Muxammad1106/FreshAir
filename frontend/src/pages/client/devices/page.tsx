@@ -28,8 +28,17 @@ export default function ClientDevicesPage() {
     API_ENDPOINTS.core.customer.devices,
     {
       transformResponse: (response) => {
-        const paginatedData = response.data as PaginatedResponse<DeviceInstance>;
-        return paginatedData.results || [];
+        const { data } = response;
+        // Если это массив - возвращаем как есть
+        if (Array.isArray(data)) {
+          return data;
+        }
+        // Если это объект с results (пагинация)
+        if (data && typeof data === 'object' && 'results' in data) {
+          return (data as PaginatedResponse<DeviceInstance>).results || [];
+        }
+        // Fallback
+        return [];
       },
     }
   );

@@ -29,6 +29,7 @@ export const paths = {
   client: {
     root: ROOTS.CLIENT,
     overview: ROOTS.CLIENT,
+    orders: `${ROOTS.CLIENT}/orders`,
     analytics: `${ROOTS.CLIENT}/analytics`,
     devices: `${ROOTS.CLIENT}/devices`,
     settings: `${ROOTS.CLIENT}/settings`,

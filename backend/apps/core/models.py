@@ -102,6 +102,7 @@ class DeviceType(BaseModel):
     supports_cleaning = models.BooleanField(default=False)
     supports_humidifying = models.BooleanField(default=False)
     supports_aroma = models.BooleanField(default=False)
+    price_usd = models.DecimalField(max_digits=10, decimal_places=2, default=Decimal('0.00'), help_text='Цена устройства в USD')
 
     def __str__(self):
         return self.name
@@ -158,10 +159,11 @@ class CustomerOrder(BaseModel):
     ]
 
     customer = models.ForeignKey('users.User', CASCADE, related_name='orders')
-    room = models.ForeignKey(Room, CASCADE, related_name='orders')
+    room = models.ForeignKey(Room, CASCADE, related_name='orders', null=True, blank=True)  # Для обратной совместимости
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default=STATUS_PENDING)
     comment = models.TextField(null=True, blank=True)
     devices = models.ManyToManyField(DeviceInstance, through='OrderDevice', related_name='orders')
+    rooms = models.ManyToManyField(Room, through='OrderRoom', related_name='order_rooms')
 
     def __str__(self):
         return f'Order #{self.id} - {self.customer.email}'
@@ -180,6 +182,31 @@ class OrderDevice(BaseModel):
     class Meta:
         db_table = 'core_order_devices'
         unique_together = [['order', 'device']]
+
+
+class OrderRoom(BaseModel):
+    order = models.ForeignKey(CustomerOrder, CASCADE, related_name='order_rooms')
+    room = models.ForeignKey(Room, CASCADE, related_name='order_room_relations')
+    device_types = models.ManyToManyField(DeviceType, through='OrderRoomDeviceType', related_name='order_room_device_types')
+
+    def __str__(self):
+        return f'{self.order} - {self.room}'
+
+    class Meta:
+        db_table = 'core_order_rooms'
+        unique_together = [['order', 'room']]
+
+
+class OrderRoomDeviceType(BaseModel):
+    order_room = models.ForeignKey(OrderRoom, CASCADE, related_name='order_room_device_types')
+    device_type = models.ForeignKey(DeviceType, CASCADE, related_name='order_room_device_type_relations')
+
+    def __str__(self):
+        return f'{self.order_room} - {self.device_type}'
+
+    class Meta:
+        db_table = 'core_order_room_device_types'
+        unique_together = [['order_room', 'device_type']]
 
 
 class DeviceMetric(BaseModel):
