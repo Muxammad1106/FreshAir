@@ -1,0 +1,16 @@
+-
+    model: "core.Company"
+    pk: 1
+    fields:
+        name: 'Monday Labs'
+        phone: '+998901112233'
+        created_at: '2018-01-01 00:00:00+00:00'
+        updated_at: '2018-01-01 00:00:00+00:00'
+-
+    model: "core.Company"
+    pk: 2
+    fields:
+        name: '.com'
+        phone: '+998901112234'
+        created_at: '2018-01-01 00:00:00+00:00'
+        updated_at: '2018-01-01 00:00:00+00:00'
