@@ -1,15 +1,26 @@
 import { useEffect, useReducer, useCallback, useMemo } from 'react';
 //
-import { _mock } from 'src/_mock';
-//
 import { AuthContext } from './auth-context';
-import { isValidToken, setSession } from './utils';
+import { isValidToken, setSession, getSession } from './utils';
 import { ActionMapType, AuthStateType, AuthUserType } from '../../types';
+import { authService, AuthResponse } from 'src/services';
 
 // ----------------------------------------------------------------------
 
-// NOTE:
-// Mock authentication - no real API calls
+// Helper function to transform backend user data to frontend format
+const transformUser = (userData: AuthResponse['user']): AuthUserType => {
+  const role = userData.role === 'CUSTOMER' ? 'client' : 'investor';
+  
+  return {
+    id: userData.id.toString(),
+    displayName: `${userData.first_name} ${userData.last_name}`.trim() || userData.email,
+    email: userData.email,
+    firstName: userData.first_name,
+    lastName: userData.last_name,
+    role,
+    company: userData.company,
+  };
+};
 
 // ----------------------------------------------------------------------
 
@@ -74,28 +85,6 @@ const reducer = (state: AuthStateType, action: ActionsType) => {
 
 const STORAGE_KEY = 'accessToken';
 
-// Mock user data
-const getMockUser = (
-  email?: string,
-  firstName?: string,
-  lastName?: string,
-  role: 'client' | 'investor' = 'client'
-): AuthUserType => ({
-  id: '8864c717-587d-472a-929a-8e5f298024da-0',
-  displayName: firstName && lastName ? `${firstName} ${lastName}` : 'Jaydon Frankie',
-  email: email || 'demo@minimals.cc',
-  photoURL: _mock.image.avatar(24),
-  phoneNumber: '+40 777666555',
-  country: 'United States',
-  address: '90210 Broadway Blvd',
-  state: 'California',
-  city: 'San Francisco',
-  zipCode: '94116',
-  about: 'Praesent turpis. Phasellus viverra nulla ut metus varius laoreet. Phasellus tempus.',
-  role,
-  isPublic: true,
-});
-
 type Props = {
   children: React.ReactNode;
 };
@@ -105,21 +94,37 @@ export function AuthProvider({ children }: Props) {
 
   const initialize = useCallback(async () => {
     try {
-      const accessToken = sessionStorage.getItem(STORAGE_KEY);
+      const accessToken = getSession();
 
       if (accessToken && isValidToken(accessToken)) {
         setSession(accessToken);
 
-        // Mock: return user from storage or default mock user
-        const storedRole = (sessionStorage.getItem('userRole') as 'client' | 'investor') || 'client';
-        const mockUser = getMockUser(undefined, undefined, undefined, storedRole);
+        // Fetch current user data from API
+        try {
+          const userData = await authService.getMe();
+          const transformedUser = transformUser(userData);
+          
+          // Store role for quick access
+          const role = userData.role === 'CUSTOMER' ? 'client' : 'investor';
+          sessionStorage.setItem('userRole', role);
 
-        dispatch({
-          type: Types.INITIAL,
-          payload: {
-            user: mockUser,
-          },
-        });
+          dispatch({
+            type: Types.INITIAL,
+            payload: {
+              user: transformedUser,
+            },
+          });
+        } catch (error) {
+          // Token might be invalid, clear session
+          console.error('Failed to fetch user data:', error);
+          setSession(null);
+          dispatch({
+            type: Types.INITIAL,
+            payload: {
+              user: null,
+            },
+          });
+        }
       } else {
         dispatch({
           type: Types.INITIAL,
@@ -129,7 +134,8 @@ export function AuthProvider({ children }: Props) {
         });
       }
     } catch (error) {
-      console.error(error);
+      console.error('Auth initialization error:', error);
+      setSession(null);
       dispatch({
         type: Types.INITIAL,
         payload: {
@@ -143,30 +149,37 @@ export function AuthProvider({ children }: Props) {
     initialize();
   }, [initialize]);
 
-  // LOGIN - Mock implementation
+  // LOGIN - Real API implementation
   const login = useCallback(
     async (email: string, password: string, role: 'client' | 'investor' = 'client') => {
-      // Simulate API delay
-      await new Promise((resolve) => setTimeout(resolve, 500));
+      try {
+        const response = await authService.signIn({ email, password });
+        
+        // Store token and set session
+        setSession(response.token);
+        
+        // Store role for quick access
+        const userRole = response.role === 'CUSTOMER' ? 'client' : 'investor';
+        sessionStorage.setItem('userRole', userRole);
 
-      // Mock: always succeed, return mock user with role
-      const mockUser = getMockUser(email, undefined, undefined, role);
-      const mockToken = `mock-access-token-${Date.now()}`;
-
-      setSession(mockToken);
-      sessionStorage.setItem('userRole', role);
-
-      dispatch({
-        type: Types.LOGIN,
-        payload: {
-          user: mockUser,
-        },
-      });
+        // Transform and dispatch user data
+        const transformedUser = transformUser(response.user);
+        
+        dispatch({
+          type: Types.LOGIN,
+          payload: {
+            user: transformedUser,
+          },
+        });
+      } catch (error) {
+        // Re-throw error to be handled by the component
+        throw error;
+      }
     },
     []
   );
 
-  // REGISTER - Mock implementation
+  // REGISTER - Real API implementation
   const register = useCallback(
     async (
       email: string,
@@ -175,33 +188,57 @@ export function AuthProvider({ children }: Props) {
       lastName: string,
       role: 'client' | 'investor' = 'client'
     ) => {
-      // Simulate API delay
-      await new Promise((resolve) => setTimeout(resolve, 500));
+      try {
+        // Convert frontend role to backend role
+        const backendRole = role === 'client' ? 'CUSTOMER' : 'INVESTOR';
+        const fullName = `${firstName} ${lastName}`.trim();
 
-      // Mock: always succeed, return mock user with role
-      const mockUser = getMockUser(email, firstName, lastName, role);
-      const mockToken = `mock-access-token-${Date.now()}`;
+        const response = await authService.signUp({
+          email,
+          password,
+          full_name: fullName,
+          role: backendRole,
+        });
 
-      sessionStorage.setItem(STORAGE_KEY, mockToken);
-      sessionStorage.setItem('userRole', role);
-      setSession(mockToken);
+        // Store token and set session
+        setSession(response.token);
+        
+        // Store role for quick access
+        const userRole = response.role === 'CUSTOMER' ? 'client' : 'investor';
+        sessionStorage.setItem('userRole', userRole);
 
-      dispatch({
-        type: Types.REGISTER,
-        payload: {
-          user: mockUser,
-        },
-      });
+        // Transform and dispatch user data
+        const transformedUser = transformUser(response.user);
+
+        dispatch({
+          type: Types.REGISTER,
+          payload: {
+            user: transformedUser,
+          },
+        });
+      } catch (error) {
+        // Re-throw error to be handled by the component
+        throw error;
+      }
     },
     []
   );
 
-  // LOGOUT
+  // LOGOUT - Real API implementation
   const logout = useCallback(async () => {
-    setSession(null);
-    dispatch({
-      type: Types.LOGOUT,
-    });
+    try {
+      // Call backend to invalidate token
+      await authService.signOut();
+    } catch (error) {
+      // Even if backend call fails, clear local session
+      console.error('Sign out error:', error);
+    } finally {
+      // Always clear local session
+      setSession(null);
+      dispatch({
+        type: Types.LOGOUT,
+      });
+    }
   }, []);
 
   // ----------------------------------------------------------------------
