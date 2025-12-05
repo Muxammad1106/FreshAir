@@ -13,6 +13,8 @@ import { bgBlur } from 'src/theme/css';
 // hooks
 import { useOffSetTop } from 'src/hooks/use-off-set-top';
 import { useResponsive } from 'src/hooks/use-responsive';
+// routes
+import { paths } from 'src/routes/paths';
 // components
 import Logo from 'src/components/logo';
 import Iconify from 'src/components/iconify';
@@ -27,9 +29,10 @@ type HeaderLandingProps = {
   navItems?: Array<{ label: string; href: string }>;
   ctaLabel?: string;
   ctaHref?: string;
+  signInRole?: 'client' | 'investor';
 };
 
-export default function HeaderLanding({ navItems = [], ctaLabel, ctaHref }: HeaderLandingProps) {
+export default function HeaderLanding({ navItems = [], ctaLabel, ctaHref, signInRole }: HeaderLandingProps) {
   const theme = useTheme();
   const [mobileOpen, setMobileOpen] = useState(false);
   const mdUp = useResponsive('up', 'md');
@@ -38,6 +41,8 @@ export default function HeaderLanding({ navItems = [], ctaLabel, ctaHref }: Head
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
   };
+
+  const signInUrl = signInRole ? `${paths.auth.jwt.login}?role=${signInRole}` : paths.auth.jwt.login;
 
   const drawer = (
     <Box onClick={handleDrawerToggle} sx={{ textAlign: 'center', pt: 3 }}>
@@ -54,6 +59,19 @@ export default function HeaderLanding({ navItems = [], ctaLabel, ctaHref }: Head
             {item.label}
           </Button>
         ))}
+        
+        {signInRole && (
+          <Button
+            component={RouterLink}
+            href={signInUrl}
+            color="inherit"
+            fullWidth
+            sx={{ justifyContent: 'flex-start' }}
+          >
+            Sign In
+          </Button>
+        )}
+
         {ctaLabel && ctaHref && (
           <Button
             component={RouterLink}
@@ -115,6 +133,17 @@ export default function HeaderLanding({ navItems = [], ctaLabel, ctaHref }: Head
                 </Button>
               ))}
 
+              {signInRole && (
+                <Button
+                  component={RouterLink}
+                  href={signInUrl}
+                  color="inherit"
+                  sx={{ typography: 'subtitle2' }}
+                >
+                  Sign In
+                </Button>
+              )}
+
               {ctaLabel && ctaHref && (
                 <Button
                   component={RouterLink}
@@ -158,4 +187,3 @@ export default function HeaderLanding({ navItems = [], ctaLabel, ctaHref }: Head
     </>
   );
 }
-

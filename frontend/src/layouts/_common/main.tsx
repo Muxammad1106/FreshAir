@@ -63,3 +63,4 @@ export default function Main({ children, sx, ...other }: BoxProps) {
     </Box>
   );
 }
+

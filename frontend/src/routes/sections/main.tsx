@@ -2,7 +2,8 @@ import { lazy } from 'react';
 import { Outlet } from 'react-router-dom';
 // layouts
 import CompactLayout from 'src/layouts/compact';
-import LandingLayout from 'src/layouts/landing';
+import ClientLandingLayout from 'src/layouts/landing/client-layout';
+import InvestorLandingLayout from 'src/layouts/landing/investor-layout';
 
 // ----------------------------------------------------------------------
 
@@ -14,15 +15,20 @@ const InvestorPage = lazy(() => import('src/pages/investor'));
 
 export const mainRoutes = [
   {
+    path: '/',
     element: (
-      <LandingLayout>
-        <Outlet />
-      </LandingLayout>
+      <ClientLandingLayout>
+        <HomePage />
+      </ClientLandingLayout>
     ),
-    children: [
-      { path: '/', element: <HomePage /> },
-      { path: 'investor', element: <InvestorPage /> },
-    ],
+  },
+  {
+    path: 'investor-landing',
+    element: (
+      <InvestorLandingLayout>
+        <InvestorPage />
+      </InvestorLandingLayout>
+    ),
   },
   {
     element: (

@@ -22,7 +22,7 @@ import { useRouter } from 'src/routes/hook';
 import SearchNotFound from 'src/components/search-not-found';
 //
 import ResultItem from './result-item';
-import { useNavData } from '../../dashboard/config-navigation';
+import { useNavData } from '../nav-config';
 import { applyFilter, groupedData, getAllItems } from './utils';
 
 // ----------------------------------------------------------------------

@@ -64,13 +64,13 @@ export default function InvestorFooter() {
               Инвесторам
             </Typography>
             <Stack spacing={1}>
-              <Link component={RouterLink} href="/investor" color="inherit" variant="body2">
+              <Link component={RouterLink} href="/investor-landing" color="inherit" variant="body2">
                 Обзор
               </Link>
-              <Link component={RouterLink} href="/investor" color="inherit" variant="body2">
+              <Link component={RouterLink} href="/investor-landing" color="inherit" variant="body2">
                 Модель дохода
               </Link>
-              <Link component={RouterLink} href="/investor" color="inherit" variant="body2">
+              <Link component={RouterLink} href="/investor-landing" color="inherit" variant="body2">
                 FAQ
               </Link>
             </Stack>
@@ -81,10 +81,10 @@ export default function InvestorFooter() {
               Поддержка
             </Typography>
             <Stack spacing={1}>
-              <Link component={RouterLink} href="/investor" color="inherit" variant="body2">
+              <Link component={RouterLink} href="/investor-landing" color="inherit" variant="body2">
                 FAQ
               </Link>
-              <Link component={RouterLink} href="/investor" color="inherit" variant="body2">
+              <Link component={RouterLink} href="/investor-landing" color="inherit" variant="body2">
                 Помощь
               </Link>
               <Link component={RouterLink} href="/" color="inherit" variant="body2">
@@ -121,10 +121,10 @@ export default function InvestorFooter() {
             © 2024 Air Purifier. Все права защищены.
           </Typography>
           <Stack direction="row" spacing={3}>
-            <Link component={RouterLink} href="/investor" color="inherit" variant="body2">
+            <Link component={RouterLink} href="/investor-landing" color="inherit" variant="body2">
               Политика конфиденциальности
             </Link>
-            <Link component={RouterLink} href="/investor" color="inherit" variant="body2">
+            <Link component={RouterLink} href="/investor-landing" color="inherit" variant="body2">
               Условия использования
             </Link>
           </Stack>

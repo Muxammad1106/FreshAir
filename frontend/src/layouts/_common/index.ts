@@ -10,3 +10,5 @@ export { default as LanguagePopover } from './language-popover';
 export { default as ContactsPopover } from './contacts-popover';
 export { default as NavToggleButton } from './nav-toggle-button';
 export { default as NotificationsPopover } from './notifications-popover';
+// Note: HeaderDashboard and Main are not exported here to avoid circular dependencies
+// They are imported directly where needed

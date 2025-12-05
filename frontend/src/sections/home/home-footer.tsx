@@ -70,7 +70,7 @@ export default function HomeFooter() {
               <Link component={RouterLink} href="/" color="inherit" variant="body2">
                 Контакты
               </Link>
-              <Link component={RouterLink} href="/investor" color="inherit" variant="body2">
+              <Link component={RouterLink} href="/investor-landing" color="inherit" variant="body2">
                 Для инвесторов
               </Link>
             </Stack>

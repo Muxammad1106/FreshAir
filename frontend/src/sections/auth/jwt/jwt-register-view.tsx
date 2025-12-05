@@ -1,6 +1,7 @@
 import * as Yup from 'yup';
 import { useForm } from 'react-hook-form';
-import { useCallback, useState } from 'react';
+import { useCallback, useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { yupResolver } from '@hookform/resolvers/yup';
 // @mui
 import LoadingButton from '@mui/lab/LoadingButton';
@@ -35,14 +36,27 @@ type FormValuesProps = {
 
 export default function JwtRegisterView() {
   const { register } = useAuthContext();
+  const navigate = useNavigate();
 
   const [errorMsg, setErrorMsg] = useState('');
+  const [role, setRole] = useState<'client' | 'investor'>('client');
 
   const searchParams = useSearchParams();
 
   const returnTo = searchParams.get('returnTo');
 
   const password = useBoolean();
+
+  // Get role from query parameter
+  useEffect(() => {
+    const roleParam = searchParams.get('role');
+    if (roleParam === 'investor' || roleParam === 'client') {
+      setRole(roleParam);
+      sessionStorage.setItem('userRole', roleParam);
+    } else {
+      sessionStorage.setItem('userRole', 'client');
+    }
+  }, [searchParams]);
 
   const RegisterSchema = Yup.object().shape({
     firstName: Yup.string().required('First name required'),
@@ -72,15 +86,22 @@ export default function JwtRegisterView() {
   const onSubmit = useCallback(
     async (data: FormValuesProps) => {
       try {
-        await register?.(data.email, data.password, data.firstName, data.lastName);
-        window.location.href = returnTo || PATH_AFTER_LOGIN;
+        await register?.(data.email, data.password, data.firstName, data.lastName, role);
+
+        // Redirect based on role
+        if (returnTo) {
+          window.location.href = returnTo;
+        } else {
+          const redirectPath = role === 'investor' ? paths.investor.root : paths.client.root;
+          navigate(redirectPath);
+        }
       } catch (error) {
         console.error(error);
         reset();
         setErrorMsg(typeof error === 'string' ? error : error.message);
       }
     },
-    [register, reset, returnTo]
+    [register, reset, returnTo, role, navigate]
   );
 
   const renderHead = (
@@ -90,7 +111,11 @@ export default function JwtRegisterView() {
       <Stack direction="row" spacing={0.5}>
         <Typography variant="body2"> Already have an account? </Typography>
 
-        <Link href={paths.auth.jwt.login} component={RouterLink} variant="subtitle2">
+        <Link
+          href={role ? `${paths.auth.jwt.login}?role=${role}` : paths.auth.jwt.login}
+          component={RouterLink}
+          variant="subtitle2"
+        >
           Sign in
         </Link>
       </Stack>

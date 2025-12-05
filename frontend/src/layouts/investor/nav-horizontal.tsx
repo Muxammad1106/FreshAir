@@ -6,22 +6,22 @@ import Toolbar from '@mui/material/Toolbar';
 // theme
 import { bgBlur } from 'src/theme/css';
 // hooks
-import { useMockedUser } from 'src/hooks/use-mocked-user';
+import { useAuthContext } from 'src/auth/hooks';
 // components
 import { NavSectionHorizontal } from 'src/components/nav-section';
 //
 import { HEADER } from '../config-layout';
-import { useNavData } from './config-navigation';
+import { useInvestorNavData } from './config-navigation';
 import { HeaderShadow } from '../_common';
 
 // ----------------------------------------------------------------------
 
-function NavHorizontal() {
+function InvestorNavHorizontal() {
   const theme = useTheme();
 
-  const { user } = useMockedUser();
+  const { user } = useAuthContext();
 
-  const navData = useNavData();
+  const navData = useInvestorNavData();
 
   return (
     <AppBar
@@ -40,7 +40,7 @@ function NavHorizontal() {
         <NavSectionHorizontal
           data={navData}
           config={{
-            currentRole: user?.role || 'admin',
+            currentRole: (user?.role as string) || 'investor',
           }}
         />
       </Toolbar>
@@ -50,4 +50,5 @@ function NavHorizontal() {
   );
 }
 
-export default memo(NavHorizontal);
+export default memo(InvestorNavHorizontal);
+

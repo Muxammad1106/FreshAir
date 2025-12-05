@@ -4,21 +4,21 @@ import Stack from '@mui/material/Stack';
 // theme
 import { hideScroll } from 'src/theme/css';
 // hooks
-import { useMockedUser } from 'src/hooks/use-mocked-user';
+import { useAuthContext } from 'src/auth/hooks';
 // components
 import Logo from 'src/components/logo';
 import { NavSectionMini } from 'src/components/nav-section';
 //
 import { NAV } from '../config-layout';
-import { useNavData } from './config-navigation';
+import { useClientNavData } from './config-navigation';
 import { NavToggleButton } from '../_common';
 
 // ----------------------------------------------------------------------
 
-export default function NavMini() {
-  const { user } = useMockedUser();
+export default function ClientNavMini() {
+  const { user } = useAuthContext();
 
-  const navData = useNavData();
+  const navData = useClientNavData();
 
   return (
     <Box
@@ -50,10 +50,11 @@ export default function NavMini() {
         <NavSectionMini
           data={navData}
           config={{
-            currentRole: user?.role || 'admin',
+            currentRole: (user?.role as string) || 'client',
           }}
         />
       </Stack>
     </Box>
   );
 }
+

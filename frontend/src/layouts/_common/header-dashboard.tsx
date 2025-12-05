@@ -15,14 +15,12 @@ import SvgColor from 'src/components/svg-color';
 import { useSettingsContext } from 'src/components/settings';
 //
 import { HEADER, NAV } from '../config-layout';
-import {
-  Searchbar,
-  AccountPopover,
-  SettingsButton,
-  LanguagePopover,
-  ContactsPopover,
-  NotificationsPopover,
-} from '../_common';
+import Searchbar from './searchbar';
+import AccountPopover from './account-popover';
+import SettingsButton from './settings-button';
+import LanguagePopover from './language-popover';
+import ContactsPopover from './contacts-popover';
+import NotificationsPopover from './notifications-popover';
 
 // ----------------------------------------------------------------------
 
@@ -117,3 +115,4 @@ export default function Header({ onOpenNav }: Props) {
     </AppBar>
   );
 }
+

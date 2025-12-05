@@ -14,7 +14,7 @@ export const paths = {
   // HOME
   home: {
     root: ROOTS.HOME,
-    investor: '/investor',
+    investor: '/investor-landing',
   },
   // AUTH
   auth: {
