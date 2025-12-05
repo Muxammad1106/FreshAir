@@ -11,7 +11,7 @@ import { ActionMapType, AuthStateType, AuthUserType, JWTContextType } from '../.
 // Helper function to transform backend user data to frontend format
 const transformUser = (userData: AuthResponse['user']): AuthUserType => {
   const role = userData.role === 'CUSTOMER' ? 'customer' : 'investor';
-  
+
   return {
     id: userData.id.toString(),
     displayName: `${userData.first_name} ${userData.last_name}`.trim() || userData.email,
@@ -104,7 +104,7 @@ export function AuthProvider({ children }: Props) {
         try {
           const userData = await authService.getMe();
           const transformedUser = transformUser(userData);
-          
+
           // Store role for quick access
           const role = userData.role === 'CUSTOMER' ? 'customer' : 'investor';
           sessionStorage.setItem('userRole', role);
@@ -154,26 +154,44 @@ export function AuthProvider({ children }: Props) {
   const login = useCallback(
     async (email: string, password: string, role: 'customer' | 'investor' = 'customer') => {
       const response = await authService.signIn({ email, password });
-      
+
       // Store token and set session
       setSession(response.token);
-      
-      // Get role from backend response
-      const userRole = response.role === 'CUSTOMER' ? 'customer' : 'investor';
-      sessionStorage.setItem('userRole', userRole);
 
-      // Transform and dispatch user data
-      const transformedUser = transformUser(response.user);
-      
-      dispatch({
-        type: Types.LOGIN,
-        payload: {
-          user: transformedUser,
-        },
-      });
+      // Fetch fresh user data from /me endpoint
+      try {
+        const userData = await authService.getMe();
+        const transformedUser = transformUser(userData);
 
-      // Return role from backend response for redirect
-      return userRole;
+        // Get role from backend response
+        const userRole = userData.role === 'CUSTOMER' ? 'customer' : 'investor';
+        sessionStorage.setItem('userRole', userRole);
+
+        dispatch({
+          type: Types.LOGIN,
+          payload: {
+            user: transformedUser,
+          },
+        });
+
+        // Return role from backend response for redirect
+        return userRole;
+      } catch (error) {
+        // Fallback to response data if /me fails
+        console.error('Failed to fetch user data from /me:', error);
+        const userRole = response.role === 'CUSTOMER' ? 'customer' : 'investor';
+        sessionStorage.setItem('userRole', userRole);
+        const transformedUser = transformUser(response.user);
+
+        dispatch({
+          type: Types.LOGIN,
+          payload: {
+            user: transformedUser,
+          },
+        });
+
+        return userRole;
+      }
     },
     []
   );
@@ -215,20 +233,36 @@ export function AuthProvider({ children }: Props) {
 
       // Store token and set session
       setSession(response.token);
-      
-      // Store role for quick access
-      const userRole = response.role === 'CUSTOMER' ? 'customer' : 'investor';
-      sessionStorage.setItem('userRole', userRole);
 
-      // Transform and dispatch user data
-      const transformedUser = transformUser(response.user);
+      // Fetch fresh user data from /me endpoint
+      try {
+        const userData = await authService.getMe();
+        const transformedUser = transformUser(userData);
 
-      dispatch({
-        type: Types.REGISTER,
-        payload: {
-          user: transformedUser,
-        },
-      });
+        // Store role for quick access
+        const userRole = userData.role === 'CUSTOMER' ? 'customer' : 'investor';
+        sessionStorage.setItem('userRole', userRole);
+
+        dispatch({
+          type: Types.REGISTER,
+          payload: {
+            user: transformedUser,
+          },
+        });
+      } catch (error) {
+        // Fallback to response data if /me fails
+        console.error('Failed to fetch user data from /me:', error);
+        const userRole = response.role === 'CUSTOMER' ? 'customer' : 'investor';
+        sessionStorage.setItem('userRole', userRole);
+        const transformedUser = transformUser(response.user);
+
+        dispatch({
+          type: Types.REGISTER,
+          payload: {
+            user: transformedUser,
+          },
+        });
+      }
     },
     []
   );
