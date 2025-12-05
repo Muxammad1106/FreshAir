@@ -1,0 +1,296 @@
+# Cursor Rules for FreshAir Frontend
+
+## Project Structure
+
+- **Pages**: `src/pages/` - основные страницы приложения
+- **Components**: `src/components/` - переиспользуемые компоненты
+- **Hooks**: `src/hooks/` - кастомные React хуки
+- **Routes**: `src/routes/` - конфигурация роутинга
+- **Utils**: `src/utils/` - утилиты и вспомогательные функции
+- **Services**: `src/services/` - сервисы для работы с API
+- **Types**: типы TypeScript должны быть в файле `types.ts` рядом с компонентом
+
+## Code Style
+
+- Используй TypeScript для всех файлов
+- Используй функциональные компоненты с хуками
+- Разделяй код на маленькие, переиспользуемые компоненты
+- Следуй правилам импортов: внешние импорты (`src/`) перед локальными (`./`)
+- Используй Material-UI компоненты из `@mui/material`
+- Используй `Iconify` для иконок (формат: `solar:icon-name`)
+
+## Forms - React Hook Form
+
+### ⚠️ КРИТИЧЕСКИ ВАЖНО:
+
+**НИКОГДА не используй простые HTML формы или нативные input элементы!**
+- **ВСЕГДА** используй React Hook Form (`react-hook-form`)
+- Используй компоненты из `src/components/hook-form/` (RHFTextField, FormProvider и т.д.)
+- Если нужен новый компонент формы - создай его на основе существующих RHF компонентов
+- Все формы должны использовать `FormProvider` и `handleSubmit` из React Hook Form
+
+## HTTP Requests - useRequest Hook
+
+### ⚠️ КРИТИЧЕСКИ ВАЖНО:
+
+**НИКОГДА не пиши простые запросы напрямую через axios или fetch!**
+- **ВСЕГДА** используй хук `useRequest` или его специализированные версии
+- Если нужно что-то изменить в логике запросов - **исправляй только хук**, не обходи его
+- Если хук не поддерживает нужную функциональность - **расширь хук**, не пиши обходные пути
+
+### Правила использования хука useRequest:
+
+1. **Всегда используй хук `useRequest` или его специализированные версии** (`useGet`, `usePost`, `usePut`, `useDelete`, `usePatch`) из `src/hooks/use-request.ts`
+
+2. **GET запросы** - используй `useGet`:
+```typescript
+import { useGet } from 'src/hooks/use-request';
+import { API_ENDPOINTS } from 'src/utils/axios';
+
+// Простой GET запрос
+const { data, loading, error, execute } = useGet<DataType[]>(
+  API_ENDPOINTS.core.customer.devices
+);
+
+// GET запрос с transformResponse для пагинации
+const { data, loading, error } = useGet<DataType[], any>(
+  API_ENDPOINTS.core.customer.devices,
+  {
+    transformResponse: (response) => {
+      const paginatedData = response.data as PaginatedResponse<DataType>;
+      return paginatedData.results || [];
+    },
+  }
+);
+```
+
+3. **POST запросы** - используй `usePost`:
+```typescript
+import { usePost } from 'src/hooks/use-request';
+
+const { data, loading, execute } = usePost<ResponseType>(
+  API_ENDPOINTS.core.customer.orders,
+  {
+    immediate: false, // не выполнять автоматически
+    onSuccess: (data) => {
+      // обработка успешного ответа
+    },
+    onError: (error) => {
+      // обработка ошибки
+    },
+  }
+);
+
+// Выполнить запрос вручную
+const handleSubmit = async () => {
+  await execute({ data: { name: 'John', email: 'john@example.com' } });
+};
+```
+
+4. **PUT/DELETE запросы** - используй `usePut` или `useDelete`:
+```typescript
+import { usePut, useDelete } from 'src/hooks/use-request';
+
+const { loading, execute: updateDevice } = usePut(
+  API_ENDPOINTS.core.customer.deviceToggle(deviceId),
+  { immediate: false }
+);
+
+const { loading: deleting, execute: deleteDevice } = useDelete(
+  API_ENDPOINTS.core.customer.devices + `/${id}`,
+  { immediate: false }
+);
+```
+
+5. **Важные правила**:
+   - Всегда типизируй данные: `useGet<DataType[]>`
+   - Используй `API_ENDPOINTS` из `src/utils/axios.ts` для URL
+   - Для пагинации используй `transformResponse` для извлечения `results`
+   - GET запросы выполняются автоматически при монтировании
+   - POST/PUT/DELETE запросы требуют `immediate: false` и ручной вызов `execute()`
+
+6. **Интеграция с React Hook Form**:
+   - Используй `usePost`/`usePut` с `immediate: false` для форм
+   - Вызывай `execute({ data: formData })` внутри `onSubmit` обработчика
+   - Используй `loading` из хука для состояния кнопки отправки
+   - Обрабатывай ошибки через `onError` callback или `error` из хука
+
+## Adding New Pages
+
+### Шаг 1: Создай структуру страницы
+
+Создай папку для страницы в соответствующей директории:
+- Client pages: `src/pages/client/[page-name]/`
+- Investor pages: `src/pages/investor/[page-name]/`
+- Auth pages: `src/pages/auth/[page-name]/`
+
+### Шаг 2: Создай файлы страницы
+
+**Обязательная структура для сложных страниц:**
+```
+src/pages/client/[page-name]/
+  ├── page.tsx          # Основной компонент страницы
+  ├── types.ts          # TypeScript типы
+  ├── [component].tsx   # Компоненты (если нужны)
+  └── utils.ts          # Утилиты (если нужны)
+```
+
+**Минимальная структура для простых страниц:**
+```
+src/pages/client/[page-name]/
+  └── page.tsx          # Все в одном файле
+```
+
+### Шаг 3: Шаблон страницы
+
+```typescript
+import { Helmet } from 'react-helmet-async';
+// @mui
+import Container from '@mui/material/Container';
+import Typography from '@mui/material/Typography';
+import Stack from '@mui/material/Stack';
+// components
+import { useSettingsContext } from 'src/components/settings';
+// hooks
+import { useGet } from 'src/hooks/use-request';
+// utils
+import { API_ENDPOINTS } from 'src/utils/axios';
+// types
+import { DataType, PaginatedResponse } from './types';
+
+export default function ClientPageName() {
+  const settings = useSettingsContext();
+
+  const { data, loading, error, execute } = useGet<DataType[], any>(
+    API_ENDPOINTS.core.customer.endpoint,
+    {
+      transformResponse: (response) => {
+        const paginatedData = response.data as PaginatedResponse<DataType>;
+        return paginatedData.results || [];
+      },
+    }
+  );
+
+  return (
+    <>
+      <Helmet>
+        <title> Page Name | Air Purifier</title>
+      </Helmet>
+
+      <Container maxWidth={settings.themeStretch ? false : 'xl'}>
+        <Stack spacing={3}>
+          <Typography variant="h4">Page Title</Typography>
+          {/* Content */}
+        </Stack>
+      </Container>
+    </>
+  );
+}
+```
+
+### Шаг 4: Добавь роут
+
+1. **Добавь путь в `src/routes/paths.ts`**:
+```typescript
+client: {
+  // ... existing paths
+  newPage: `${ROOTS.CLIENT}/new-page`,
+}
+```
+
+2. **Добавь роут в `src/routes/sections/client.tsx`** (или соответствующий файл):
+```typescript
+const ClientNewPage = lazy(() => import('src/pages/client/new-page/page'));
+
+export const clientRoutes = [
+  // ... existing routes
+  {
+    path: 'client',
+    element: (
+      <ClientGuard>
+        <ClientLayout>
+          <Suspense fallback={<LoadingScreen />}>
+            <Outlet />
+          </Suspense>
+        </ClientLayout>
+      </ClientGuard>
+    ),
+    children: [
+      // ... existing children
+      { path: 'new-page', element: <ClientNewPage /> },
+    ],
+  },
+];
+```
+
+3. **Добавь в навигацию** (если нужно):
+   - Client: `src/layouts/client/config-navigation.tsx`
+   - Investor: `src/layouts/investor/config-navigation.tsx`
+
+## Component Structure
+
+### Разделяй компоненты на файлы:
+
+1. **Большие компоненты** - выноси в отдельные файлы
+2. **Типы** - в файл `types.ts`
+3. **Утилиты** - в файл `utils.ts`
+4. **Скелетоны загрузки** - в отдельный компонент `[name]-skeleton.tsx`
+
+### Пример структуры компонента:
+
+```typescript
+// types.ts
+export interface ComponentProps {
+  id: number;
+  name: string;
+}
+
+// component.tsx
+import { ComponentProps } from './types';
+
+export function Component({ id, name }: ComponentProps) {
+  return <div>{name}</div>;
+}
+```
+
+## API Endpoints
+
+- Все endpoints должны быть в `src/utils/axios.ts` в объекте `API_ENDPOINTS`
+- Используй структуру: `API_ENDPOINTS.core.customer.[endpoint]`
+- Для динамических URL используй функции: `deviceToggle: (id: number) => \`/api/v1/core/customer/devices/${id}/toggle\``
+
+## Error Handling
+
+- Всегда обрабатывай состояния `loading`, `error` и пустые данные
+- Используй `Alert` компонент для отображения ошибок
+- Используй скелетоны для состояния загрузки
+
+## Best Practices
+
+1. **Типизация**: Всегда типизируй props, state, и API responses
+2. **Разделение**: Разделяй большие компоненты на маленькие
+3. **Переиспользование**: Используй существующие компоненты и хуки
+4. **Консистентность**: Следуй существующим паттернам в проекте
+5. **Только данные из бэкенда**: Показывай только те поля, которые приходят с API, ничего не добавляй от себя
+6. **Строгое использование хуков**: 
+   - **НИКОГДА** не обходи хуки `useRequest` - если нужна новая функциональность, расширь хук
+   - **НИКОГДА** не используй простые формы - всегда React Hook Form
+   - Если хук не работает как нужно - **исправь хук**, не пиши обходные пути
+
+## Import Order
+
+1. React и сторонние библиотеки
+2. Material-UI компоненты (`@mui/material`)
+3. Внешние компоненты (`src/components/`)
+4. Внешние утилиты (`src/utils/`)
+5. Внешние хуки (`src/hooks/`)
+6. Локальные типы (`./types`)
+7. Локальные компоненты (`./component`)
+8. Локальные утилиты (`./utils`)
+
+## Examples
+
+Смотри примеры в:
+- `src/pages/client/devices/` - пример страницы с запросами и компонентами
+- `src/hooks/use-request.ts` - документация хука useRequest
+

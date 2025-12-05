@@ -603,3 +603,247 @@
         created_at: "2024-12-15 12:00:00+00:00"
         updated_at: "2024-12-15 12:00:00+00:00"
 
+# CUSTOMER PROFILE FOR ANGELINA
+-
+    model: "core.CustomerProfile"
+    pk: 4
+    fields:
+        user_id: 1
+        phone: "+998901111111"
+        address: "г. Ташкент, ул. Амира Темура, д. 10, кв. 25"
+        created_at: "2024-01-15 00:00:00+00:00"
+        updated_at: "2024-01-15 00:00:00+00:00"
+
+# ROOM FOR ANGELINA
+-
+    model: "core.Room"
+    pk: 5
+    fields:
+        customer_id: 1
+        name: "Квартира Агелины"
+        room_type: "HOME"
+        area_m2: 95.0
+        ceiling_height_m: 2.8
+        volume_m3: 266.0
+        address: "г. Ташкент, ул. Амира Темура, д. 10, кв. 25"
+        city: "Ташкент"
+        notes: "Двухкомнатная квартира, живу одна"
+        created_at: "2024-01-15 10:00:00+00:00"
+        updated_at: "2024-01-15 10:00:00+00:00"
+
+# DEVICE INSTANCES FOR ANGELINA
+-
+    model: "core.DeviceInstance"
+    pk: 6
+    fields:
+        device_type_id: 3
+        room_id: 5
+        customer_id: 1
+        status: "ACTIVE"
+        serial_number: "COMBO-2024-ANG-001"
+        internal_code: "D006"
+        is_power_on: true
+        installation_date: "2024-01-20 12:00:00+00:00"
+        last_service_date: "2024-01-20 12:00:00+00:00"
+        created_at: "2024-01-18 00:00:00+00:00"
+        updated_at: "2024-01-20 12:00:00+00:00"
+
+-
+    model: "core.DeviceInstance"
+    pk: 7
+    fields:
+        device_type_id: 1
+        room_id: 5
+        customer_id: 1
+        status: "ACTIVE"
+        serial_number: "PUR-2024-ANG-002"
+        internal_code: "D007"
+        is_power_on: true
+        installation_date: "2024-01-22 14:30:00+00:00"
+        last_service_date: "2024-01-22 14:30:00+00:00"
+        created_at: "2024-01-21 00:00:00+00:00"
+        updated_at: "2024-01-22 14:30:00+00:00"
+
+-
+    model: "core.DeviceInstance"
+    pk: 8
+    fields:
+        device_type_id: 2
+        room_id: 5
+        customer_id: 1
+        status: "ACTIVE"
+        serial_number: "HUM-2024-ANG-003"
+        internal_code: "D008"
+        is_power_on: true
+        installation_date: "2024-01-25 10:00:00+00:00"
+        last_service_date: "2024-01-25 10:00:00+00:00"
+        created_at: "2024-01-24 00:00:00+00:00"
+        updated_at: "2024-01-25 10:00:00+00:00"
+
+# CUSTOMER ORDER FOR ANGELINA
+-
+    model: "core.CustomerOrder"
+    pk: 5
+    fields:
+        customer_id: 1
+        room_id: 5
+        status: "ACTIVE"
+        comment: "Установка системы очистки воздуха для квартиры"
+        created_at: "2024-01-15 11:00:00+00:00"
+        updated_at: "2024-01-25 10:00:00+00:00"
+
+# ORDER DEVICES FOR ANGELINA
+-
+    model: "core.OrderDevice"
+    pk: 5
+    fields:
+        order_id: 5
+        device_id: 6
+        created_at: "2024-01-18 00:00:00+00:00"
+        updated_at: "2024-01-18 00:00:00+00:00"
+
+-
+    model: "core.OrderDevice"
+    pk: 6
+    fields:
+        order_id: 5
+        device_id: 7
+        created_at: "2024-01-21 00:00:00+00:00"
+        updated_at: "2024-01-21 00:00:00+00:00"
+
+-
+    model: "core.OrderDevice"
+    pk: 7
+    fields:
+        order_id: 5
+        device_id: 8
+        created_at: "2024-01-24 00:00:00+00:00"
+        updated_at: "2024-01-24 00:00:00+00:00"
+
+# DEVICE METRICS FOR ANGELINA'S DEVICES
+-
+    model: "core.DeviceMetric"
+    pk: 8
+    fields:
+        device_id: 6
+        timestamp: "2024-12-15 08:00:00+00:00"
+        pm25: 8.2
+        humidity: 52.0
+        cleaned_air_volume_m3: 120.5
+        filter_wear_percent: 18.0
+        liquid_level_percent: 88.0
+        created_at: "2024-12-15 08:00:00+00:00"
+        updated_at: "2024-12-15 08:00:00+00:00"
+
+-
+    model: "core.DeviceMetric"
+    pk: 9
+    fields:
+        device_id: 6
+        timestamp: "2024-12-15 12:00:00+00:00"
+        pm25: 6.5
+        humidity: 55.0
+        cleaned_air_volume_m3: 145.8
+        filter_wear_percent: 18.5
+        liquid_level_percent: 85.0
+        created_at: "2024-12-15 12:00:00+00:00"
+        updated_at: "2024-12-15 12:00:00+00:00"
+
+-
+    model: "core.DeviceMetric"
+    pk: 10
+    fields:
+        device_id: 6
+        timestamp: "2024-12-15 18:00:00+00:00"
+        pm25: 7.1
+        humidity: 53.0
+        cleaned_air_volume_m3: 168.3
+        filter_wear_percent: 19.0
+        liquid_level_percent: 82.0
+        created_at: "2024-12-15 18:00:00+00:00"
+        updated_at: "2024-12-15 18:00:00+00:00"
+
+-
+    model: "core.DeviceMetric"
+    pk: 11
+    fields:
+        device_id: 7
+        timestamp: "2024-12-15 08:00:00+00:00"
+        pm25: 10.5
+        humidity: 48.0
+        cleaned_air_volume_m3: 95.2
+        filter_wear_percent: 22.0
+        liquid_level_percent: null
+        created_at: "2024-12-15 08:00:00+00:00"
+        updated_at: "2024-12-15 08:00:00+00:00"
+
+-
+    model: "core.DeviceMetric"
+    pk: 12
+    fields:
+        device_id: 7
+        timestamp: "2024-12-15 14:00:00+00:00"
+        pm25: 9.8
+        humidity: 50.0
+        cleaned_air_volume_m3: 110.5
+        filter_wear_percent: 22.5
+        liquid_level_percent: null
+        created_at: "2024-12-15 14:00:00+00:00"
+        updated_at: "2024-12-15 14:00:00+00:00"
+
+-
+    model: "core.DeviceMetric"
+    pk: 13
+    fields:
+        device_id: 7
+        timestamp: "2024-12-15 20:00:00+00:00"
+        pm25: 8.9
+        humidity: 49.0
+        cleaned_air_volume_m3: 125.8
+        filter_wear_percent: 23.0
+        liquid_level_percent: null
+        created_at: "2024-12-15 20:00:00+00:00"
+        updated_at: "2024-12-15 20:00:00+00:00"
+
+-
+    model: "core.DeviceMetric"
+    pk: 14
+    fields:
+        device_id: 8
+        timestamp: "2024-12-15 08:00:00+00:00"
+        pm25: null
+        humidity: 58.0
+        cleaned_air_volume_m3: null
+        filter_wear_percent: null
+        liquid_level_percent: 92.0
+        created_at: "2024-12-15 08:00:00+00:00"
+        updated_at: "2024-12-15 08:00:00+00:00"
+
+-
+    model: "core.DeviceMetric"
+    pk: 15
+    fields:
+        device_id: 8
+        timestamp: "2024-12-15 15:00:00+00:00"
+        pm25: null
+        humidity: 60.0
+        cleaned_air_volume_m3: null
+        filter_wear_percent: null
+        liquid_level_percent: 89.0
+        created_at: "2024-12-15 15:00:00+00:00"
+        updated_at: "2024-12-15 15:00:00+00:00"
+
+-
+    model: "core.DeviceMetric"
+    pk: 16
+    fields:
+        device_id: 8
+        timestamp: "2024-12-15 22:00:00+00:00"
+        pm25: null
+        humidity: 57.0
+        cleaned_air_volume_m3: null
+        filter_wear_percent: null
+        liquid_level_percent: 86.0
+        created_at: "2024-12-15 22:00:00+00:00"
+        updated_at: "2024-12-15 22:00:00+00:00"
+
