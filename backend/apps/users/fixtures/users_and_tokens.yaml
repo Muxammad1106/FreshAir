@@ -9,6 +9,7 @@
         last_name: "Jolie"
         groups: [[admin]]
         company: 1
+        role: "CUSTOMER"
         verified_at: "2018-01-01 00:00:00+00:00"
         password: "pbkdf2_sha256$120000$Q3ICPM6omVjp$liGZrVdJWPLpkne0vjBLnJr4S+v49AoVABreMeAwNBU=" # password
         is_superuser: true
@@ -24,6 +25,7 @@
         last_name: "Jackson"
 #        groups: [[teacher]]
         company: 1
+        role: "CUSTOMER"
         verified_at: "2018-01-01 00:00:00+00:00"
         password: "pbkdf2_sha256$120000$Q3ICPM6omVjp$liGZrVdJWPLpkne0vjBLnJr4S+v49AoVABreMeAwNBU=" # password
 
@@ -37,6 +39,7 @@
         last_name: "Bellucci"
 #        groups: [[accountant]]
         company: 1
+        role: "INVESTOR"
         verified_at: "2018-01-01 00:00:00+00:00"
         password: "pbkdf2_sha256$120000$Q3ICPM6omVjp$liGZrVdJWPLpkne0vjBLnJr4S+v49AoVABreMeAwNBU=" # password
 
@@ -50,6 +53,7 @@
         last_name: "Johansson"
 #        groups: [[accountant]]
         company: 1
+        role: "INVESTOR"
         verified_at: "2018-01-01 00:00:00+00:00"
         password: "pbkdf2_sha256$120000$Q3ICPM6omVjp$liGZrVdJWPLpkne0vjBLnJr4S+v49AoVABreMeAwNBU=" # password
 
