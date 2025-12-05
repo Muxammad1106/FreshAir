@@ -61,8 +61,8 @@ export default function JwtLoginView() {
   });
 
   const defaultValues = {
-    email: 'demo@minimals.cc',
-    password: 'demo1234',
+    email: '',
+    password: '',
   };
 
   const methods = useForm<FormValuesProps>({
@@ -79,19 +79,26 @@ export default function JwtLoginView() {
   const onSubmit = useCallback(
     async (data: FormValuesProps) => {
       try {
+        setErrorMsg('');
         await login?.(data.email, data.password, role);
+
+        // Get role from user context after login (role is determined by backend)
+        const userRole = sessionStorage.getItem('userRole') as 'client' | 'investor';
+        const redirectRole = userRole || role;
 
         // Redirect based on role or returnTo
         if (returnTo) {
           window.location.href = returnTo;
         } else {
-          const redirectPath = role === 'investor' ? paths.investor.root : paths.client.root;
+          const redirectPath = redirectRole === 'investor' ? paths.investor.root : paths.client.root;
           navigate(redirectPath);
         }
-      } catch (error) {
-        console.error(error);
+      } catch (error: any) {
+        console.error('Login error:', error);
         reset();
-        setErrorMsg(typeof error === 'string' ? error : error.message);
+        // Extract error message from error object
+        const errorMessage = error?.message || error?.toString() || 'Failed to sign in. Please check your credentials.';
+        setErrorMsg(errorMessage);
       }
     },
     [login, reset, returnTo, role, navigate]
@@ -153,9 +160,6 @@ export default function JwtLoginView() {
     <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
       {renderHead}
 
-      <Alert severity="info" sx={{ mb: 3 }}>
-        Use email : <strong>demo@minimals.cc</strong> / password :<strong> demo1234</strong>
-      </Alert>
 
       {renderForm}
     </FormProvider>

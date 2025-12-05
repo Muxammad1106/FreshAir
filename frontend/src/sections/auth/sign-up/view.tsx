@@ -81,18 +81,25 @@ export default function SignUpView() {
   const onSubmit = useCallback(
     async (data: FormValuesProps) => {
       try {
+        setErrorMsg('');
         await register?.(data.email, data.password, data.firstName, data.lastName, role);
 
-        // Redirect based on role
-        if (role === 'investor') {
+        // Get role from user context after registration (role is determined by backend)
+        const userRole = sessionStorage.getItem('userRole') as 'client' | 'investor';
+        const redirectRole = userRole || role;
+
+        // Redirect based on actual user role
+        if (redirectRole === 'investor') {
           navigate(paths.investor.root);
         } else {
           navigate(paths.client.root);
         }
-      } catch (error) {
-        console.error(error);
+      } catch (error: any) {
+        console.error('Registration error:', error);
         reset();
-        setErrorMsg(typeof error === 'string' ? error : 'Something went wrong');
+        // Extract error message from error object
+        const errorMessage = error?.message || error?.toString() || 'Failed to create account. Please try again.';
+        setErrorMsg(errorMessage);
       }
     },
     [register, reset, role, navigate]

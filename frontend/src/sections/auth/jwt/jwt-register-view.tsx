@@ -86,19 +86,26 @@ export default function JwtRegisterView() {
   const onSubmit = useCallback(
     async (data: FormValuesProps) => {
       try {
+        setErrorMsg('');
         await register?.(data.email, data.password, data.firstName, data.lastName, role);
+
+        // Get role from user context after registration (role is determined by backend)
+        const userRole = sessionStorage.getItem('userRole') as 'client' | 'investor';
+        const redirectRole = userRole || role;
 
         // Redirect based on role
         if (returnTo) {
           window.location.href = returnTo;
         } else {
-          const redirectPath = role === 'investor' ? paths.investor.root : paths.client.root;
+          const redirectPath = redirectRole === 'investor' ? paths.investor.root : paths.client.root;
           navigate(redirectPath);
         }
-      } catch (error) {
-        console.error(error);
+      } catch (error: any) {
+        console.error('Registration error:', error);
         reset();
-        setErrorMsg(typeof error === 'string' ? error : error.message);
+        // Extract error message from error object
+        const errorMessage = error?.message || error?.toString() || 'Failed to create account. Please try again.';
+        setErrorMsg(errorMessage);
       }
     },
     [register, reset, returnTo, role, navigate]
