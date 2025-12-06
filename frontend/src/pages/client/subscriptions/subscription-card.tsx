@@ -7,6 +7,7 @@ import Chip from '@mui/material/Chip';
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
 import Divider from '@mui/material/Divider';
+import Alert from '@mui/material/Alert';
 import Dialog from '@mui/material/Dialog';
 import DialogTitle from '@mui/material/DialogTitle';
 import DialogContent from '@mui/material/DialogContent';
@@ -24,33 +25,41 @@ import { Subscription } from './types';
 
 interface SubscriptionCardProps {
   subscription: Subscription;
-  onCancel: (id: number) => void;
+  onCancel: (id: number) => void | Promise<void>;
 }
 
 const STATUS_COLORS: Record<Subscription['status'], 'default' | 'primary' | 'secondary' | 'error' | 'info' | 'success' | 'warning'> = {
   ACTIVE: 'success',
   CANCELLED: 'default',
   EXPIRED: 'error',
-  SUSPENDED: 'warning',
+  SUSPENDED: 'info',
 };
 
 const STATUS_LABELS: Record<Subscription['status'], string> = {
   ACTIVE: 'Активна',
   CANCELLED: 'Отменена',
   EXPIRED: 'Истекла',
-  SUSPENDED: 'Приостановлена',
+  SUSPENDED: 'Ожидает активации заказа',
 };
 
 export function SubscriptionCard({ subscription, onCancel }: SubscriptionCardProps) {
   const [cancelDialogOpen, setCancelDialogOpen] = useState(false);
+  const [cancelling, setCancelling] = useState(false);
 
   const handleCancelClick = () => {
     setCancelDialogOpen(true);
   };
 
-  const handleConfirmCancel = () => {
-    onCancel(subscription.id);
-    setCancelDialogOpen(false);
+  const handleConfirmCancel = async () => {
+    setCancelling(true);
+    try {
+      await onCancel(subscription.id);
+      setCancelDialogOpen(false);
+    } catch (error) {
+      console.error('Failed to cancel subscription:', error);
+    } finally {
+      setCancelling(false);
+    }
   };
 
   const handleCloseDialog = () => {
@@ -79,7 +88,7 @@ export function SubscriptionCard({ subscription, onCancel }: SubscriptionCardPro
               <Stack spacing={0.5}>
                 <Typography variant="h6">Подписка #{subscription.id}</Typography>
                 <Typography variant="body2" color="text.secondary">
-                  Заказ #{subscription.order_id}
+                  Заказ #{subscription.order.id}
                 </Typography>
               </Stack>
               <Chip
@@ -105,13 +114,11 @@ export function SubscriptionCard({ subscription, onCancel }: SubscriptionCardPro
                       </Typography>
                     )}
                   </Stack>
-                  <Typography variant="caption" color="text.secondary">
-                    {subscription.order.rooms.map((orderRoom, idx) => (
-                      <Box key={idx} component="span" sx={{ display: 'block' }}>
-                        {orderRoom.room.name} ({orderRoom.device_types?.map(dt => dt.name).join(', ')})
-                      </Box>
-                    ))}
-                  </Typography>
+                  {subscription.order.rooms.map((orderRoom, idx) => (
+                    <Typography key={idx} variant="caption" color="text.secondary" component="div">
+                      <strong>{orderRoom.room.name}</strong>: {orderRoom.device_types?.map((dt) => dt.name).join(', ') || 'Нет устройств'}
+                    </Typography>
+                  ))}
                 </>
               )}
             </Stack>
@@ -125,26 +132,35 @@ export function SubscriptionCard({ subscription, onCancel }: SubscriptionCardPro
                   Сумма в месяц:
                 </Typography>
                 <Typography variant="h6" color="primary.main">
-                  ${subscription.monthly_amount_usd.toFixed(2)}
+                  ${parseFloat(String(subscription.monthly_amount_usd)).toFixed(2)}
                 </Typography>
               </Stack>
-              <Stack direction="row" justifyContent="space-between" alignItems="center">
-                <Typography variant="body2" color="text.secondary">
-                  Дата начала:
-                </Typography>
-                <Typography variant="body2" fontWeight="medium">
-                  {fDate(subscription.start_date)}
-                </Typography>
-              </Stack>
+              {subscription.status === 'SUSPENDED' && (
+                <Alert severity="info" sx={{ mb: 1 }}>
+                  <Typography variant="caption">
+                    Подписка будет активирована после установки заказа через админку
+                  </Typography>
+                </Alert>
+              )}
               {subscription.status === 'ACTIVE' && (
-                <Stack direction="row" justifyContent="space-between" alignItems="center">
-                  <Typography variant="body2" color="text.secondary">
-                    Следующий платёж:
-                  </Typography>
-                  <Typography variant="body2" fontWeight="medium" color="warning.main">
-                    {fDate(subscription.next_payment_date)}
-                  </Typography>
-                </Stack>
+                <>
+                  <Stack direction="row" justifyContent="space-between" alignItems="center">
+                    <Typography variant="body2" color="text.secondary">
+                      Дата начала:
+                    </Typography>
+                    <Typography variant="body2" fontWeight="medium">
+                      {fDate(subscription.start_date)}
+                    </Typography>
+                  </Stack>
+                  <Stack direction="row" justifyContent="space-between" alignItems="center">
+                    <Typography variant="body2" color="text.secondary">
+                      Следующий платёж:
+                    </Typography>
+                    <Typography variant="body2" fontWeight="medium" color="warning.main">
+                      {fDate(subscription.next_payment_date)}
+                    </Typography>
+                  </Stack>
+                </>
               )}
               {subscription.status === 'CANCELLED' && subscription.cancelled_at && (
                 <Stack direction="row" justifyContent="space-between" alignItems="center">
@@ -156,20 +172,34 @@ export function SubscriptionCard({ subscription, onCancel }: SubscriptionCardPro
                   </Typography>
                 </Stack>
               )}
+              {subscription.status === 'SUSPENDED' && (
+                <Stack direction="row" justifyContent="space-between" alignItems="center">
+                  <Typography variant="body2" color="text.secondary">
+                    Статус заказа:
+                  </Typography>
+                  <Typography variant="body2" fontWeight="medium">
+                    {subscription.order.status === 'APPROVED' && 'Одобрен'}
+                    {subscription.order.status === 'INSTALLED' && 'Установлен'}
+                    {subscription.order.status === 'PENDING' && 'Ожидает оплаты'}
+                    {!['APPROVED', 'INSTALLED', 'PENDING'].includes(subscription.order.status) && subscription.order.status}
+                  </Typography>
+                </Stack>
+              )}
             </Stack>
 
             {/* Cancel Button */}
-            {subscription.status === 'ACTIVE' && (
+            {subscription.status === 'ACTIVE' && !cancelling && (
               <>
                 <Divider />
                 <Button
                   variant="outlined"
                   color="error"
                   fullWidth
+                  disabled={cancelling}
                   startIcon={<Iconify icon="solar:close-circle-bold" />}
                   onClick={handleCancelClick}
                 >
-                  Отменить подписку
+                  {cancelling ? 'Отмена...' : 'Отменить подписку'}
                 </Button>
               </>
             )}

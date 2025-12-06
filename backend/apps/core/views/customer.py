@@ -2,12 +2,15 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from django.db import transaction
+from django.utils import timezone
+from datetime import timedelta
 from toolkit.views import BaseView, CreateMixin, ListMixin
-from core.models import Room, CustomerOrder, DeviceInstance, DeviceMetric, DeviceType, OrderRoom, OrderRoomDeviceType, OrderDevice, PaymentCard, Payment
+from core.models import Room, CustomerOrder, DeviceInstance, DeviceMetric, DeviceType, OrderRoom, OrderRoomDeviceType, OrderDevice, PaymentCard, Payment, Subscription
 from core.serializers.room import RoomSerializer
 from core.serializers.customer_order import CustomerOrderSerializer
 from core.serializers.device import DeviceInstanceSerializer, DeviceMetricSerializer, DeviceTypeSerializer
 from core.serializers.payment import PaymentCardSerializer, PaymentCardCreateSerializer, PaymentSerializer
+from core.serializers.subscription import SubscriptionSerializer
 
 
 class CustomerMixin:
@@ -317,15 +320,33 @@ class CustomerOrderPayView(APIView):
                 # Связываем устройство с заказом через OrderDevice
                 OrderDevice.objects.get_or_create(order=order, device=device)
         
-        # Возвращаем обновленный заказ с созданными устройствами
+        # Создаем подписку для заказа со статусом SUSPENDED
+        # Подписка будет активирована автоматически когда заказ станет ACTIVE (после установки через админку)
+        # Ежемесячная стоимость = общая стоимость заказа (разовая установка не включена в подписку)
+        monthly_amount = total_amount  # Можно настроить отдельную логику расчета
+        
+        # Пока заказ не ACTIVE, подписка в статусе SUSPENDED (ожидает активации)
+        # start_date и next_payment_date будут установлены при активации
+        subscription = Subscription.objects.create(
+            customer=order.customer,
+            order=order,
+            status=Subscription.STATUS_SUSPENDED,  # Ожидает активации заказа
+            monthly_amount_usd=monthly_amount,
+            start_date=timezone.now(),  # Дата создания, но подписка еще не активна
+            next_payment_date=timezone.now() + timedelta(days=30)  # Будет пересчитано при активации
+        )
+        
+        # Возвращаем обновленный заказ с созданными устройствами и подпиской
         order_serializer = CustomerOrderSerializer(order)
         payment_serializer = PaymentSerializer(payment)
+        subscription_serializer = SubscriptionSerializer(subscription)
         
         return Response({
             'order': order_serializer.data,
             'payment': payment_serializer.data,
+            'subscription': subscription_serializer.data,
             'devices_created': len(created_devices),
-            'message': 'Payment confirmed. Devices created successfully.'
+            'message': 'Payment confirmed. Devices created successfully. Subscription created and will be activated when order is installed.'
         })
 
 
@@ -481,4 +502,53 @@ class CustomerPaymentListView(ListMixin, BaseView):
         }
         
         return response
+
+
+class CustomerSubscriptionListView(CustomerMixin, ListMixin, BaseView):
+    """
+    Список подписок клиента.
+    
+    GET: Возвращает список всех подписок текущего клиента.
+    """
+    serializer_class = SubscriptionSerializer
+    queryset = Subscription.objects.select_related('order', 'customer').prefetch_related(
+        'order__order_rooms__room',
+        'order__order_rooms__device_types'
+    ).all()
+    check_retrieve_permission = False
+
+
+class CustomerSubscriptionCancelView(APIView):
+    """
+    Отмена подписки клиента.
+    
+    POST: Отменяет подписку (меняет статус на CANCELLED).
+    """
+    
+    def post(self, request, pk):
+        from rest_framework.exceptions import NotFound, ValidationError, PermissionDenied
+        
+        try:
+            subscription = Subscription.objects.select_related('order', 'customer').get(pk=pk)
+        except Subscription.DoesNotExist:
+            raise NotFound('Subscription not found')
+        
+        # Проверка прав доступа
+        if subscription.customer != request.user:
+            raise PermissionDenied('You do not have permission to cancel this subscription')
+        
+        # Проверка статуса
+        if subscription.status != Subscription.STATUS_ACTIVE:
+            raise ValidationError(f'Subscription is not active. Current status: {subscription.status}')
+        
+        # Отменяем подписку
+        subscription.status = Subscription.STATUS_CANCELLED
+        subscription.cancelled_at = timezone.now()
+        subscription.save()
+        
+        serializer = SubscriptionSerializer(subscription)
+        return Response({
+            'subscription': serializer.data,
+            'message': 'Subscription cancelled successfully'
+        })
 

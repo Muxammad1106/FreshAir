@@ -78,6 +78,8 @@ export const API_ENDPOINTS = {
       devices: '/api/v1/core/customer/devices',
       deviceToggle: (id: number) => `/api/v1/core/customer/devices/${id}/toggle`,
       deviceMetrics: (id: number) => `/api/v1/core/customer/devices/${id}/metrics`,
+      subscriptions: '/api/v1/core/customer/subscriptions',
+      subscriptionCancel: (id: number) => `/api/v1/core/customer/subscriptions/${id}/cancel`,
       paymentCards: '/api/v1/core/customer/payment-cards',
       paymentCard: (id: number) => `/api/v1/core/customer/payment-cards/${id}`,
       payments: '/api/v1/core/customer/payments',
