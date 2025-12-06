@@ -10,27 +10,54 @@ fi
 
 # Функция для проверки доступности базы данных
 wait_for_db() {
-    echo "Waiting for database..."
-    # Получаем параметры БД из Django settings
-    until python -c "
+    echo "Waiting for database connection..."
+    MAX_RETRIES=60
+    RETRY_COUNT=0
+    
+    while [ $RETRY_COUNT -lt $MAX_RETRIES ]; do
+        # Используем прямой psycopg2 вместо Django для более быстрой проверки
+        if python -c "
 import os
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', '${DJANGO_SETTINGS_MODULE:-config.settings}')
-import django
-django.setup()
-from django.conf import settings
-import psycopg2
-psycopg2.connect(
-    dbname=settings.DATABASES['default']['NAME'],
-    user=settings.DATABASES['default']['USER'],
-    password=settings.DATABASES['default']['PASSWORD'],
-    host=settings.DATABASES['default']['HOST'],
-    port=settings.DATABASES['default']['PORT']
-)
-" 2>/dev/null; do
-        echo "Database is unavailable - sleeping"
-        sleep 1
+import sys
+try:
+    import psycopg2
+    db_host = os.environ.get('POSTGRES_HOST', 'localhost')
+    db_port = int(os.environ.get('POSTGRES_PORT', 5432))
+    db_name = 'fresh2'
+    db_user = 'suv'
+    db_pass = 'suv'
+    
+    conn = psycopg2.connect(
+        dbname=db_name,
+        user=db_user,
+        password=db_pass,
+        host=db_host,
+        port=db_port,
+        connect_timeout=3
+    )
+    conn.close()
+    sys.exit(0)
+except Exception as e:
+    sys.exit(1)
+" 2>/dev/null; then
+            echo "Database is available!"
+            return 0
+        fi
+        
+        RETRY_COUNT=$((RETRY_COUNT + 1))
+        if [ $RETRY_COUNT -lt $MAX_RETRIES ]; then
+            echo "Database is unavailable (attempt $RETRY_COUNT/$MAX_RETRIES) - sleeping..."
+            sleep 2
+        fi
     done
-    echo "Database is available!"
+    
+    echo "ERROR: Could not connect to database after $MAX_RETRIES attempts"
+    echo "Please check:"
+    echo "  - PostgreSQL is running: sudo systemctl status postgresql"
+    echo "  - POSTGRES_HOST is correct (current: ${POSTGRES_HOST:-localhost})"
+    echo "  - Database 'fresh2' exists and user 'suv' has access"
+    echo "  - pg_hba.conf allows connections from Docker network"
+    exit 1
 }
 
 # Ждем доступности базы данных

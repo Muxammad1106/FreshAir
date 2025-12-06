@@ -60,15 +60,16 @@ services:
       - DJANGO_SETTINGS_MODULE=${DJANGO_SETTINGS_MODULE:-config.settings_prod}
       - DEBUG=${DEBUG:-False}
       - SECRET_KEY=${SECRET_KEY:-django-insecure-change-me-in-production}
-      - POSTGRES_HOST=${POSTGRES_HOST:-172.17.0.1}
+      - POSTGRES_HOST=${POSTGRES_HOST:-host.docker.internal}
       - POSTGRES_PORT=${POSTGRES_PORT:-5432}
       - CELERY_BROKER_URL=redis://redis:6379/0
       - CELERY_RESULT_BACKEND=redis://redis:6379/0
       - FRONTEND_DOMAIN=${FRONTEND_DOMAIN:-https://airly.life}
       - ALLOWED_HOSTS=${ALLOWED_HOSTS:-api.airly.life,localhost,127.0.0.1,backend}
       - CORS_ALLOWED_ORIGINS=${CORS_ALLOWED_ORIGINS:-https://airly.life}
-    # Для подключения к внешнему PostgreSQL на Linux используйте: POSTGRES_HOST=172.17.0.1
-    # Для Mac/Windows добавьте: extra_hosts: - "host.docker.internal:host-gateway"
+    # Поддержка host.docker.internal для подключения к хосту
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     depends_on:
       # db:
       #   condition: service_healthy
@@ -90,10 +91,12 @@ services:
     environment:
       - DJANGO_SETTINGS_MODULE=${DJANGO_SETTINGS_MODULE:-config.settings_prod}
       - DEBUG=${DEBUG:-False}
-      - POSTGRES_HOST=${POSTGRES_HOST:-172.17.0.1}
+      - POSTGRES_HOST=${POSTGRES_HOST:-host.docker.internal}
       - POSTGRES_PORT=${POSTGRES_PORT:-5432}
       - CELERY_BROKER_URL=redis://redis:6379/0
       - CELERY_RESULT_BACKEND=redis://redis:6379/0
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     depends_on:
       # - db
       - redis
@@ -114,10 +117,12 @@ services:
     environment:
       - DJANGO_SETTINGS_MODULE=${DJANGO_SETTINGS_MODULE:-config.settings_prod}
       - DEBUG=${DEBUG:-False}
-      - POSTGRES_HOST=${POSTGRES_HOST:-172.17.0.1}
+      - POSTGRES_HOST=${POSTGRES_HOST:-host.docker.internal}
       - POSTGRES_PORT=${POSTGRES_PORT:-5432}
       - CELERY_BROKER_URL=redis://redis:6379/0
       - CELERY_RESULT_BACKEND=redis://redis:6379/0
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     depends_on:
       # - db
       - redis
