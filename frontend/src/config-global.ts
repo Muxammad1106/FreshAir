@@ -4,7 +4,9 @@ import { paths } from 'src/routes/paths';
 // API
 // ----------------------------------------------------------------------
 
-export const HOST_API = process.env.REACT_APP_HOST_API || 'http://localhost:8000';
+// В production используется api.airly.life, в development - localhost:8000
+export const HOST_API = process.env.REACT_APP_HOST_API || 
+  (process.env.NODE_ENV === 'production' ? 'https://api.airly.life' : 'http://localhost:8000');
 export const ASSETS_API = process.env.REACT_APP_ASSETS_API;
 
 export const FIREBASE_API = {

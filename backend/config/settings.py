@@ -30,7 +30,7 @@ SECRET_KEY = JWT_SECRET_KEY = 'django-3asdfldc%1uurd4%956l++wadfe2460&vbpasdfg7e
 DEBUG = os.environ.get('DEBUG', False)
 TESTING = ('test' == sys.argv[1]) if sys.argv else False
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1']
+ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', 'localhost,127.0.0.1').split(',')
 
 # Application definition
 
@@ -168,7 +168,27 @@ LOGIN_REDIRECT_URL = '/api/v1/toolkit/'
 
 # CUSTOM SETTINGS
 FRONTEND_DOMAIN = os.environ.get('FRONTEND_DOMAIN', 'http://localhost:3000')
-CORS_ORIGIN_WHITELIST = (FRONTEND_DOMAIN,)
+
+# CORS Configuration
+cors_origins = os.environ.get('CORS_ALLOWED_ORIGINS', '').strip()
+if cors_origins:
+    CORS_ALLOWED_ORIGINS = [origin.strip() for origin in cors_origins.split(',') if origin.strip()]
+else:
+    CORS_ALLOWED_ORIGINS = [FRONTEND_DOMAIN]
+
+CORS_ORIGIN_WHITELIST = CORS_ALLOWED_ORIGINS
+CORS_ALLOW_CREDENTIALS = True
+CORS_ALLOW_HEADERS = [
+    'accept',
+    'accept-encoding',
+    'authorization',
+    'content-type',
+    'dnt',
+    'origin',
+    'user-agent',
+    'x-csrftoken',
+    'x-requested-with',
+]
 
 COMPANY_NAME = 'FreshAIR'
 DEFAULT_FIXTURES = [
