@@ -78,17 +78,20 @@ class AvailableDevicesView(ListMixin, BaseView):
     """
     serializer_class = AvailableDeviceSerializer
     queryset = DeviceInstance.objects.filter(status=DeviceInstance.STATUS_ACTIVE).select_related('device_type', 'room').prefetch_related('metrics')
+    check_retrieve_permission = False  # Отключаем проверку прав, так как это публичный список для инвесторов
 
     def get_queryset(self):
         queryset = super().get_queryset()
         budget = self.request.query_params.get('budget')
         if budget:
             try:
-                budget = float(budget)
+                from decimal import Decimal
+                budget_decimal = Decimal(str(budget))
+                # Фильтруем устройства, у которых минимальная инвестиция меньше или равна бюджету
                 queryset = queryset.filter(
-                    Q(investments__isnull=True) | Q(investments__amount_usd__lt=budget)
+                    device_type__min_investment_usd__lte=budget_decimal
                 )
-            except ValueError:
+            except (ValueError, TypeError):
                 pass
         return queryset.distinct()
 
@@ -103,7 +106,9 @@ class InvestmentListView(InvestorMixin, ListMixin, CreateMixin, BaseView):
     Инвестиция создаётся со статусом PENDING и требует подтверждения оплаты.
     """
     serializer_class = InvestmentSerializer
-    queryset = Investment.objects.select_related('device', 'device__device_type', 'device__room').prefetch_related('stat_snapshots').all()
+    queryset = Investment.objects.select_related('device', 'device__device_type', 'device__room').prefetch_related('stat_snapshots').order_by('-created_at')
+    check_retrieve_permission = False  # Фильтрация по investor обеспечивает безопасность
+    check_create_permission = False  # Проверяем только что пользователь - инвестор
 
     def perform_create(self, serializer):
         serializer.validated_data['investor'] = self.request.user

@@ -103,6 +103,11 @@ class DeviceType(BaseModel):
     supports_humidifying = models.BooleanField(default=False)
     supports_aroma = models.BooleanField(default=False)
     price_usd = models.DecimalField(max_digits=10, decimal_places=2, default=Decimal('0.00'), help_text='Цена устройства в USD')
+    # Поля для инвестиций
+    min_investment_usd = models.DecimalField(max_digits=10, decimal_places=2, default=Decimal('100.00'), help_text='Минимальная сумма инвестиции в USD')
+    max_investment_usd = models.DecimalField(max_digits=10, decimal_places=2, default=Decimal('1000.00'), help_text='Максимальная сумма инвестиции в USD')
+    investment_profit_percentage = models.FloatField(default=25.0, help_text='Процент прибыли за период (например, 25% за 6 месяцев)')
+    investment_period_months = models.IntegerField(default=6, help_text='Период инвестиции в месяцах')
 
     def __str__(self):
         return self.name
