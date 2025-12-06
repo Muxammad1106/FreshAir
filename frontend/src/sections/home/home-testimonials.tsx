@@ -9,28 +9,32 @@ import Avatar from '@mui/material/Avatar';
 import Stack from '@mui/material/Stack';
 import Grid from '@mui/material/Grid';
 // components
+import Iconify from 'src/components/iconify';
 import { MotionContainer, varFade } from 'src/components/animate';
 
 // ----------------------------------------------------------------------
 
 const TESTIMONIALS = [
   {
-    name: 'Анна Иванова',
-    role: 'Москва',
-    content: 'Отличный сервис! Чистый воздух в доме, и не нужно думать о замене фильтров.',
+    name: 'Sarah Johnson',
+    role: 'New York, NY',
+    content: 'Amazing service! The air quality in our home has improved dramatically. No more worrying about filter replacements - they handle everything.',
     avatar: 'https://i.pravatar.cc/150?img=1',
+    rating: 5,
   },
   {
-    name: 'Дмитрий Петров',
-    role: 'Санкт-Петербург',
-    content: 'Удобная подписка, все работает как часы. Рекомендую!',
+    name: 'Michael Chen',
+    role: 'San Francisco, CA',
+    content: 'The subscription model is perfect. Affordable monthly payments and zero maintenance hassle. The real-time monitoring is a game-changer.',
     avatar: 'https://i.pravatar.cc/150?img=2',
+    rating: 5,
   },
   {
-    name: 'Мария Сидорова',
-    role: 'Казань',
-    content: 'Прекрасное решение для семьи. Дети дышат чистым воздухом.',
+    name: 'Emily Rodriguez',
+    role: 'Austin, TX',
+    content: 'Best investment for our family\'s health. The kids breathe cleaner air, and I love the peace of mind knowing everything is taken care of.',
     avatar: 'https://i.pravatar.cc/150?img=3',
+    rating: 5,
   },
 ];
 
@@ -43,7 +47,10 @@ export default function HomeTestimonials() {
         <Stack spacing={5} alignItems="center">
           <m.div variants={varFade().inUp}>
             <Typography variant="h2" sx={{ textAlign: 'center', mb: 2 }}>
-              Отзывы клиентов
+              What Our Customers Say
+            </Typography>
+            <Typography variant="body1" color="text.secondary" sx={{ textAlign: 'center', maxWidth: 600, mx: 'auto' }}>
+              Join thousands of satisfied customers breathing cleaner air
             </Typography>
           </m.div>
 
@@ -54,6 +61,15 @@ export default function HomeTestimonials() {
                   <Card sx={{ height: '100%' }}>
                     <CardContent sx={{ p: 3 }}>
                       <Stack spacing={2}>
+                        <Stack direction="row" spacing={0.5}>
+                          {[...Array(testimonial.rating)].map((_, i) => (
+                            <Iconify
+                              key={i}
+                              icon="solar:star-bold"
+                              sx={{ color: 'warning.main', width: 20, height: 20 }}
+                            />
+                          ))}
+                        </Stack>
                         <Typography variant="body1" color="text.secondary">
                           &ldquo;{testimonial.content}&rdquo;
                         </Typography>

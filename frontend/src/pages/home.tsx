@@ -8,7 +8,7 @@ export default function HomePage() {
   return (
     <>
       <Helmet>
-        <title> Чистый воздух по подписке | Air Purifier</title>
+        <title>Fresh Air Subscription | Air Purification Service</title>
       </Helmet>
 
       <HomeView />

@@ -30,7 +30,7 @@ export default function InvestorCta() {
                 fontSize: { xs: '2rem', md: '3rem' },
               }}
             >
-              Начните инвестировать прямо сейчас
+              Start Investing Today
             </Typography>
           </m.div>
 
@@ -44,7 +44,8 @@ export default function InvestorCta() {
                 mb: 5,
               }}
             >
-              Присоединяйтесь к инвесторам, которые уже получают пассивный доход от чистого воздуха
+              Join investors already earning passive income from clean air. 
+              Build your portfolio and start receiving monthly returns.
             </Typography>
           </m.div>
 
@@ -65,7 +66,7 @@ export default function InvestorCta() {
                 },
               }}
             >
-              Начать инвестировать
+              Get Started
             </Button>
           </m.div>
         </Stack>

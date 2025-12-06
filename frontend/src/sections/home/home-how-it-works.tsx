@@ -15,18 +15,18 @@ import { MotionContainer, varFade } from 'src/components/animate';
 
 const STEPS = [
   {
-    title: 'Выберите тариф',
-    description: 'Выберите подходящий план подписки',
+    title: 'Choose Your Plan',
+    description: 'Select a subscription plan that fits your space and needs. From basic air purification to premium smart monitoring.',
     icon: 'solar:check-circle-bold',
   },
   {
-    title: 'Мы доставим устройство',
-    description: 'Бесплатная доставка и установка',
+    title: 'We Deliver & Install',
+    description: 'Free delivery and professional installation. Our team sets up your device and shows you how to use it.',
     icon: 'solar:delivery-bold',
   },
   {
-    title: 'Вы пользуетесь — мы обслуживаем',
-    description: 'Мы следим за устройством и меняем фильтры',
+    title: 'Enjoy Clean Air',
+    description: 'Monitor air quality in real-time. We handle maintenance, filter replacements, and 24/7 support.',
     icon: 'solar:settings-bold',
   },
 ];
@@ -40,7 +40,10 @@ export default function HomeHowItWorks() {
         <Stack spacing={5} alignItems="center">
           <m.div variants={varFade().inUp}>
             <Typography variant="h2" sx={{ textAlign: 'center', mb: 2 }}>
-              Как это работает
+              How It Works
+            </Typography>
+            <Typography variant="body1" color="text.secondary" sx={{ textAlign: 'center', maxWidth: 600, mx: 'auto' }}>
+              Get premium air purification in three simple steps
             </Typography>
           </m.div>
 

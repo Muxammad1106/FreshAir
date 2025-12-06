@@ -34,7 +34,11 @@ export default function InvestorHero() {
                 mb: 2,
               }}
             >
-              Инвестируйте в чистый воздух
+              Invest in Clean Air
+              <br />
+              <Box component="span" sx={{ color: 'primary.main' }}>
+                Earn Passive Income
+              </Box>
             </Typography>
           </m.div>
 
@@ -48,25 +52,40 @@ export default function InvestorHero() {
                 fontWeight: 400,
               }}
             >
-              Купите очиститель воздуха — мы сдаём его в аренду и выплачиваем вам пассивный доход
-              каждый месяц
+              Purchase air purification devices and earn monthly passive income. 
+              We handle installation, maintenance, and customer management. You just collect returns.
             </Typography>
           </m.div>
 
           <m.div variants={varFade().inUp}>
-            <Button
-              size="large"
-              variant="contained"
-              color="primary"
-              sx={{
-                px: 5,
-                py: 1.5,
-                fontSize: '1.1rem',
-                fontWeight: 600,
-              }}
-            >
-              Стать инвестором
-            </Button>
+            <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2} alignItems="center">
+              <Button
+                size="large"
+                variant="contained"
+                color="primary"
+                sx={{
+                  px: 5,
+                  py: 1.5,
+                  fontSize: '1.1rem',
+                  fontWeight: 600,
+                }}
+              >
+                Start Investing
+              </Button>
+              <Button
+                size="large"
+                variant="outlined"
+                color="primary"
+                sx={{
+                  px: 5,
+                  py: 1.5,
+                  fontSize: '1.1rem',
+                  fontWeight: 600,
+                }}
+              >
+                View Returns
+              </Button>
+            </Stack>
           </m.div>
 
           <m.div variants={varFade().inUp}>

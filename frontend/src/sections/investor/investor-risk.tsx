@@ -15,21 +15,21 @@ import { MotionContainer, varFade } from 'src/components/animate';
 
 const RISKS = [
   {
-    title: 'Гарантия обслуживания',
+    title: 'Full Maintenance Guarantee',
     description:
-      'Мы полностью отвечаем за обслуживание устройств. В случае поломки мы бесплатно ремонтируем или заменяем устройство.',
+      'We fully maintain all devices. If a device breaks, we repair or replace it at no cost to you. Your investment is protected.',
     icon: 'solar:shield-check-bold',
   },
   {
-    title: 'Полный мониторинг',
+    title: 'Real-time Monitoring',
     description:
-      'Вы получаете доступ к дашборду, где видите статус ваших устройств, доходность и все транзакции в реальном времени.',
+      'Access your investor dashboard to track device status, returns, and all transactions in real-time. Complete transparency.',
     icon: 'solar:graph-up-bold',
   },
   {
-    title: 'Консервативные риски',
+    title: 'Low Risk Investment',
     description:
-      'Мы работаем только с проверенными подписчиками, используем страховку и гарантируем минимальный уровень риска.',
+      'We work only with verified subscribers, use insurance coverage, and maintain conservative risk management practices.',
     icon: 'solar:verified-check-bold',
   },
 ];
@@ -43,10 +43,10 @@ export default function InvestorRisk() {
         <Stack spacing={5} alignItems="center">
           <m.div variants={varFade().inUp}>
             <Typography variant="h2" sx={{ textAlign: 'center', mb: 2 }}>
-              Риски и прозрачность
+              Risk Management & Transparency
             </Typography>
-            <Typography variant="body1" color="text.secondary" sx={{ textAlign: 'center' }}>
-              Мы обеспечиваем максимальную защиту ваших инвестиций
+            <Typography variant="body1" color="text.secondary" sx={{ textAlign: 'center', maxWidth: 700, mx: 'auto' }}>
+              We protect your investment with comprehensive guarantees and full transparency
             </Typography>
           </m.div>
 

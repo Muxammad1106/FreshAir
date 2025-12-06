@@ -20,10 +20,10 @@ export default function InvestorIncomeModel() {
         <Stack spacing={5} alignItems="center">
           <m.div variants={varFade().inUp}>
             <Typography variant="h2" sx={{ textAlign: 'center', mb: 2 }}>
-              Модель дохода
+              Income Model
             </Typography>
-            <Typography variant="body1" color="text.secondary" sx={{ textAlign: 'center' }}>
-              Пример расчета доходности инвестиции
+            <Typography variant="body1" color="text.secondary" sx={{ textAlign: 'center', maxWidth: 700, mx: 'auto' }}>
+              Transparent returns with predictable monthly income
             </Typography>
           </m.div>
 
@@ -34,13 +34,13 @@ export default function InvestorIncomeModel() {
                   <CardContent sx={{ p: 4 }}>
                     <Stack spacing={3}>
                       <Typography variant="h4" sx={{ mb: 2 }}>
-                        Пример инвестиции
+                        Investment Example
                       </Typography>
 
                       <Stack spacing={2}>
                         <Stack direction="row" justifyContent="space-between" alignItems="center">
                           <Typography variant="body1" color="text.secondary">
-                            Стоимость устройства:
+                            Device Investment:
                           </Typography>
                           <Typography variant="h6" fontWeight={700}>
                             $300
@@ -51,7 +51,7 @@ export default function InvestorIncomeModel() {
 
                         <Stack direction="row" justifyContent="space-between" alignItems="center">
                           <Typography variant="body1" color="text.secondary">
-                            Доход в месяц:
+                            Monthly Income:
                           </Typography>
                           <Typography variant="h6" fontWeight={700} color="primary.main">
                             $12–18
@@ -62,10 +62,10 @@ export default function InvestorIncomeModel() {
 
                         <Stack direction="row" justifyContent="space-between" alignItems="center">
                           <Typography variant="body1" color="text.secondary">
-                            Окупаемость:
+                            Payback Period:
                           </Typography>
                           <Typography variant="h6" fontWeight={700}>
-                            ~18–24 месяцев
+                            ~18–24 months
                           </Typography>
                         </Stack>
 
@@ -73,7 +73,7 @@ export default function InvestorIncomeModel() {
 
                         <Stack direction="row" justifyContent="space-between" alignItems="center">
                           <Typography variant="body1" color="text.secondary">
-                            Годовая доходность:
+                            Annual ROI:
                           </Typography>
                           <Typography variant="h6" fontWeight={700} color="success.main">
                             ~48–72%
@@ -92,7 +92,7 @@ export default function InvestorIncomeModel() {
                   <CardContent sx={{ p: 4 }}>
                     <Stack spacing={3}>
                       <Typography variant="h4" sx={{ mb: 2 }}>
-                        График доходности
+                        Returns Timeline
                       </Typography>
 
                       <Box
@@ -107,13 +107,13 @@ export default function InvestorIncomeModel() {
                         }}
                       >
                         <Typography variant="body2" color="text.secondary">
-                          График доходности (placeholder)
+                          Returns Chart (placeholder)
                         </Typography>
                       </Box>
 
                       <Typography variant="body2" color="text.secondary">
-                        * Доходность может варьироваться в зависимости от тарифа подписчика и
-                        условий договора
+                        * Returns may vary based on subscriber plan and device usage. 
+                        All figures are estimates based on typical performance.
                       </Typography>
                     </Stack>
                   </CardContent>

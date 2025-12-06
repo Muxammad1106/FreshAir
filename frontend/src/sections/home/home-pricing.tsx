@@ -22,29 +22,42 @@ const PLANS = [
   {
     name: 'Basic',
     price: '29',
-    features: ['Очиститель воздуха', 'Базовый мониторинг', 'Замена фильтров раз в 6 месяцев'],
+    period: 'per month',
+    description: 'Perfect for small spaces',
+    features: [
+      'Air Purifier Device',
+      'Basic Air Quality Monitoring',
+      'Filter Replacement Every 6 Months',
+      'Email Support',
+    ],
     popular: false,
   },
   {
     name: 'Standard',
     price: '49',
+    period: 'per month',
+    description: 'Most popular choice',
     features: [
-      'Очиститель воздуха премиум',
-      'Расширенный мониторинг',
-      'Замена фильтров раз в 3 месяца',
-      'Приоритетная поддержка',
+      'Premium Air Purifier',
+      'Advanced Real-time Monitoring',
+      'Filter Replacement Every 3 Months',
+      'Priority Support',
+      'Humidification Features',
     ],
     popular: true,
   },
   {
     name: 'Premium',
     price: '79',
+    period: 'per month',
+    description: 'Complete air care solution',
     features: [
-      'Очиститель воздуха премиум+',
-      'Smart мониторинг в реальном времени',
-      'Замена фильтров раз в месяц',
-      '24/7 поддержка',
-      'Персональный менеджер',
+      'Premium+ Air Purifier',
+      'Smart Real-time Monitoring',
+      'Filter Replacement Every Month',
+      '24/7 Dedicated Support',
+      'Personal Account Manager',
+      'Aromatherapy Features',
     ],
     popular: false,
   },
@@ -59,10 +72,10 @@ export default function HomePricing() {
         <Stack spacing={5} alignItems="center">
           <m.div variants={varFade().inUp}>
             <Typography variant="h2" sx={{ textAlign: 'center', mb: 2 }}>
-              Тарифы
+              Simple, Transparent Pricing
             </Typography>
-            <Typography variant="body1" color="text.secondary" sx={{ textAlign: 'center' }}>
-              Выберите подходящий план подписки
+            <Typography variant="body1" color="text.secondary" sx={{ textAlign: 'center', maxWidth: 600, mx: 'auto' }}>
+              Choose the plan that fits your needs. All plans include free delivery, installation, and maintenance.
             </Typography>
           </m.div>
 
@@ -105,12 +118,15 @@ export default function HomePricing() {
                           <Typography variant="h4" sx={{ mb: 1 }}>
                             {plan.name}
                           </Typography>
+                          <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+                            {plan.description}
+                          </Typography>
                           <Stack direction="row" alignItems="baseline" spacing={0.5}>
                             <Typography variant="h3" sx={{ fontWeight: 700 }}>
                               ${plan.price}
                             </Typography>
                             <Typography variant="body2" color="text.secondary">
-                              /месяц
+                              /{plan.period}
                             </Typography>
                           </Stack>
                         </Box>
@@ -135,7 +151,7 @@ export default function HomePricing() {
                           size="large"
                           sx={{ mt: 2 }}
                         >
-                          Subscribe
+                          Get Started
                         </Button>
                       </Stack>
                     </CardContent>
