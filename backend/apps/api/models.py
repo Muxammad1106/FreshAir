@@ -28,14 +28,14 @@ class DeviceModels(BaseModel):
     SENSOR = 'sensor'
     AROMA = 'aroma'
 
-    DEVICE_TYPES = {
+    DEVICE_TYPES = [
         (CONDITIONER, 'Air Conditioner'),
         (PURIFIER, 'Air Purifier'),
         (HUMIDIFIER, 'Air Humidifier'),
         (SENSOR, 'Air Quality Sensor'),
         (AROMA, 'Aroma'),
-    }
-    
+    ]
+
     name = models.CharField(max_length=255)
     square = models.DecimalField(max_digits=10, decimal_places=2)
     rent_price = models.DecimalField(max_digits=10, decimal_places=2)
