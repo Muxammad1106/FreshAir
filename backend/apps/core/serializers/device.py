@@ -6,7 +6,7 @@ from core.models import DeviceInstance, DeviceType, DeviceMetric
 class DeviceTypeSerializer(BaseModelSerializer):
     class Meta:
         model = DeviceType
-        fields = ('id', 'name', 'device_category', 'recommended_max_area_m2', 'recommended_max_volume_m3', 'power_watts', 'supports_cleaning', 'supports_humidifying', 'supports_aroma')
+        fields = ('id', 'name', 'device_category', 'recommended_max_area_m2', 'recommended_max_volume_m3', 'power_watts', 'supports_cleaning', 'supports_humidifying', 'supports_aroma', 'price_usd', 'min_investment_usd', 'max_investment_usd', 'investment_profit_percentage', 'investment_period_months')
         read_only_fields = ('id',)
 
 
@@ -30,6 +30,9 @@ class DeviceInstanceSerializer(BaseModelSerializer):
         return None
 
     def get_last_metric(self, obj):
+        from core.utils.metrics_generator import ensure_device_has_recent_metrics
+        # Убеждаемся, что есть свежая метрика
+        ensure_device_has_recent_metrics(obj, hours_back=1)
         last_metric = obj.metrics.order_by('-timestamp').first()
         if last_metric:
             return DeviceMetricSerializer(last_metric).data

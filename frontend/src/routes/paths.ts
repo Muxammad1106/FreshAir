@@ -29,6 +29,7 @@ export const paths = {
   client: {
     root: ROOTS.CLIENT,
     overview: ROOTS.CLIENT,
+    orders: `${ROOTS.CLIENT}/orders`,
     analytics: `${ROOTS.CLIENT}/analytics`,
     devices: `${ROOTS.CLIENT}/devices`,
     settings: `${ROOTS.CLIENT}/settings`,
@@ -36,7 +37,10 @@ export const paths = {
   // INVESTOR DASHBOARD
   investor: {
     root: ROOTS.INVESTOR,
-    portfolio: `${ROOTS.INVESTOR}/portfolio`,
+    portfolio: ROOTS.INVESTOR, // Портфолио - это главная страница инвестора
+    investments: `${ROOTS.INVESTOR}/investments`,
+    analytics: `${ROOTS.INVESTOR}/analytics`,
+    transactions: `${ROOTS.INVESTOR}/transactions`,
     earnings: `${ROOTS.INVESTOR}/earnings`,
     settings: `${ROOTS.INVESTOR}/settings`,
   },

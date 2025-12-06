@@ -15,6 +15,7 @@ const ICONS = {
   analytics: icon('ic_analytics'),
   product: icon('ic_product'),
   settings: icon('ic_lock'),
+  order: icon('ic_product'), // Используем иконку продукта для заказов
 };
 
 // ----------------------------------------------------------------------
@@ -26,6 +27,7 @@ export function useClientNavData() {
         subheader: 'Client Dashboard',
         items: [
           { title: 'Overview', path: paths.client.overview, icon: ICONS.dashboard },
+          { title: 'Orders', path: paths.client.orders, icon: ICONS.order },
           { title: 'Analytics', path: paths.client.analytics, icon: ICONS.analytics },
           { title: 'Devices', path: paths.client.devices, icon: ICONS.product },
           { title: 'Settings', path: paths.client.settings, icon: ICONS.settings },

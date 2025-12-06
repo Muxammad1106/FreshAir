@@ -8,7 +8,9 @@ from core.views.customer import (
     CustomerOrderListView,
     CustomerDeviceListView,
     DeviceToggleView,
-    DeviceMetricsView
+    DeviceMetricsView,
+    DeviceTypeListView,
+    CustomerOrderPayView
 )
 from core.views.investor import (
     InvestorDashboardView,
@@ -27,7 +29,9 @@ urlpatterns = [
     path('general', GeneralView.as_view()),
     path('company', CompanyView.as_view()),
     path('customer/rooms', RoomListView.as_view(), name='customer-rooms'),
+    path('customer/device-types', DeviceTypeListView.as_view(), name='customer-device-types'),
     path('customer/orders', CustomerOrderListView.as_view(), name='customer-orders'),
+    path('customer/orders/<int:pk>/pay', CustomerOrderPayView.as_view(), name='customer-order-pay'),
     path('customer/devices', CustomerDeviceListView.as_view(), name='customer-devices'),
     path('customer/devices/<int:pk>/toggle', DeviceToggleView.as_view(), name='device-toggle'),
     path('customer/devices/<int:pk>/metrics', DeviceMetricsView.as_view(), name='device-metrics'),

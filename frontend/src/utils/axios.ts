@@ -72,7 +72,9 @@ export const API_ENDPOINTS = {
     // Customer endpoints
     customer: {
       rooms: '/api/v1/core/customer/rooms',
+      deviceTypes: '/api/v1/core/customer/device-types',
       orders: '/api/v1/core/customer/orders',
+      orderPay: (id: number) => `/api/v1/core/customer/orders/${id}/pay`,
       devices: '/api/v1/core/customer/devices',
       deviceToggle: (id: number) => `/api/v1/core/customer/devices/${id}/toggle`,
       deviceMetrics: (id: number) => `/api/v1/core/customer/devices/${id}/metrics`,
