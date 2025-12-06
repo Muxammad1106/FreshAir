@@ -189,7 +189,7 @@ CORS_ALLOW_HEADERS = [
     'x-requested-with',
 ]
 
-    CORS_ALLOWED_ORIGINS = [
+CORS_ALLOWED_ORIGINS = [
         "https://api.airly.life",
         "https://airly.life",
         "https://fresh-271gglawq-muxammads-projects-3b88429c.vercel.app",
