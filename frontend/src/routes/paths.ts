@@ -31,6 +31,7 @@ export const paths = {
     overview: ROOTS.CLIENT,
     orders: `${ROOTS.CLIENT}/orders`,
     payment: `${ROOTS.CLIENT}/payment`,
+    subscriptions: `${ROOTS.CLIENT}/subscriptions`,
     devices: `${ROOTS.CLIENT}/devices`,
     settings: `${ROOTS.CLIENT}/settings`,
   },

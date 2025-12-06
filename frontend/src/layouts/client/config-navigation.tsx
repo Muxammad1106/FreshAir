@@ -16,6 +16,7 @@ const ICONS = {
   product: icon('ic_product'),
   settings: icon('ic_lock'),
   order: icon('ic_product'), // Используем иконку продукта для заказов
+  subscription: icon('ic_banking'), // Используем иконку банковских операций для подписок
 };
 
 // ----------------------------------------------------------------------
@@ -29,6 +30,7 @@ export function useClientNavData() {
           { title: 'Overview', path: paths.client.overview, icon: ICONS.dashboard },
           { title: 'Orders', path: paths.client.orders, icon: ICONS.order },
           { title: 'Payment', path: paths.client.payment, icon: ICONS.analytics },
+          { title: 'Subscriptions', path: paths.client.subscriptions, icon: ICONS.subscription },
           { title: 'Devices', path: paths.client.devices, icon: ICONS.product },
           { title: 'Settings', path: paths.client.settings, icon: ICONS.settings },
         ],
