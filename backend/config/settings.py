@@ -59,9 +59,9 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    "corsheaders.middleware.CorsMiddleware",
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
-    "corsheaders.middleware.CorsMiddleware",
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -174,39 +174,43 @@ LOGIN_REDIRECT_URL = '/api/v1/toolkit/'
 # CUSTOM SETTINGS
 FRONTEND_DOMAIN = os.environ.get('FRONTEND_DOMAIN', 'http://localhost:3000')
 
-# CORS Configuration - разрешаем все источники
-CORS_ALLOW_ALL_ORIGINS = True
 CORS_ALLOW_CREDENTIALS = True
-CORS_ALLOW_HEADERS = [
-    'accept',
-    'accept-encoding',
-    'authorization',
-    'content-type',
-    'dnt',
-    'origin',
-    'user-agent',
-    'x-csrftoken',
-    'x-requested-with',
-]
 
 CORS_ALLOWED_ORIGINS = [
-        "https://api.airly.life",
-        "https://airly.life",
-        "https://fresh-271gglawq-muxammads-projects-3b88429c.vercel.app",
-        "https://8cef48143298.ngrok-free.app",
-        "https://37d9e4e326d7.ngrok-free.app",
-        "http://localhost:3000"
-    ]
-
-COMPANY_NAME = 'FreshAIR'
-DEFAULT_FIXTURES = [
-    # when you run `manage.py fixtures` fixtures below will be loaded.
-    'company',
-    'users_and_tokens',
-    'freshair_data',
-    'freshair_users',
-    'users_and_tokens',
+    "https://airly.life",
+    "https://api.airly.life",
+    "https://fresh-kgj7bzek4-muxammads-projects-3b88429c.vercel.app",
+    "http://localhost:3000",
 ]
+
+CORS_ALLOWED_ORIGIN_REGEXES = [
+    r"^https://.*vercel\.app$",
+]
+
+CORS_ALLOW_HEADERS = [
+    "accept",
+    "accept-encoding",
+    "authorization",
+    "content-type",
+    "dnt",
+    "origin",
+    "user-agent",
+    "x-csrftoken",
+    "x-requested-with",
+]
+
+CORS_EXPOSE_HEADERS = ["Content-Type", "X-CSRFToken"]
+
+CORS_ALLOW_METHODS = [
+    "GET",
+    "POST",
+    "PUT",
+    "PATCH",
+    "DELETE",
+    "OPTIONS",
+]
+
+
 JWT_ALGORITHM = 'HS256'
 TOKEN_EXPIRATION = 7200  # seconds
 
