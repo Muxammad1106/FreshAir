@@ -30,11 +30,11 @@ SECRET_KEY = JWT_SECRET_KEY = 'django-3asdfldc%1uurd4%956l++wadfe2460&vbpasdfg7e
 DEBUG = os.environ.get('DEBUG', False)
 TESTING = ('test' == sys.argv[1]) if sys.argv else False
 
-ALLOWED_HOSTS = [
-    'api.airly.life',
-    'localhost',
-    '127.0.0.1',
-]
+# ALLOWED_HOSTS - добавляйте конкретные ngrok домены через переменную окружения
+# Django не поддерживает wildcards в ALLOWED_HOSTS, поэтому добавляйте конкретные домены
+_allowed_hosts_default = 'api.airly.life,localhost,127.0.0.1,8cef48143298.ngrok-free.app,37d9e4e326d7.ngrok-free.app'
+_allowed_hosts = os.environ.get('ALLOWED_HOSTS', _allowed_hosts_default)
+ALLOWED_HOSTS = [host.strip() for host in _allowed_hosts.split(',')]
 
 # Application definition
 
@@ -178,10 +178,22 @@ cors_origins = os.environ.get('CORS_ALLOWED_ORIGINS', '').strip()
 if cors_origins:
     CORS_ALLOWED_ORIGINS = [origin.strip() for origin in cors_origins.split(',') if origin.strip()]
 else:
-    CORS_ALLOWED_ORIGINS = [FRONTEND_DOMAIN]
+    CORS_ALLOWED_ORIGINS = [
+        FRONTEND_DOMAIN,
+        'https://api.airly.life',
+        'https://airly.life',
+    ]
+
+# Поддержка всех ngrok доменов через регулярные выражения
+CORS_ALLOWED_ORIGIN_REGEXES = [
+    r"^https://.*\.ngrok-free\.app$",
+    r"^https://.*\.ngrok\.io$",
+]
 
 CORS_ORIGIN_WHITELIST = CORS_ALLOWED_ORIGINS
+CORS_ALLOW_ALL_ORIGINS = True
 CORS_ALLOW_CREDENTIALS = True
+
 CORS_ALLOW_HEADERS = [
     'accept',
     'accept-encoding',
