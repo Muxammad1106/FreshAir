@@ -11,7 +11,7 @@ import { LoadingScreen } from 'src/components/loading-screen';
 
 const ClientPage = lazy(() => import('src/pages/client/page'));
 const ClientOrdersPage = lazy(() => import('src/pages/client/orders/page'));
-const ClientAnalyticsPage = lazy(() => import('src/pages/client/analytics/page'));
+const ClientPaymentPage = lazy(() => import('src/pages/client/payment/page'));
 const ClientDevicesPage = lazy(() => import('src/pages/client/devices/page'));
 const ClientSettingsPage = lazy(() => import('src/pages/client/settings/page'));
 
@@ -32,7 +32,7 @@ export const clientRoutes = [
     children: [
       { element: <ClientPage />, index: true },
       { path: 'orders', element: <ClientOrdersPage /> },
-      { path: 'analytics', element: <ClientAnalyticsPage /> },
+      { path: 'payment', element: <ClientPaymentPage /> },
       { path: 'devices', element: <ClientDevicesPage /> },
       { path: 'settings', element: <ClientSettingsPage /> },
     ],

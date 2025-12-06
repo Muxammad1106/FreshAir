@@ -52,7 +52,7 @@ export function useNavData() {
         subheader: 'Client Dashboard',
         items: [
           { title: 'Overview', path: paths.client.overview, icon: ICONS.dashboard },
-          { title: 'Analytics', path: paths.client.analytics, icon: ICONS.analytics },
+          { title: 'Payment', path: paths.client.payment, icon: ICONS.analytics },
           { title: 'Devices', path: paths.client.devices, icon: ICONS.product },
           { title: 'Settings', path: paths.client.settings, icon: ICONS.lock },
         ],

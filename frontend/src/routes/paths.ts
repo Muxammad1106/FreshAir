@@ -30,7 +30,7 @@ export const paths = {
     root: ROOTS.CLIENT,
     overview: ROOTS.CLIENT,
     orders: `${ROOTS.CLIENT}/orders`,
-    analytics: `${ROOTS.CLIENT}/analytics`,
+    payment: `${ROOTS.CLIENT}/payment`,
     devices: `${ROOTS.CLIENT}/devices`,
     settings: `${ROOTS.CLIENT}/settings`,
   },
