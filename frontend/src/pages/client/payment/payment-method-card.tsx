@@ -10,43 +10,44 @@ import Divider from '@mui/material/Divider';
 // components
 import Iconify from 'src/components/iconify';
 // types
-import { PaymentMethod, getPaymentMethodLabel } from './types';
+import { PaymentMethod, getPaymentMethodLabel, PaymentMethodType } from './types';
 
 // ----------------------------------------------------------------------
 
 interface PaymentMethodCardProps {
   paymentMethod: PaymentMethod;
   onDelete: (id: number) => void;
-  onSetDefault?: (id: number) => void;
+  onClick?: (paymentMethod: PaymentMethod) => void;
 }
 
-const getPaymentMethodIcon = (type: PaymentMethod['type']): string => 'solar:card-bold';
+const getPaymentMethodIcon = (type: PaymentMethodType | string): string => 'solar:card-bold';
 
 const formatCardNumber = (last4?: string): string => {
   if (!last4) return '';
   return `•••• •••• •••• ${last4}`;
 };
 
-export function PaymentMethodCard({ paymentMethod, onDelete, onSetDefault }: PaymentMethodCardProps) {
+export function PaymentMethodCard({ paymentMethod, onDelete, onClick }: PaymentMethodCardProps) {
   const handleDelete = (e: React.MouseEvent) => {
     e.stopPropagation();
-    if (window.confirm('Вы уверены, что хотите удалить этот метод оплаты?')) {
+    if (window.confirm('Вы уверены, что хотите удалить эту карту?')) {
       onDelete(paymentMethod.id);
     }
   };
 
-  const handleSetDefault = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    if (onSetDefault) {
-      onSetDefault(paymentMethod.id);
+  const handleCardClick = () => {
+    if (onClick) {
+      onClick(paymentMethod);
     }
   };
 
   return (
     <Card
+      onClick={handleCardClick}
       sx={{
         position: 'relative',
         transition: 'all 0.3s',
+        cursor: onClick ? 'pointer' : 'default',
         border: (theme) => `2px solid ${paymentMethod.is_default ? theme.palette.primary.main : 'transparent'}`,
         '&:hover': {
           boxShadow: (theme) => theme.customShadows.z20,
@@ -79,20 +80,11 @@ export function PaymentMethodCard({ paymentMethod, onDelete, onSetDefault }: Pay
                 )}
               </Box>
             </Stack>
-            <Stack direction="row" spacing={0.5}>
-              {!paymentMethod.is_default && onSetDefault && (
-                <Tooltip title="Установить по умолчанию">
-                  <IconButton size="small" onClick={handleSetDefault}>
-                    <Iconify icon="solar:star-bold" />
-                  </IconButton>
-                </Tooltip>
-              )}
-              <Tooltip title="Удалить">
-                <IconButton size="small" color="error" onClick={handleDelete}>
-                  <Iconify icon="solar:trash-bin-trash-bold" />
-                </IconButton>
-              </Tooltip>
-            </Stack>
+            <Tooltip title="Удалить">
+              <IconButton size="small" color="error" onClick={handleDelete}>
+                <Iconify icon="solar:trash-bin-trash-bold" />
+              </IconButton>
+            </Tooltip>
           </Stack>
 
           <Divider />

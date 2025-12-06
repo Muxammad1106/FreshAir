@@ -19,6 +19,7 @@ interface TransactionHistoryProps {
 
 const STATUS_COLORS: Record<Transaction['status'], 'default' | 'primary' | 'secondary' | 'error' | 'info' | 'success' | 'warning'> = {
   PENDING: 'warning',
+  PAID: 'success',
   COMPLETED: 'success',
   FAILED: 'error',
   CANCELLED: 'default',
@@ -26,6 +27,7 @@ const STATUS_COLORS: Record<Transaction['status'], 'default' | 'primary' | 'seco
 
 const STATUS_LABELS: Record<Transaction['status'], string> = {
   PENDING: 'В обработке',
+  PAID: 'Оплачено',
   COMPLETED: 'Завершена',
   FAILED: 'Ошибка',
   CANCELLED: 'Отменена',
@@ -122,13 +124,13 @@ export function TransactionHistory({ transactions }: TransactionHistoryProps) {
                     color={
                       (() => {
                         if (transaction.type === 'REFUND') return 'success.main';
-                        if (transaction.status === 'COMPLETED') return 'text.primary';
+                        if (transaction.status === 'COMPLETED' || transaction.status === 'PAID') return 'text.primary';
                         return 'text.secondary';
                       })()
                     }
                   >
                     {transaction.type === 'REFUND' ? '+' : '-'}
-                    {transaction.amount_usd.toFixed(2)} $
+                    {(transaction.amount || transaction.amount_usd || 0).toFixed(2)} $
                   </Typography>
                   <Chip
                     label={STATUS_LABELS[transaction.status]}
@@ -142,11 +144,11 @@ export function TransactionHistory({ transactions }: TransactionHistoryProps) {
                 <>
                   <Divider />
                   <Stack direction="row" spacing={3} flexWrap="wrap">
-                    {transaction.payment_method && (
+                    {(transaction.payment_method || transaction.payment_card) && (
                       <Stack direction="row" spacing={1} alignItems="center">
                         <Iconify icon="solar:card-bold" width={16} sx={{ color: 'text.secondary' }} />
                         <Typography variant="body2" color="text.secondary">
-                          {transaction.payment_method.type} •••• {transaction.payment_method.last4}
+                          {transaction.payment_method?.type || transaction.payment_card?.brand || 'Карта'} •••• {transaction.payment_method?.last4 || transaction.payment_card?.card_number_last4}
                         </Typography>
                       </Stack>
                     )}

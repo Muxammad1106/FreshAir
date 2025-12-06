@@ -9,8 +9,6 @@ import Stack from '@mui/material/Stack';
 import Box from '@mui/material/Box';
 import Chip from '@mui/material/Chip';
 import Button from '@mui/material/Button';
-import Switch from '@mui/material/Switch';
-import FormControlLabel from '@mui/material/FormControlLabel';
 import Divider from '@mui/material/Divider';
 import Grid from '@mui/material/Grid';
 import Card from '@mui/material/Card';
@@ -20,7 +18,7 @@ import Alert from '@mui/material/Alert';
 import Iconify from 'src/components/iconify';
 import Scrollbar from 'src/components/scrollbar';
 // hooks
-import { useGet, usePatch } from 'src/hooks/use-request';
+import { useGet } from 'src/hooks/use-request';
 // utils
 import { fDate } from 'src/utils/format-time';
 import { API_ENDPOINTS } from 'src/utils/axios';
@@ -40,7 +38,6 @@ interface DeviceModalProps {
 }
 
 export function DeviceModal({ open, device, onClose }: DeviceModalProps) {
-  const [isPowerOn, setIsPowerOn] = useState(device.is_power_on);
   const [metricsData, setMetricsData] = useState<DeviceMetric[]>([]);
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
 
@@ -74,27 +71,7 @@ export function DeviceModal({ open, device, onClose }: DeviceModalProps) {
     }
   }, [device.id]);
 
-  // Переключение устройства
-  const { loading: toggling, execute: toggleDevice } = usePatch(
-    API_ENDPOINTS.core.customer.deviceToggle(device.id),
-    {
-      immediate: false,
-      onSuccess: (updatedDevice: any) => {
-        console.log('Device toggled, response:', updatedDevice);
-        // Обновляем состояние на основе ответа от сервера
-        if (updatedDevice?.is_power_on !== undefined) {
-          setIsPowerOn(updatedDevice.is_power_on);
-        } else {
-          setIsPowerOn(!isPowerOn);
-        }
-      },
-      onError: (error: any) => {
-        console.error('Failed to toggle device:', error);
-      },
-    }
-  );
-
-  // Загружаем метрики при открытии модального окна и обновляем каждые 30 секунд
+  // Загружаем устройства комнаты и метрики при открытии модального окна
   useEffect(() => {
     // Очищаем предыдущий интервал, если он есть
     if (intervalRef.current) {
@@ -109,10 +86,10 @@ export function DeviceModal({ open, device, onClose }: DeviceModalProps) {
     // Загружаем метрики сразу при открытии
     loadMetricsStable();
     
-    // Автообновление метрик каждые 30 секунд (увеличено с 30 до 60 секунд для снижения нагрузки)
+    // Автообновление метрик каждые 60 секунд
     intervalRef.current = setInterval(() => {
       loadMetricsStable();
-    }, 60000); // 60 секунд вместо 30
+    }, 60000);
     
     return () => {
       if (intervalRef.current) {
@@ -125,15 +102,17 @@ export function DeviceModal({ open, device, onClose }: DeviceModalProps) {
   // Обновляем метрики при получении данных
   useEffect(() => {
     if (metrics) {
-      setMetricsData(metrics);
+      // Фильтруем метрики только с момента установки устройства
+      const installationDate = device.installation_date ? new Date(device.installation_date) : null;
+      if (installationDate) {
+        const filtered = metrics.filter((metric) => new Date(metric.timestamp) >= installationDate);
+        setMetricsData(filtered);
+      } else {
+        setMetricsData(metrics);
+      }
     }
-  }, [metrics]);
+  }, [metrics, device.installation_date]);
 
-  const handleToggle = async () => {
-    await toggleDevice({
-      data: { is_power_on: !isPowerOn },
-    });
-  };
 
   return (
     <Dialog
@@ -244,39 +223,6 @@ export function DeviceModal({ open, device, onClose }: DeviceModalProps) {
               </Grid>
             </Box>
 
-            <Divider />
-
-            {/* Управление питанием */}
-            <Box>
-              <Typography variant="subtitle1" gutterBottom>
-                Управление устройством
-              </Typography>
-              <FormControlLabel
-                control={
-                  <Switch
-                    checked={isPowerOn}
-                    onChange={handleToggle}
-                    disabled={toggling}
-                    color="success"
-                    size="medium"
-                  />
-                }
-                label={
-                  <Stack direction="row" spacing={1} alignItems="center">
-                    <Iconify
-                      icon={isPowerOn ? 'solar:power-bold' : 'solar:power-bold-duotone'}
-                      width={20}
-                      sx={{ color: isPowerOn ? 'success.main' : 'text.disabled' }}
-                    />
-                    <Typography variant="body1" sx={{ fontWeight: 500 }}>
-                      {isPowerOn ? 'Устройство включено' : 'Устройство выключено'}
-                    </Typography>
-                  </Stack>
-                }
-              />
-            </Box>
-
-            <Divider />
 
             {/* Текущие метрики */}
             <Box>

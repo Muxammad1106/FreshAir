@@ -13,6 +13,7 @@ from core.models import (
     DeviceMetric,
     Investment,
     Payment,
+    PaymentCard,
     InvestmentStatSnapshot
 )
 
@@ -153,14 +154,24 @@ class InvestmentAdmin(AuthorMixin, BaseAdmin):
     raw_id_fields = ('investor', 'device')
 
 
+@admin.register(PaymentCard)
+class PaymentCardAdmin(AuthorMixin, BaseAdmin):
+    list_display = ('id', 'customer', 'cardholder_name', 'card_number_last4', 'brand', 'is_default', 'expiry_month', 'expiry_year', 'created_at')
+    list_filter = ('is_default', 'brand', 'created_at', 'updated_at')
+    search_fields = ('cardholder_name', 'card_number_last4', 'customer__email', 'customer__username')
+    fields = ('customer', 'card_number_last4', 'cardholder_name', 'expiry_month', 'expiry_year', 'is_default', 'brand', 'created_at', 'updated_at', 'created_by', 'updated_by')
+    readonly_fields = ('created_at', 'updated_at')
+    raw_id_fields = ('customer',)
+
+
 @admin.register(Payment)
 class PaymentAdmin(AuthorMixin, BaseAdmin):
-    list_display = ('id', 'investment', 'external_id', 'transaction_id', 'status', 'amount', 'created_at', 'updated_at')
-    list_filter = ('status', 'created_at', 'updated_at')
-    search_fields = ('external_id', 'transaction_id', 'investment__id')
-    fields = ('investment', 'external_id', 'transaction_id', 'status', 'amount', 'created_at', 'updated_at', 'created_by', 'updated_by')
+    list_display = ('id', 'order', 'investment', 'payment_card', 'external_id', 'transaction_id', 'status', 'amount', 'paid_at', 'created_at')
+    list_filter = ('status', 'created_at', 'updated_at', 'paid_at')
+    search_fields = ('external_id', 'transaction_id', 'order__id', 'investment__id')
+    fields = ('order', 'investment', 'payment_card', 'external_id', 'transaction_id', 'status', 'amount', 'paid_at', 'created_at', 'updated_at', 'created_by', 'updated_by')
     readonly_fields = ('created_at', 'updated_at')
-    raw_id_fields = ('investment',)
+    raw_id_fields = ('order', 'investment', 'payment_card')
 
 
 @admin.register(InvestmentStatSnapshot)

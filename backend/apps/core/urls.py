@@ -10,7 +10,10 @@ from core.views.customer import (
     DeviceToggleView,
     DeviceMetricsView,
     DeviceTypeListView,
-    CustomerOrderPayView
+    CustomerOrderPayView,
+    PaymentCardListView,
+    PaymentCardDetailView,
+    CustomerPaymentListView
 )
 from core.views.investor import (
     InvestorDashboardView,
@@ -35,6 +38,9 @@ urlpatterns = [
     path('customer/devices', CustomerDeviceListView.as_view(), name='customer-devices'),
     path('customer/devices/<int:pk>/toggle', DeviceToggleView.as_view(), name='device-toggle'),
     path('customer/devices/<int:pk>/metrics', DeviceMetricsView.as_view(), name='device-metrics'),
+    path('customer/payment-cards', PaymentCardListView.as_view(), name='customer-payment-cards'),
+    path('customer/payment-cards/<int:pk>', PaymentCardDetailView.as_view(), name='customer-payment-card-detail'),
+    path('customer/payments', CustomerPaymentListView.as_view(), name='customer-payments'),
     path('investor/dashboard', InvestorDashboardView.as_view(), name='investor-dashboard'),
     path('investor/devices/available', AvailableDevicesView.as_view(), name='investor-devices-available'),
     path('investor/investments', InvestmentListView.as_view(), name='investor-investments'),

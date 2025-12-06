@@ -26,6 +26,7 @@ import { API_ENDPOINTS } from 'src/utils/axios';
 import { Order, OrderRoom } from './types';
 // components
 import { RoomModal } from './room-modal';
+import { PaymentCardModal } from './payment-card-modal';
 
 // ----------------------------------------------------------------------
 
@@ -65,6 +66,8 @@ const getRoomTypeLabel = (roomType: string): string => {
 export function OrderModal({ open, order, onClose }: OrderModalProps) {
   const [selectedRoom, setSelectedRoom] = useState<OrderRoom | null>(null);
   const [paymentError, setPaymentError] = useState<string | null>(null);
+  const [showPaymentCardModal, setShowPaymentCardModal] = useState(false);
+  const [selectedCardId, setSelectedCardId] = useState<number | null>(null);
 
   const { loading: paying, execute: payOrder } = usePost(
     '',
@@ -95,17 +98,39 @@ export function OrderModal({ open, order, onClose }: OrderModalProps) {
     }
   );
 
-  const handlePay = async () => {
+  const processPayment = async (cardId: number) => {
     setPaymentError(null);
     try {
       await payOrder({
         url: API_ENDPOINTS.core.customer.orderPay(order.id),
-        data: {},
+        data: {
+          payment_card_id: cardId,
+        },
       });
     } catch (error) {
       console.error('Payment failed:', error);
       setPaymentError('Не удалось выполнить оплату. Попробуйте еще раз.');
     }
+  };
+
+  const handlePay = async () => {
+    setPaymentError(null);
+    // Если карта не выбрана, открываем модалку выбора карты
+    if (!selectedCardId) {
+      setShowPaymentCardModal(true);
+      return;
+    }
+
+    await processPayment(selectedCardId);
+  };
+
+  const handleCardSelected = (cardId: number) => {
+    setSelectedCardId(cardId);
+    setShowPaymentCardModal(false);
+    // Автоматически выполняем оплату после выбора карты
+    setTimeout(() => {
+      processPayment(cardId);
+    }, 100);
   };
 
   const handleOpenRoomModal = (orderRoom: OrderRoom) => {
@@ -119,18 +144,37 @@ export function OrderModal({ open, order, onClose }: OrderModalProps) {
   const currentStatusIndex = STATUS_STEPS.findIndex((step) => step.key === order.status);
   const progress = ((currentStatusIndex + 1) / STATUS_STEPS.length) * 100;
 
-  // Расчет стоимости: объем воздуха (м³) / 5 = цена в долларах
-  // 5 кубов воздуха = 1 доллар
-  const calculateCost = (areaM2: number, ceilingHeightM: number) => {
-    const volumeM3 = areaM2 * ceilingHeightM;
-    return (volumeM3 / 5).toFixed(2);
+  // Расчет стоимости на основе услуг и объема
+  // 0.10 USD за м³ для очистки/увлажнения, 0.05 USD за м³ для арома
+  const calculateCost = (areaM2: number, ceilingHeightM: number, deviceTypes: any[] = []) => {
+    const volumeM3 = areaM2 * (ceilingHeightM || 0);
+    if (volumeM3 <= 0) return 0;
+
+    let cost = 0;
+    const hasCleaning = deviceTypes.some((dt) => dt.supports_cleaning);
+    const hasHumidifying = deviceTypes.some((dt) => dt.supports_humidifying);
+    const hasAroma = deviceTypes.some((dt) => dt.supports_aroma);
+
+    if (hasCleaning) {
+      cost += volumeM3 * 0.10;
+    }
+    if (hasHumidifying) {
+      cost += volumeM3 * 0.10;
+    }
+    if (hasAroma && !(hasCleaning && hasHumidifying)) {
+      // Арома отдельно только если не в подарок
+      cost += volumeM3 * 0.05;
+    }
+
+    return cost;
   };
 
   const totalCost =
     order.rooms?.reduce((sum, room) => {
       const area = room.room?.area_m2 || 0;
       const height = room.room?.ceiling_height_m || 0;
-      return sum + (area > 0 && height > 0 ? parseFloat(calculateCost(area, height)) : 0);
+      const deviceTypes = room.device_types || [];
+      return sum + calculateCost(area, height, deviceTypes);
     }, 0) || 0;
 
   return (
@@ -280,8 +324,9 @@ export function OrderModal({ open, order, onClose }: OrderModalProps) {
                             <Typography variant="caption" color="primary" fontWeight={600}>
                               Стоимость: ${calculateCost(
                                 orderRoom.room.area_m2,
-                                orderRoom.room.ceiling_height_m || 0
-                              )}
+                                orderRoom.room.ceiling_height_m || 0,
+                                orderRoom.device_types || []
+                              ).toFixed(2)}
                             </Typography>
                             {orderRoom.device_types && orderRoom.device_types.length > 0 && (
                               <Box sx={{ mt: 1 }}>
@@ -367,6 +412,14 @@ export function OrderModal({ open, order, onClose }: OrderModalProps) {
 
       {selectedRoom && (
         <RoomModal open={!!selectedRoom} orderRoom={selectedRoom} onClose={handleCloseRoomModal} />
+      )}
+
+      {showPaymentCardModal && (
+        <PaymentCardModal
+          open={showPaymentCardModal}
+          onClose={() => setShowPaymentCardModal(false)}
+          onSelect={handleCardSelected}
+        />
       )}
     </Dialog>
   );

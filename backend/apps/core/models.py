@@ -168,8 +168,50 @@ class CustomerOrder(BaseModel):
     room = models.ForeignKey(Room, CASCADE, related_name='orders', null=True, blank=True)  # Для обратной совместимости
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default=STATUS_PENDING)
     comment = models.TextField(null=True, blank=True)
+    total_cost = models.DecimalField(max_digits=12, decimal_places=2, null=True, blank=True, help_text='Общая стоимость заказа')
     devices = models.ManyToManyField(DeviceInstance, through='OrderDevice', related_name='orders')
     rooms = models.ManyToManyField(Room, through='OrderRoom', related_name='order_rooms')
+
+    def calculate_total_cost(self):
+        """
+        Рассчитывает общую стоимость заказа на основе комнат и услуг.
+        Логика: 0.10 USD за м³ для очистки/увлажнения, 0.05 USD за м³ для арома.
+        """
+        from decimal import Decimal
+        total = Decimal('0.00')
+        
+        for order_room in self.order_rooms.all():
+            room = order_room.room
+            volume_m3 = Decimal(str(room.volume_m3 or 0))
+            
+            # Получаем услуги из OrderRoomDeviceType (определяем по типам устройств)
+            has_cleaning = False
+            has_humidifying = False
+            has_aroma = False
+            
+            for order_room_device_type in order_room.order_room_device_types.all():
+                device_type = order_room_device_type.device_type
+                if device_type.supports_cleaning:
+                    has_cleaning = True
+                if device_type.supports_humidifying:
+                    has_humidifying = True
+                if device_type.supports_aroma:
+                    has_aroma = True
+            
+            # Если есть и cleaning, и humidifying, арома добавляется автоматически
+            if has_cleaning and has_humidifying:
+                has_aroma = True
+            
+            # Расчет стоимости
+            if has_cleaning:
+                total += volume_m3 * Decimal('0.10')
+            if has_humidifying:
+                total += volume_m3 * Decimal('0.10')
+            if has_aroma and not (has_cleaning and has_humidifying):
+                # Арома отдельно только если не в подарок
+                total += volume_m3 * Decimal('0.05')
+        
+        return total
 
     def __str__(self):
         return f'Order #{self.id} - {self.customer.email}'
@@ -257,6 +299,26 @@ class Investment(BaseModel):
         db_table = 'core_investments'
 
 
+class PaymentCard(BaseModel):
+    """
+    Банковская карта пользователя для оплаты заказов.
+    """
+    customer = models.ForeignKey('users.User', CASCADE, related_name='payment_cards')
+    card_number_last4 = models.CharField(max_length=4, help_text='Последние 4 цифры карты')
+    cardholder_name = models.CharField(max_length=255, help_text='Имя держателя карты')
+    expiry_month = models.IntegerField(help_text='Месяц истечения (1-12)')
+    expiry_year = models.IntegerField(help_text='Год истечения (например, 2025)')
+    is_default = models.BooleanField(default=False, help_text='Карта по умолчанию')
+    brand = models.CharField(max_length=50, null=True, blank=True, help_text='Бренд карты (Visa, Mastercard, etc.)')
+    
+    def __str__(self):
+        return f'{self.cardholder_name} - ****{self.card_number_last4}'
+    
+    class Meta:
+        db_table = 'core_payment_cards'
+        ordering = ['-is_default', '-created_at']
+
+
 class Payment(BaseModel):
     STATUS_PENDING = 'PENDING'
     STATUS_PAID = 'PAID'
@@ -267,14 +329,25 @@ class Payment(BaseModel):
         (STATUS_FAILED, 'Failed'),
     ]
 
-    investment = models.OneToOneField(Investment, CASCADE, related_name='payment')
+    # Связь с инвестицией (для инвесторов)
+    investment = models.OneToOneField(Investment, CASCADE, related_name='payment', null=True, blank=True)
+    # Связь с заказом (для клиентов)
+    order = models.ForeignKey(CustomerOrder, CASCADE, related_name='payments', null=True, blank=True)
+    # Карта, которой была произведена оплата
+    payment_card = models.ForeignKey(PaymentCard, CASCADE, related_name='payments', null=True, blank=True)
+    
     external_id = models.CharField(max_length=255, null=True, blank=True)
     transaction_id = models.CharField(max_length=255, null=True, blank=True)
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default=STATUS_PENDING)
     amount = models.DecimalField(max_digits=12, decimal_places=2)
+    paid_at = models.DateTimeField(null=True, blank=True)
 
     def __str__(self):
-        return f'Payment #{self.id} - {self.investment}'
+        if self.investment:
+            return f'Payment #{self.id} - Investment #{self.investment.id} - {self.amount} USD'
+        if self.order:
+            return f'Payment #{self.id} - Order #{self.order.id} - {self.amount} USD'
+        return f'Payment #{self.id} - {self.amount} USD'
 
     class Meta:
         db_table = 'core_payments'

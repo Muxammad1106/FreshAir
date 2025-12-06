@@ -41,6 +41,21 @@
         date_joined: "2024-01-03 00:00:00+00:00"
         verified_at: "2024-01-03 00:00:00+00:00"
 
+# DEMO ACCOUNT - Full Demo Customer
+-
+    model: "users.User"
+    pk: 13
+    fields:
+        email: "demo@freshair.com"
+        username: "demo@freshair.com"
+        first_name: "Демо"
+        last_name: "Пользователь"
+        role: "CUSTOMER"
+        password: "pbkdf2_sha256$120000$Q3ICPM6omVjp$liGZrVdJWPLpkne0vjBLnJr4S+v49AoVABreMeAwNBU="
+        is_active: true
+        date_joined: "2024-01-10 00:00:00+00:00"
+        verified_at: "2024-01-10 00:00:00+00:00"
+
 # USERS - Investors
 -
     model: "users.User"
@@ -106,4 +121,16 @@
         expires_at: "4000-01-01 00:00:00+00:00"
         created_at: "2024-01-01 00:00:00+00:00"
         updated_at: "2024-01-01 00:00:00+00:00"
+
+-
+    model: "users.Token"
+    pk: 13
+    fields:
+        user_id: 13
+        key: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTMsImVtYWlsIjoiZGVtb0BmcmVzaGFpci5jb20iLCJyb2xlIjoiQ1VTVE9NRVIiLCJleHAiOjk5OTk5OTk5OTl9.demo_token"
+        refresh: "demo_refresh_token"
+        is_active: true
+        expires_at: "4000-01-01 00:00:00+00:00"
+        created_at: "2024-01-10 00:00:00+00:00"
+        updated_at: "2024-01-10 00:00:00+00:00"
 

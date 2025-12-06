@@ -154,11 +154,11 @@ class CustomerOrderSerializer(BaseModelSerializer):
         Автоматически подбирает девайсы на основе выбранных услуг и площади.
         
         Логика:
-        - cleaning (очистка) -> нужен PURIFIER или COMBO
-        - humidifying (увлажнение) -> нужен HUMIDIFIER или COMBO
-        - aroma (арома) -> нужен AROMA или COMBO
+        - cleaning (очистка) -> нужен PURIFIER (отдельные девайсы, не COMBO)
+        - humidifying (увлажнение) -> нужен HUMIDIFIER (отдельные девайсы, не COMBO)
+        - aroma (арома) -> нужен AROMA (отдельные девайсы, не COMBO)
         - Если выбраны cleaning + humidifying -> арома добавляется автоматически (в подарок)
-        - Выбираем девайсы с coverage_area_m2 >= area_m2
+        - Всегда создаем отдельные девайсы, подбираем несколько для покрытия большой площади
         """
         from core.models import DeviceType
         
@@ -172,58 +172,90 @@ class CustomerOrderSerializer(BaseModelSerializer):
             needs_aroma = True
             logger.info('Cleaning + Humidifying selected, aroma added as gift')
         
-        # Пытаемся найти COMBO девайс, который покрывает все нужные услуги
-        if needs_cleaning and needs_humidifying:
-            combo_devices = DeviceType.objects.filter(
-                device_category=DeviceType.DEVICE_COMBO,
-                supports_cleaning=True,
-                supports_humidifying=True,
-                supports_aroma=needs_aroma
-            ).filter(
-                models.Q(coverage_area_m2__gte=area_m2) | models.Q(coverage_area_m2__isnull=True)
-            ).order_by('coverage_area_m2')
-            
-            if combo_devices.exists():
-                selected_device_ids.append(combo_devices.first().id)
-                logger.info(f'Selected COMBO device {combo_devices.first().id} for area {area_m2} m²')
-                return selected_device_ids
-        
-        # Если COMBO не найден, подбираем отдельные девайсы
+        # Всегда подбираем отдельные девайсы (не COMBO)
         if needs_cleaning:
+            # Сначала пытаемся найти один большой PURIFIER
             purifier_devices = DeviceType.objects.filter(
                 device_category=DeviceType.DEVICE_PURIFIER,
-                supports_cleaning=True
+                supports_cleaning=True,
+                coverage_area_m2__isnull=False
             ).filter(
                 models.Q(coverage_area_m2__gte=area_m2) | models.Q(coverage_area_m2__isnull=True)
             ).order_by('coverage_area_m2')
             
-            if purifier_devices.exists():
+            if purifier_devices.exists() and purifier_devices.first().coverage_area_m2 >= area_m2:
                 selected_device_ids.append(purifier_devices.first().id)
                 logger.info(f'Selected PURIFIER device {purifier_devices.first().id} for area {area_m2} m²')
+            else:
+                # Если один не покрывает, подбираем несколько
+                all_purifiers = DeviceType.objects.filter(
+                    device_category=DeviceType.DEVICE_PURIFIER,
+                    supports_cleaning=True,
+                    coverage_area_m2__isnull=False
+                ).order_by('-coverage_area_m2')
+                
+                total_coverage = 0
+                for device in all_purifiers:
+                    if total_coverage < area_m2:
+                        selected_device_ids.append(device.id)
+                        total_coverage += device.coverage_area_m2
+                        logger.info(f'Selected PURIFIER device {device.id} (coverage: {device.coverage_area_m2} m²) for area {area_m2} m²')
         
         if needs_humidifying:
+            # Сначала пытаемся найти один большой HUMIDIFIER
             humidifier_devices = DeviceType.objects.filter(
                 device_category=DeviceType.DEVICE_HUMIDIFIER,
-                supports_humidifying=True
+                supports_humidifying=True,
+                coverage_area_m2__isnull=False
             ).filter(
                 models.Q(coverage_area_m2__gte=area_m2) | models.Q(coverage_area_m2__isnull=True)
             ).order_by('coverage_area_m2')
             
-            if humidifier_devices.exists():
+            if humidifier_devices.exists() and humidifier_devices.first().coverage_area_m2 >= area_m2:
                 selected_device_ids.append(humidifier_devices.first().id)
                 logger.info(f'Selected HUMIDIFIER device {humidifier_devices.first().id} for area {area_m2} m²')
+            else:
+                # Если один не покрывает, подбираем несколько
+                all_humidifiers = DeviceType.objects.filter(
+                    device_category=DeviceType.DEVICE_HUMIDIFIER,
+                    supports_humidifying=True,
+                    coverage_area_m2__isnull=False
+                ).order_by('-coverage_area_m2')
+                
+                total_coverage = 0
+                for device in all_humidifiers:
+                    if total_coverage < area_m2:
+                        selected_device_ids.append(device.id)
+                        total_coverage += device.coverage_area_m2
+                        logger.info(f'Selected HUMIDIFIER device {device.id} (coverage: {device.coverage_area_m2} m²) for area {area_m2} m²')
         
         if needs_aroma:
+            # Сначала пытаемся найти один большой AROMA
             aroma_devices = DeviceType.objects.filter(
                 device_category=DeviceType.DEVICE_AROMA,
-                supports_aroma=True
+                supports_aroma=True,
+                coverage_area_m2__isnull=False
             ).filter(
                 models.Q(coverage_area_m2__gte=area_m2) | models.Q(coverage_area_m2__isnull=True)
             ).order_by('coverage_area_m2')
             
-            if aroma_devices.exists():
+            if aroma_devices.exists() and aroma_devices.first().coverage_area_m2 >= area_m2:
                 selected_device_ids.append(aroma_devices.first().id)
                 logger.info(f'Selected AROMA device {aroma_devices.first().id} for area {area_m2} m²')
+            else:
+                # Если один не покрывает, подбираем несколько
+                all_aromas = DeviceType.objects.filter(
+                    device_category=DeviceType.DEVICE_AROMA,
+                    supports_aroma=True,
+                    coverage_area_m2__isnull=False
+                ).order_by('-coverage_area_m2')
+                
+                total_coverage = 0
+                for device in all_aromas:
+                    if total_coverage < area_m2:
+                        selected_device_ids.append(device.id)
+                        total_coverage += device.coverage_area_m2
+                        logger.info(f'Selected AROMA device {device.id} (coverage: {device.coverage_area_m2} m²) for area {area_m2} m²')
         
         return selected_device_ids
 
