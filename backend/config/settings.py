@@ -217,6 +217,17 @@ TOKEN_EXPIRATION = 7200  # seconds
 # OPENAI
 OPENAI_API_KEY = os.environ.get('OPENAI_API_KEY', '')
 
+COMPANY_NAME = 'FreshAIR'
+DEFAULT_FIXTURES = [
+    'company',
+    'users_and_tokens',
+    'freshair_data',
+    'freshair_users',
+    'users_and_tokens',
+]
+
+
+
 try:
     from .settings_dev import *
 except ImportError:
