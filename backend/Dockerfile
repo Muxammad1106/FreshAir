@@ -29,7 +29,7 @@ RUN mkdir -p /app/static /app/media
 # Устанавливаем переменные окружения по умолчанию
 ENV PYTHONUNBUFFERED=1 \
     PYTHONDONTWRITEBYTECODE=1 \
-    DJANGO_SETTINGS_MODULE=config.settings
+    DJANGO_SETTINGS_MODULE=${DJANGO_SETTINGS_MODULE:-config.settings}
 
 # Открываем порт
 EXPOSE 8000
