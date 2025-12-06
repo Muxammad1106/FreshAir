@@ -182,6 +182,7 @@ else:
         FRONTEND_DOMAIN,
         'https://api.airly.life',
         'https://airly.life',
+        'https://fresh-271gglawq-muxammads-projects-3b88429c.vercel.app',
     ]
 
 # Поддержка всех ngrok доменов через регулярные выражения
