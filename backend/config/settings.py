@@ -28,7 +28,8 @@ SECRET_KEY = JWT_SECRET_KEY = 'django-3asdfldc%1uurd4%956l++wadfe2460&vbpasdfg7e
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get('DEBUG', False)
-TESTING = ('test' == sys.argv[1]) if sys.argv else False
+TESTING = ('test' in sys.argv)
+
 
 # ALLOWED_HOSTS - добавляйте конкретные ngrok домены через переменную окружения
 # Django не поддерживает wildcards в ALLOWED_HOSTS, поэтому добавляйте конкретные домены
