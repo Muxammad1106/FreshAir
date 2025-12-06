@@ -124,6 +124,7 @@
         device_category: "PURIFIER"
         recommended_max_area_m2: 150.0
         recommended_max_volume_m3: 400.0
+        coverage_area_m2: 150.0
         power_watts: 50.0
         supports_cleaning: true
         supports_humidifying: false
@@ -139,6 +140,7 @@
         device_category: "HUMIDIFIER"
         recommended_max_area_m2: 100.0
         recommended_max_volume_m3: 300.0
+        coverage_area_m2: 100.0
         power_watts: 30.0
         supports_cleaning: false
         supports_humidifying: true
@@ -154,6 +156,7 @@
         device_category: "COMBO"
         recommended_max_area_m2: 200.0
         recommended_max_volume_m3: 600.0
+        coverage_area_m2: 200.0
         power_watts: 80.0
         supports_cleaning: true
         supports_humidifying: true
@@ -169,6 +172,7 @@
         device_category: "AROMA"
         recommended_max_area_m2: 80.0
         recommended_max_volume_m3: 200.0
+        coverage_area_m2: 80.0
         power_watts: 15.0
         supports_cleaning: false
         supports_humidifying: false

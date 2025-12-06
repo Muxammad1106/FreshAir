@@ -206,7 +206,6 @@ export function CreateInvestmentModal({ open, onClose }: CreateInvestmentModalPr
                     })
                     .map((device) => {
                       const deviceMinAmount = parseFloat(device.min_investment_usd);
-                      const deviceMaxAmount = parseFloat(device.max_investment_usd);
                       const budgetNum = budget ? parseFloat(budget) : null;
                       const isBudgetEnough = budgetNum === null || (budgetNum !== null && budgetNum >= deviceMinAmount);
                       const profitPercentage = device.short_projection?.profit_percentage || 25;

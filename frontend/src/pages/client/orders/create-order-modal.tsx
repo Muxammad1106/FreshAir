@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Dialog from '@mui/material/Dialog';
 import DialogTitle from '@mui/material/DialogTitle';
 import DialogContent from '@mui/material/DialogContent';
@@ -21,11 +21,9 @@ import Alert from '@mui/material/Alert';
 import Iconify from 'src/components/iconify';
 import Scrollbar from 'src/components/scrollbar';
 // hooks
-import { useGet, usePost } from 'src/hooks/use-request';
+import { usePost } from 'src/hooks/use-request';
 // utils
 import { API_ENDPOINTS } from 'src/utils/axios';
-// types
-import { DeviceType, PaginatedResponse } from '../devices/types';
 
 // ----------------------------------------------------------------------
 
@@ -40,7 +38,7 @@ interface RoomFormData {
   room_type: 'HOME' | 'COMMERCIAL' | 'INDUSTRIAL';
   area_m2: number;
   ceiling_height_m: number;
-  device_type_ids: number[];
+  services: string[]; // 'cleaning', 'humidifying', 'aroma'
 }
 
 export function CreateOrderModal({ open, onClose, onOrderCreated }: CreateOrderModalProps) {
@@ -50,25 +48,12 @@ export function CreateOrderModal({ open, onClose, onOrderCreated }: CreateOrderM
       room_type: 'HOME',
       area_m2: 0,
       ceiling_height_m: 0,
-      device_type_ids: [],
+      services: [],
     },
   ]);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  // Загружаем типы устройств
-  const { data: deviceTypes, loading: deviceTypesLoading } = useGet<DeviceType[], any>(
-    API_ENDPOINTS.core.customer.deviceTypes,
-    {
-      transformResponse: (response) => {
-        if (Array.isArray(response.data)) {
-          return response.data;
-        }
-        if (response.data && typeof response.data === 'object' && 'results' in response.data) {
-          return (response.data as PaginatedResponse<DeviceType>).results || [];
-        }
-        return [];
-      },
-    }
-  );
+  // Типы устройств больше не нужны для выбора, система сама подберет девайсы
 
   // Создание заказа
   const { loading: orderLoading, execute: createOrder, error: orderError, data: createdOrder } = usePost(
@@ -79,6 +64,8 @@ export function CreateOrderModal({ open, onClose, onOrderCreated }: CreateOrderM
         console.log('Order created - full response:', data);
         console.log('Order created - data type:', typeof data);
         console.log('Order created - data keys:', data ? Object.keys(data) : 'null');
+        
+        setIsSubmitting(false);
         
         // API возвращает данные в response.data, но usePost уже извлекает data
         // Передаем созданный заказ в родительский компонент ПЕРЕД закрытием модального окна
@@ -121,6 +108,7 @@ export function CreateOrderModal({ open, onClose, onOrderCreated }: CreateOrderM
       },
       onError: (error: any) => {
         console.error('Order creation error:', error);
+        setIsSubmitting(false);
       },
     }
   );
@@ -133,7 +121,7 @@ export function CreateOrderModal({ open, onClose, onOrderCreated }: CreateOrderM
         room_type: 'HOME',
         area_m2: 0,
         ceiling_height_m: 0,
-        device_type_ids: [],
+        services: [],
       },
     ]);
   };
@@ -150,62 +138,159 @@ export function CreateOrderModal({ open, onClose, onOrderCreated }: CreateOrderM
     setRooms(newRooms);
   };
 
-  const handleDeviceTypeToggle = (roomIndex: number, deviceTypeId: number) => {
+  const handleServiceToggle = (roomIndex: number, service: string) => {
     const newRooms = [...rooms];
-    const currentIds = newRooms[roomIndex].device_type_ids;
-    if (currentIds.includes(deviceTypeId)) {
-      newRooms[roomIndex].device_type_ids = currentIds.filter((id) => id !== deviceTypeId);
+    const currentServices = newRooms[roomIndex].services;
+    
+    if (currentServices.includes(service)) {
+      newRooms[roomIndex].services = currentServices.filter((s) => s !== service);
     } else {
-      newRooms[roomIndex].device_type_ids = [...currentIds, deviceTypeId];
+      newRooms[roomIndex].services = [...currentServices, service];
     }
+    
+    // Если выбраны cleaning + humidifying, арома добавляется автоматически (в подарок)
+    const hasCleaning = newRooms[roomIndex].services.includes('cleaning');
+    const hasHumidifying = newRooms[roomIndex].services.includes('humidifying');
+    const hasAroma = newRooms[roomIndex].services.includes('aroma');
+    
+    if (hasCleaning && hasHumidifying && !hasAroma) {
+      // Добавляем арома в подарок
+      newRooms[roomIndex].services = [...newRooms[roomIndex].services, 'aroma'];
+    } else if (hasCleaning && hasHumidifying && hasAroma && service === 'aroma') {
+      // Если пользователь пытается убрать арома при наличии cleaning + humidifying,
+      // не даем убрать (арома в подарок)
+      newRooms[roomIndex].services = [...newRooms[roomIndex].services, 'aroma'];
+    }
+    
     setRooms(newRooms);
   };
 
   const handleSubmit = async () => {
-    // Валидация
-    const hasInvalidRoom = rooms.some(
-      (room) =>
-        !room.name || !room.area_m2 || !room.ceiling_height_m || room.device_type_ids.length === 0
-    );
-    if (hasInvalidRoom) {
-      console.error('Validation failed: invalid room data');
+    // Защита от повторных отправок
+    if (isSubmitting || orderLoading) {
+      console.warn('Order submission already in progress');
       return;
     }
 
-    // Формируем данные для отправки
-    const roomsData = rooms.map((room) => ({
-      name: room.name,
-      room_type: room.room_type,
-      area_m2: room.area_m2,
-      ceiling_height_m: room.ceiling_height_m,
-      device_type_ids: room.device_type_ids,
-    }));
+    // Валидация - проверяем каждую комнату
+    const invalidRooms: number[] = [];
+    rooms.forEach((room, index) => {
+      const area = Number(room.area_m2);
+      const height = Number(room.ceiling_height_m);
+      
+      if (
+        !room.name || 
+        !room.name.trim() ||
+        !area || 
+        area <= 0 || 
+        Number.isNaN(area) ||
+        !height || 
+        height <= 0 || 
+        Number.isNaN(height) ||
+        !Array.isArray(room.services) ||
+        room.services.length === 0
+      ) {
+        invalidRooms.push(index + 1);
+      }
+    });
 
-    console.log('Submitting order with data:', { rooms_data: roomsData });
+    if (invalidRooms.length > 0) {
+      console.error('Validation failed: invalid room data', {
+        invalidRooms,
+        rooms: rooms.map((r, i) => ({
+          index: i + 1,
+          name: r.name,
+          area_m2: r.area_m2,
+          ceiling_height_m: r.ceiling_height_m,
+          services: r.services,
+        })),
+      });
+      alert(`Пожалуйста, заполните все поля для комнат: ${invalidRooms.join(', ')}`);
+      return;
+    }
+
+    setIsSubmitting(true);
+
+    // Формируем данные для отправки - ОДИН объект с массивом rooms_data
+    const orderData = {
+      rooms_data: rooms.map((room) => ({
+        name: room.name.trim(),
+        room_type: room.room_type,
+        area_m2: Number(room.area_m2),
+        ceiling_height_m: Number(room.ceiling_height_m),
+        services: room.services,
+      })),
+    };
+
+    console.log('Submitting order with data:', orderData);
+    console.log('Number of rooms in order:', orderData.rooms_data.length);
     
     try {
       const result = await createOrder({
-        data: {
-          rooms_data: roomsData,
-        },
+        data: orderData,
       });
       console.log('Order creation result:', result);
     } catch (error) {
       console.error('Failed to create order:', error);
+      setIsSubmitting(false);
     }
   };
 
-  const calculateCost = (areaM2: number) => (areaM2 / 10).toFixed(2);
+  // Сброс состояния при закрытии модального окна
+  useEffect(() => {
+    if (!open) {
+      // Сбрасываем состояние при закрытии
+      setRooms([
+        {
+          name: '',
+          room_type: 'HOME',
+          area_m2: 0,
+          ceiling_height_m: 0,
+          services: [],
+        },
+      ]);
+      setIsSubmitting(false);
+    }
+  }, [open]);
+
+  // Расчет стоимости на основе услуг и объема
+  // За 5 кубов:
+  // - очистка: 50 центов = 0.50 доллара, значит за 1 куб = 0.10 доллара
+  // - увлажнение: 50 центов = 0.50 доллара, значит за 1 куб = 0.10 доллара
+  // - арома: 25 центов = 0.25 доллара, значит за 1 куб = 0.05 доллара
+  // (или в подарок при комбо cleaning + humidifying)
+  const calculateCost = (areaM2: number, ceilingHeightM: number, services: string[]) => {
+    if (areaM2 <= 0 || ceilingHeightM <= 0 || services.length === 0) return '0.00';
+    
+    const volumeM3 = areaM2 * ceilingHeightM;
+    let cost = 0;
+    const hasCleaning = services.includes('cleaning');
+    const hasHumidifying = services.includes('humidifying');
+    const hasAroma = services.includes('aroma');
+    
+    // Если выбраны cleaning + humidifying, арома в подарок
+    const aromaIsFree = hasCleaning && hasHumidifying;
+    
+    if (hasCleaning) {
+      cost += volumeM3 * 0.10; // 50 центов за 5 кубов = 0.10 доллара за 1 куб
+    }
+    if (hasHumidifying) {
+      cost += volumeM3 * 0.10; // 50 центов за 5 кубов = 0.10 доллара за 1 куб
+    }
+    if (hasAroma && !aromaIsFree) {
+      cost += volumeM3 * 0.05; // 25 центов за 5 кубов = 0.05 доллара за 1 куб
+    }
+    
+    return cost.toFixed(2);
+  };
 
   const totalCost = rooms.reduce(
-    (sum, room) => sum + (room.area_m2 > 0 ? parseFloat(calculateCost(room.area_m2)) : 0),
+    (sum, room) => sum + (room.area_m2 > 0 && room.ceiling_height_m > 0 && room.services.length > 0
+      ? parseFloat(calculateCost(room.area_m2, room.ceiling_height_m, room.services))
+      : 0),
     0
   );
 
-  // Фильтруем типы устройств
-  const purifierTypes = deviceTypes?.filter((dt) => dt.device_category === 'PURIFIER') || [];
-  const comboTypes = deviceTypes?.filter((dt) => dt.device_category === 'COMBO') || [];
-  const humidifierTypes = deviceTypes?.filter((dt) => dt.device_category === 'HUMIDIFIER') || [];
 
   return (
     <Dialog
@@ -304,86 +389,82 @@ export function CreateOrderModal({ open, onClose, onOrderCreated }: CreateOrderM
                     />
                   </Stack>
 
-                  {room.area_m2 > 0 && (
+                  {room.area_m2 > 0 && room.ceiling_height_m > 0 && room.services.length > 0 && (
                     <Typography variant="caption" color="text.secondary">
-                      Стоимость: ${calculateCost(room.area_m2)}
+                      Стоимость: ${calculateCost(room.area_m2, room.ceiling_height_m, room.services)}
                     </Typography>
                   )}
 
                   <Divider />
 
                   <Typography variant="body2" fontWeight={600}>
-                    Выберите устройства
+                    Выберите услуги
                   </Typography>
 
-                  {purifierTypes.length > 0 && (
-                    <Box>
-                      <Typography variant="caption" sx={{ mb: 1, display: 'block' }}>
-                        Только очистка воздуха
-                      </Typography>
-                      <Stack spacing={0.5}>
-                        {purifierTypes.map((deviceType) => (
-                          <FormControlLabel
-                            key={deviceType.id}
-                            control={
-                              <Checkbox
-                                checked={room.device_type_ids.includes(deviceType.id)}
-                                onChange={() => handleDeviceTypeToggle(roomIndex, deviceType.id)}
-                                size="small"
-                              />
-                            }
-                            label={`${deviceType.name}${deviceType.recommended_max_area_m2 ? ` (до ${deviceType.recommended_max_area_m2} м²)` : ''}`}
-                          />
-                        ))}
-                      </Stack>
-                    </Box>
-                  )}
+                  <Stack spacing={1}>
+                    <FormControlLabel
+                      control={
+                        <Checkbox
+                          checked={room.services.includes('cleaning')}
+                          onChange={() => handleServiceToggle(roomIndex, 'cleaning')}
+                          size="small"
+                        />
+                      }
+                      label={
+                        <Stack direction="row" spacing={1} alignItems="center">
+                          <Typography>Очистка воздуха</Typography>
+                          <Typography variant="caption" color="text.secondary">
+                            (50 центов за 5 м³)
+                          </Typography>
+                        </Stack>
+                      }
+                    />
 
-                  {comboTypes.length > 0 && (
-                    <Box>
-                      <Typography variant="caption" sx={{ mb: 1, display: 'block' }}>
-                        Очистка + увлажнение (арома в подарок)
-                      </Typography>
-                      <Stack spacing={0.5}>
-                        {comboTypes.map((deviceType) => (
-                          <FormControlLabel
-                            key={deviceType.id}
-                            control={
-                              <Checkbox
-                                checked={room.device_type_ids.includes(deviceType.id)}
-                                onChange={() => handleDeviceTypeToggle(roomIndex, deviceType.id)}
-                                size="small"
-                              />
-                            }
-                            label={`${deviceType.name}${deviceType.recommended_max_area_m2 ? ` (до ${deviceType.recommended_max_area_m2} м²)` : ''}`}
-                          />
-                        ))}
-                      </Stack>
-                    </Box>
-                  )}
+                    <FormControlLabel
+                      control={
+                        <Checkbox
+                          checked={room.services.includes('humidifying')}
+                          onChange={() => handleServiceToggle(roomIndex, 'humidifying')}
+                          size="small"
+                        />
+                      }
+                      label={
+                        <Stack direction="row" spacing={1} alignItems="center">
+                          <Typography>Увлажнение</Typography>
+                          <Typography variant="caption" color="text.secondary">
+                            (50 центов за 5 м³)
+                          </Typography>
+                        </Stack>
+                      }
+                    />
 
-                  {humidifierTypes.length > 0 && (
-                    <Box>
-                      <Typography variant="caption" sx={{ mb: 1, display: 'block' }}>
-                        Только увлажнение
-                      </Typography>
-                      <Stack spacing={0.5}>
-                        {humidifierTypes.map((deviceType) => (
-                          <FormControlLabel
-                            key={deviceType.id}
-                            control={
-                              <Checkbox
-                                checked={room.device_type_ids.includes(deviceType.id)}
-                                onChange={() => handleDeviceTypeToggle(roomIndex, deviceType.id)}
-                                size="small"
-                              />
-                            }
-                            label={`${deviceType.name}${deviceType.recommended_max_area_m2 ? ` (до ${deviceType.recommended_max_area_m2} м²)` : ''}`}
+                    {room.services.includes('cleaning') && room.services.includes('humidifying') ? (
+                      <Box sx={{ pl: 4 }}>
+                        <Typography variant="body2" color="success.main">
+                          Арома добавлен в подарок
+                        </Typography>
+                      </Box>
+                    ) : (
+                      <FormControlLabel
+                        control={
+                          <Checkbox
+                            checked={room.services.includes('aroma')}
+                            onChange={() => handleServiceToggle(roomIndex, 'aroma')}
+                            size="small"
+                            disabled={false}
                           />
-                        ))}
-                      </Stack>
-                    </Box>
-                  )}
+                        }
+                        label={
+                          <Stack direction="row" spacing={1} alignItems="center">
+                            <Typography>Арома</Typography>
+                            <Typography variant="caption" color="text.secondary">
+                              (25 центов за 5 м³)
+                            </Typography>
+                          </Stack>
+                        }
+                      />
+                    )}
+                  </Stack>
                 </Stack>
               </Box>
             ))}
@@ -413,9 +494,9 @@ export function CreateOrderModal({ open, onClose, onOrderCreated }: CreateOrderM
         <Button
           variant="contained"
           onClick={handleSubmit}
-          disabled={orderLoading || deviceTypesLoading}
+          disabled={orderLoading || isSubmitting}
         >
-          {orderLoading ? 'Создание...' : 'Создать заказ'}
+          {orderLoading || isSubmitting ? 'Создание...' : 'Создать заказ'}
         </Button>
       </DialogActions>
     </Dialog>

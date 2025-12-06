@@ -6,7 +6,7 @@ from core.models import DeviceInstance, DeviceType, DeviceMetric
 class DeviceTypeSerializer(BaseModelSerializer):
     class Meta:
         model = DeviceType
-        fields = ('id', 'name', 'device_category', 'recommended_max_area_m2', 'recommended_max_volume_m3', 'power_watts', 'supports_cleaning', 'supports_humidifying', 'supports_aroma', 'price_usd', 'min_investment_usd', 'max_investment_usd', 'investment_profit_percentage', 'investment_period_months')
+        fields = ('id', 'name', 'device_category', 'recommended_max_area_m2', 'recommended_max_volume_m3', 'coverage_area_m2', 'power_watts', 'supports_cleaning', 'supports_humidifying', 'supports_aroma', 'price_usd', 'min_investment_usd', 'max_investment_usd', 'investment_profit_percentage', 'investment_period_months')
         read_only_fields = ('id',)
 
 

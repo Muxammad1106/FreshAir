@@ -148,6 +148,18 @@ export function DeviceCard({ device }: DeviceCardProps) {
             </Typography>
           </Box>
 
+          {/* Coverage Area */}
+          {device.device_type.coverage_area_m2 && (
+            <Box>
+              <Typography variant="caption" color="text.disabled">
+                Площадь покрытия:
+              </Typography>
+              <Typography variant="body2" sx={{ fontWeight: 500 }}>
+                {device.device_type.coverage_area_m2} м²
+              </Typography>
+            </Box>
+          )}
+
           {/* Last Metric */}
           <DeviceMetrics metric={device.last_metric} deviceType={device.device_type} />
 

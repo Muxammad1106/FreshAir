@@ -98,6 +98,7 @@ class DeviceType(BaseModel):
     device_category = models.CharField(max_length=20, choices=DEVICE_CHOICES)
     recommended_max_area_m2 = models.FloatField(null=True, blank=True)
     recommended_max_volume_m3 = models.FloatField(null=True, blank=True)
+    coverage_area_m2 = models.FloatField(null=True, blank=True, help_text='Площадь покрытия устройства в м²')
     power_watts = models.FloatField(null=True, blank=True)
     supports_cleaning = models.BooleanField(default=False)
     supports_humidifying = models.BooleanField(default=False)

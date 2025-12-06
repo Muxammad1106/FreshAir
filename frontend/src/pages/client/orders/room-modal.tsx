@@ -38,7 +38,12 @@ const getDeviceCategoryColor = (category: string): 'default' | 'primary' | 'seco
 };
 
 export function RoomModal({ open, orderRoom, onClose }: RoomModalProps) {
-  const calculateCost = (areaM2: number) => (areaM2 / 10).toFixed(2);
+  // Расчет стоимости: объем воздуха (м³) / 5 = цена в долларах
+  // 5 кубов воздуха = 1 доллар
+  const calculateCost = (areaM2: number, ceilingHeightM: number) => {
+    const volumeM3 = areaM2 * ceilingHeightM;
+    return (volumeM3 / 5).toFixed(2);
+  };
 
   return (
     <Dialog
@@ -99,7 +104,10 @@ export function RoomModal({ open, orderRoom, onClose }: RoomModalProps) {
                     Стоимость
                   </Typography>
                   <Typography variant="h6" color="primary">
-                    ${calculateCost(orderRoom.room.area_m2)}
+                    ${calculateCost(
+                      orderRoom.room.area_m2,
+                      orderRoom.room.ceiling_height_m || 0
+                    )}
                   </Typography>
                 </Box>
               </Grid>
