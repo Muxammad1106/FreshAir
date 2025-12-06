@@ -125,6 +125,38 @@
         created_at: "2024-01-08 00:00:00+00:00"
         updated_at: "2024-01-08 00:00:00+00:00"
 
+-
+    model: "core.Room"
+    pk: 7
+    fields:
+        customer_id: 13
+        name: "Демо квартира"
+        room_type: "HOME"
+        area_m2: 95.0
+        ceiling_height_m: 2.8
+        volume_m3: 266.0
+        address: "г. Ташкент, ул. Амира Темура, д. 100, офис 25"
+        city: "Ташкент"
+        notes: "Демо заказ для квартиры"
+        created_at: "2024-01-12 10:00:00+00:00"
+        updated_at: "2024-01-12 10:00:00+00:00"
+
+-
+    model: "core.Room"
+    pk: 8
+    fields:
+        customer_id: 13
+        name: "Демо офис"
+        room_type: "COMMERCIAL"
+        area_m2: 150.0
+        ceiling_height_m: 3.0
+        volume_m3: 450.0
+        address: "г. Ташкент, ул. Амира Темура, д. 100, офис 25"
+        city: "Ташкент"
+        notes: "Демо заказ для офиса"
+        created_at: "2024-01-13 11:00:00+00:00"
+        updated_at: "2024-01-13 11:00:00+00:00"
+
 # DEVICE TYPES
 -
     model: "core.DeviceType"
@@ -317,6 +349,86 @@
         created_at: "2024-01-14 00:00:00+00:00"
         updated_at: "2024-01-14 00:00:00+00:00"
 
+-
+    model: "core.DeviceInstance"
+    pk: 9
+    fields:
+        device_type_id: 1
+        room_id: 7
+        customer_id: 13
+        status: "ACTIVE"
+        serial_number: "PUR-2024-DEMO-001"
+        internal_code: "D009"
+        is_power_on: true
+        installation_date: "2024-01-15 10:00:00+00:00"
+        last_service_date: "2024-01-15 10:00:00+00:00"
+        created_at: "2024-01-15 10:00:00+00:00"
+        updated_at: "2024-01-15 10:00:00+00:00"
+
+-
+    model: "core.DeviceInstance"
+    pk: 10
+    fields:
+        device_type_id: 2
+        room_id: 7
+        customer_id: 13
+        status: "ACTIVE"
+        serial_number: "HUM-2024-DEMO-001"
+        internal_code: "D010"
+        is_power_on: true
+        installation_date: "2024-01-15 10:00:00+00:00"
+        last_service_date: "2024-01-15 10:00:00+00:00"
+        created_at: "2024-01-15 10:00:00+00:00"
+        updated_at: "2024-01-15 10:00:00+00:00"
+
+-
+    model: "core.DeviceInstance"
+    pk: 11
+    fields:
+        device_type_id: 4
+        room_id: 7
+        customer_id: 13
+        status: "ACTIVE"
+        serial_number: "AROMA-2024-DEMO-001"
+        internal_code: "D011"
+        is_power_on: true
+        installation_date: "2024-01-15 10:00:00+00:00"
+        last_service_date: "2024-01-15 10:00:00+00:00"
+        created_at: "2024-01-15 10:00:00+00:00"
+        updated_at: "2024-01-15 10:00:00+00:00"
+
+-
+    model: "core.DeviceInstance"
+    pk: 12
+    fields:
+        device_type_id: 1
+        room_id: 8
+        customer_id: 13
+        status: "ACTIVE"
+        serial_number: "PUR-2024-DEMO-002"
+        internal_code: "D012"
+        is_power_on: true
+        installation_date: "2024-01-16 11:00:00+00:00"
+        last_service_date: "2024-01-16 11:00:00+00:00"
+        created_at: "2024-01-16 11:00:00+00:00"
+        updated_at: "2024-01-16 11:00:00+00:00"
+
+-
+    model: "core.DeviceInstance"
+    pk: 13
+    fields:
+        device_type_id: 2
+        room_id: 8
+        customer_id: 13
+        status: "ACTIVE"
+        serial_number: "HUM-2024-DEMO-002"
+        internal_code: "D013"
+        is_power_on: true
+        installation_date: "2024-01-16 11:00:00+00:00"
+        last_service_date: "2024-01-16 11:00:00+00:00"
+        created_at: "2024-01-16 11:00:00+00:00"
+        updated_at: "2024-01-16 11:00:00+00:00"
+
 # CUSTOMER ORDERS
 -
     model: "core.CustomerOrder"
@@ -367,7 +479,7 @@
     pk: 7
     fields:
         customer_id: 13
-        room_id: 7
+        room_id: null
         status: "ACTIVE"
         total_cost: "53.20"
         comment: "Демо заказ для квартиры"
@@ -379,7 +491,7 @@
     pk: 8
     fields:
         customer_id: 13
-        room_id: 8
+        room_id: null
         status: "ACTIVE"
         total_cost: "90.00"
         comment: "Демо заказ для офиса"
