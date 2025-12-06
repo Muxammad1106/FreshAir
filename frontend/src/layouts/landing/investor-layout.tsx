@@ -22,7 +22,7 @@ export default function InvestorLandingLayout({ children }: Props) {
     <>
       <Header
         navItems={investorNavItems}
-        ctaLabel="Назад"
+        ctaLabel="Back to Home"
         ctaHref="/"
         signInRole="investor"
       />

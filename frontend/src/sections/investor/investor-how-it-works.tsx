@@ -15,23 +15,23 @@ import { MotionContainer, varFade } from 'src/components/animate';
 
 const STEPS = [
   {
-    title: 'Покупаете устройство',
-    description: 'Вы приобретаете очиститель воздуха по цене $300',
+    title: 'Invest in Devices',
+    description: 'Purchase air purification devices starting from $300. Choose from available devices in our marketplace.',
     icon: 'solar:cart-bold',
   },
   {
-    title: 'Мы ставим его у подписчика',
-    description: 'Мы находим подписчика и устанавливаем устройство у него',
+    title: 'We Install & Manage',
+    description: 'We find subscribers, install devices at their locations, and handle all customer relationships.',
     icon: 'solar:home-smile-bold',
   },
   {
-    title: 'Вы получаете ежемесячный доход',
-    description: 'Каждый месяц вы получаете $12-18 пассивного дохода',
+    title: 'Receive Monthly Returns',
+    description: 'Earn passive income every month. Typical returns range from $12-18 per device based on usage.',
     icon: 'solar:wallet-money-bold',
   },
   {
-    title: 'Полностью пассивный процесс',
-    description: 'Мы управляем всем процессом, вам не нужно ничего делать',
+    title: 'Fully Passive Investment',
+    description: 'Zero management required. We handle everything - you just collect your returns monthly.',
     icon: 'solar:chart-2-bold',
   },
 ];
@@ -45,7 +45,10 @@ export default function InvestorHowItWorks() {
         <Stack spacing={5} alignItems="center">
           <m.div variants={varFade().inUp}>
             <Typography variant="h2" sx={{ textAlign: 'center', mb: 2 }}>
-              Как это работает
+              How It Works
+            </Typography>
+            <Typography variant="body1" color="text.secondary" sx={{ textAlign: 'center', maxWidth: 700, mx: 'auto' }}>
+              A simple, transparent investment process with passive returns
             </Typography>
           </m.div>
 

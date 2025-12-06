@@ -13,19 +13,23 @@ import { MotionContainer, varFade } from 'src/components/animate';
 
 const BENEFITS = [
   {
-    title: 'Низкая ежемесячная стоимость',
+    title: 'Affordable Monthly Plans',
+    description: 'No upfront costs. Pay a fixed monthly fee starting from $29.',
     icon: 'solar:wallet-bold',
   },
   {
-    title: 'Без единовременной покупки',
+    title: 'No Upfront Purchase',
+    description: 'Skip the expensive one-time purchase. Subscribe and save.',
     icon: 'solar:card-bold',
   },
   {
-    title: 'Бесплатное обслуживание и фильтры',
+    title: 'Free Maintenance & Filters',
+    description: 'We handle all maintenance, filter replacements, and repairs at no extra cost.',
     icon: 'solar:shield-check-bold',
   },
   {
-    title: 'Smart мониторинг воздуха',
+    title: 'Smart Air Monitoring',
+    description: 'Real-time air quality metrics, PM2.5 tracking, and humidity control.',
     icon: 'solar:graph-up-bold',
   },
 ];
@@ -39,7 +43,10 @@ export default function HomeBenefits() {
         <Stack spacing={5}>
           <m.div variants={varFade().inUp}>
             <Typography variant="h2" sx={{ textAlign: 'center', mb: 2 }}>
-              Преимущества
+              Why Choose FreshAir
+            </Typography>
+            <Typography variant="body1" color="text.secondary" sx={{ textAlign: 'center', maxWidth: 600, mx: 'auto' }}>
+              Everything you need for clean, healthy air without the hassle
             </Typography>
           </m.div>
 
@@ -82,6 +89,9 @@ export default function HomeBenefits() {
 
                     <Typography variant="h6" sx={{ textAlign: 'center' }}>
                       {benefit.title}
+                    </Typography>
+                    <Typography variant="body2" color="text.secondary" sx={{ textAlign: 'center' }}>
+                      {benefit.description}
                     </Typography>
                   </Stack>
                 </m.div>

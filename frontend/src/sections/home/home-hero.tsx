@@ -36,7 +36,11 @@ export default function HomeHero() {
                 mb: 2,
               }}
             >
-              Чистый воздух по подписке
+              Breathe Clean Air
+              <br />
+              <Box component="span" sx={{ color: 'primary.main' }}>
+                Every Day
+              </Box>
             </Typography>
           </m.div>
 
@@ -45,29 +49,45 @@ export default function HomeHero() {
               variant="h5"
               sx={{
                 color: 'text.secondary',
-                maxWidth: 600,
+                maxWidth: 700,
                 mb: 5,
                 fontWeight: 400,
               }}
             >
-              Получите современный очиститель воздуха за фиксированную ежемесячную плату
+              Premium air purification devices delivered to your space. 
+              Subscribe monthly, we handle installation, maintenance, and filter replacement.
             </Typography>
           </m.div>
 
           <m.div variants={varFade().inUp}>
-            <Button
-              size="large"
-              variant="contained"
-              color="primary"
-              sx={{
-                px: 5,
-                py: 1.5,
-                fontSize: '1.1rem',
-                fontWeight: 600,
-              }}
-            >
-              Оформить подписку
-            </Button>
+            <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2} alignItems="center">
+              <Button
+                size="large"
+                variant="contained"
+                color="primary"
+                sx={{
+                  px: 5,
+                  py: 1.5,
+                  fontSize: '1.1rem',
+                  fontWeight: 600,
+                }}
+              >
+                Start Your Subscription
+              </Button>
+              <Button
+                size="large"
+                variant="outlined"
+                color="primary"
+                sx={{
+                  px: 5,
+                  py: 1.5,
+                  fontSize: '1.1rem',
+                  fontWeight: 600,
+                }}
+              >
+                Learn More
+              </Button>
+            </Stack>
           </m.div>
 
           <m.div variants={varFade().inUp}>

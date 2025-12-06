@@ -22,7 +22,7 @@ export default function ClientLandingLayout({ children }: Props) {
     <>
       <Header
         navItems={homeNavItems}
-        ctaLabel="Стать инвестором"
+        ctaLabel="Become an Investor"
         ctaHref={paths.home.investor}
         signInRole="customer"
       />

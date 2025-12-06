@@ -16,43 +16,43 @@ import { MotionContainer, varFade } from 'src/components/animate';
 
 const FAQS = [
   {
-    question: 'Как работает подписка?',
+    question: 'How does the subscription work?',
     answer:
-      'Вы выбираете тариф, мы доставляем очиститель воздуха, и вы платите фиксированную ежемесячную плату. Мы берем на себя обслуживание и замену фильтров.',
+      'You choose a plan, we deliver and install the air purifier at your location, and you pay a fixed monthly fee. We handle all maintenance, filter replacements, and support.',
   },
   {
-    question: 'Что входит в стоимость подписки?',
+    question: 'What\'s included in the subscription?',
     answer:
-      'В стоимость входит сам очиститель воздуха, его установка, регулярное обслуживание, замена фильтров и техническая поддержка.',
+      'Everything! The air purifier device, professional installation, regular maintenance, filter replacements, repairs, and 24/7 technical support are all included.',
   },
   {
-    question: 'Можно ли отменить подписку?',
+    question: 'Can I cancel my subscription?',
     answer:
-      'Да, вы можете отменить подписку в любой момент. Мы заберем устройство, и вы больше не будете платить.',
+      'Yes, you can cancel anytime with no penalties. We\'ll pick up the device and you\'ll stop paying immediately.',
   },
   {
-    question: 'Как часто меняются фильтры?',
+    question: 'How often are filters replaced?',
     answer:
-      'Частота замены фильтров зависит от выбранного тарифа: Basic - раз в 6 месяцев, Standard - раз в 3 месяца, Premium - раз в месяц.',
+      'Filter replacement frequency depends on your plan: Basic - every 6 months, Standard - every 3 months, Premium - every month. We handle it automatically.',
   },
   {
-    question: 'Что делать, если устройство сломается?',
+    question: 'What if the device breaks?',
     answer:
-      'Мы полностью отвечаем за работоспособность устройства. В случае поломки мы бесплатно отремонтируем или заменим его.',
+      'We fully cover all repairs and replacements. If your device breaks, we\'ll fix or replace it at no extra cost to you.',
   },
   {
-    question: 'Есть ли минимальный срок подписки?',
-    answer: 'Нет, минимального срока нет. Вы можете отменить подписку в любой момент.',
+    question: 'Is there a minimum subscription period?',
+    answer: 'No minimum commitment required. Cancel anytime without fees or penalties.',
   },
   {
-    question: 'Доставляете ли вы в регионы?',
+    question: 'Do you deliver nationwide?',
     answer:
-      'Да, мы доставляем по всей России. Стоимость доставки зависит от региона и включена в первый месяц подписки.',
+      'Yes, we deliver and install across the United States. Delivery and installation are included in your first month.',
   },
   {
-    question: 'Как происходит установка?',
+    question: 'How does installation work?',
     answer:
-      'Наш специалист приедет к вам в удобное время, установит устройство, покажет как им пользоваться и настроит мониторинг.',
+      'Our certified technician will schedule a convenient time, install the device, show you how to use it, set up monitoring, and answer any questions.',
   },
 ];
 
@@ -71,7 +71,10 @@ export default function HomeFaq() {
         <Stack spacing={5}>
           <m.div variants={varFade().inUp}>
             <Typography variant="h2" sx={{ textAlign: 'center', mb: 2 }}>
-              Часто задаваемые вопросы
+              Frequently Asked Questions
+            </Typography>
+            <Typography variant="body1" color="text.secondary" sx={{ textAlign: 'center', maxWidth: 600, mx: 'auto' }}>
+              Everything you need to know about FreshAir subscriptions
             </Typography>
           </m.div>
 
