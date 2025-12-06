@@ -32,7 +32,7 @@ TESTING = ('test' == sys.argv[1]) if sys.argv else False
 
 # ALLOWED_HOSTS - добавляйте конкретные ngrok домены через переменную окружения
 # Django не поддерживает wildcards в ALLOWED_HOSTS, поэтому добавляйте конкретные домены
-_allowed_hosts_default = 'api.airly.life,localhost,127.0.0.1,8cef48143298.ngrok-free.app,37d9e4e326d7.ngrok-free.app'
+_allowed_hosts_default = 'api.airly.life,airly.life,localhost,127.0.0.1,8cef48143298.ngrok-free.app,37d9e4e326d7.ngrok-free.app,fresh-271gglawq-muxammads-projects-3b88429c.vercel.app'
 _allowed_hosts = os.environ.get('ALLOWED_HOSTS', _allowed_hosts_default)
 ALLOWED_HOSTS = [host.strip() for host in _allowed_hosts.split(',')]
 
@@ -173,28 +173,9 @@ LOGIN_REDIRECT_URL = '/api/v1/toolkit/'
 # CUSTOM SETTINGS
 FRONTEND_DOMAIN = os.environ.get('FRONTEND_DOMAIN', 'http://localhost:3000')
 
-# CORS Configuration
-cors_origins = os.environ.get('CORS_ALLOWED_ORIGINS', '').strip()
-if cors_origins:
-    CORS_ALLOWED_ORIGINS = [origin.strip() for origin in cors_origins.split(',') if origin.strip()]
-else:
-    CORS_ALLOWED_ORIGINS = [
-        FRONTEND_DOMAIN,
-        'https://api.airly.life',
-        'https://airly.life',
-        'https://fresh-271gglawq-muxammads-projects-3b88429c.vercel.app',
-    ]
-
-# Поддержка всех ngrok доменов через регулярные выражения
-CORS_ALLOWED_ORIGIN_REGEXES = [
-    r"^https://.*\.ngrok-free\.app$",
-    r"^https://.*\.ngrok\.io$",
-]
-
-CORS_ORIGIN_WHITELIST = CORS_ALLOWED_ORIGINS
+# CORS Configuration - разрешаем все источники
 CORS_ALLOW_ALL_ORIGINS = True
 CORS_ALLOW_CREDENTIALS = True
-
 CORS_ALLOW_HEADERS = [
     'accept',
     'accept-encoding',
@@ -206,6 +187,15 @@ CORS_ALLOW_HEADERS = [
     'x-csrftoken',
     'x-requested-with',
 ]
+
+    CORS_ALLOWED_ORIGINS = [
+        "https://api.airly.life",
+        "https://airly.life",
+        "https://fresh-271gglawq-muxammads-projects-3b88429c.vercel.app",
+        "https://8cef48143298.ngrok-free.app",
+        "https://37d9e4e326d7.ngrok-free.app",
+        "http://localhost:3000"
+    ]
 
 COMPANY_NAME = 'FreshAIR'
 DEFAULT_FIXTURES = [
