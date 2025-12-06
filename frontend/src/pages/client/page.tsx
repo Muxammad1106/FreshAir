@@ -58,35 +58,14 @@ export default function ClientPage() {
     }
   );
 
-  // Проверяем наличие заказов
-  const { data: orders, loading: ordersLoading } = useGet<any[], any>(
-    API_ENDPOINTS.core.customer.orders,
-    {
-      transformResponse: (response) => {
-        const { data } = response;
-        // Если это массив - возвращаем как есть
-        if (Array.isArray(data)) {
-          return data;
-        }
-        // Если это объект с results (пагинация DRF)
-        if (data && typeof data === 'object' && 'results' in data) {
-          return (data as PaginatedResponse<any>).results || [];
-        }
-        // Fallback
-        return [];
-      },
-    }
-  );
-
-  const loading = roomsLoading || devicesLoading || ordersLoading;
+  const loading = roomsLoading || devicesLoading;
   const hasRooms = rooms && rooms.length > 0;
   const hasDevices = devices && devices.length > 0;
-  const hasOrders = orders && orders.length > 0;
-  // Показываем форму только если нет комнат, устройств И заказов
-  const showOrderForm = !loading && !hasRooms && !hasDevices && !hasOrders;
+  // Показываем форму только если нет комнат и устройств
+  const showOrderForm = !loading && !hasRooms && !hasDevices;
   
-  // Если есть заказы, но нет устройств - показываем дашборд с информацией о заказах
-  const showDashboard = !loading && (hasRooms || hasDevices || hasOrders);
+  // Если есть комнаты или устройства - показываем дашборд
+  const showDashboard = !loading && (hasRooms || hasDevices);
 
   return (
     <>
@@ -102,7 +81,6 @@ export default function ClientPage() {
             <ClientDashboard 
               rooms={rooms || []} 
               devices={devices || []} 
-              orders={orders || []}
               loading={loading} 
             />
           )

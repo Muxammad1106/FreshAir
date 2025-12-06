@@ -6,6 +6,7 @@ export interface DeviceType {
   device_category: 'PURIFIER' | 'HUMIDIFIER' | 'AROMA' | 'COMBO';
   recommended_max_area_m2: number;
   recommended_max_volume_m3: number;
+  coverage_area_m2?: number;
   power_watts: number;
   supports_cleaning: boolean;
   supports_humidifying: boolean;
