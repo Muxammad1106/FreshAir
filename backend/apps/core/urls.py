@@ -13,7 +13,9 @@ from core.views.customer import (
     CustomerOrderPayView,
     PaymentCardListView,
     PaymentCardDetailView,
-    CustomerPaymentListView
+    CustomerPaymentListView,
+    CustomerSubscriptionListView,
+    CustomerSubscriptionCancelView
 )
 from core.views.investor import (
     InvestorDashboardView,
@@ -41,6 +43,8 @@ urlpatterns = [
     path('customer/payment-cards', PaymentCardListView.as_view(), name='customer-payment-cards'),
     path('customer/payment-cards/<int:pk>', PaymentCardDetailView.as_view(), name='customer-payment-card-detail'),
     path('customer/payments', CustomerPaymentListView.as_view(), name='customer-payments'),
+    path('customer/subscriptions', CustomerSubscriptionListView.as_view(), name='customer-subscriptions'),
+    path('customer/subscriptions/<int:pk>/cancel', CustomerSubscriptionCancelView.as_view(), name='customer-subscription-cancel'),
     path('investor/dashboard', InvestorDashboardView.as_view(), name='investor-dashboard'),
     path('investor/devices/available', AvailableDevicesView.as_view(), name='investor-devices-available'),
     path('investor/investments', InvestmentListView.as_view(), name='investor-investments'),
