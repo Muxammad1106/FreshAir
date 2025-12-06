@@ -28,7 +28,7 @@ export function useClientNavData() {
         items: [
           { title: 'Overview', path: paths.client.overview, icon: ICONS.dashboard },
           { title: 'Orders', path: paths.client.orders, icon: ICONS.order },
-          { title: 'Analytics', path: paths.client.analytics, icon: ICONS.analytics },
+          { title: 'Payment', path: paths.client.payment, icon: ICONS.analytics },
           { title: 'Devices', path: paths.client.devices, icon: ICONS.product },
           { title: 'Settings', path: paths.client.settings, icon: ICONS.settings },
         ],
