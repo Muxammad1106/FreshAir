@@ -44,6 +44,9 @@ MEDIA_ROOT = os.environ.get('MEDIA_ROOT', '/uploads')
 # Debug mode - обязательно False для production
 DEBUG = False
 
+# Allowed Hosts (переопределяем для production)
+ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', 'api.airly.life,airly.life,localhost,127.0.0.1,backend').split(',')
+
 # Security settings
 SECURE_SSL_REDIRECT = os.environ.get('SECURE_SSL_REDIRECT', 'False') == 'True'
 SESSION_COOKIE_SECURE = os.environ.get('SESSION_COOKIE_SECURE', 'False') == 'True'

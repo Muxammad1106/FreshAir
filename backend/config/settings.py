@@ -30,7 +30,7 @@ SECRET_KEY = JWT_SECRET_KEY = 'django-3asdfldc%1uurd4%956l++wadfe2460&vbpasdfg7e
 DEBUG = os.environ.get('DEBUG', False)
 TESTING = ('test' == sys.argv[1]) if sys.argv else False
 
-ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', 'localhost,127.0.0.1', 'api.airly.life', 'airly.life').split(',')
+ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', 'localhost,127.0.0.1,api.airly.life,airly.life').split(',')
 
 # Application definition
 
