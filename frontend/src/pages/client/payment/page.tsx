@@ -142,23 +142,23 @@ export default function ClientPaymentPage() {
       const orderId = payment.order_id || (typeof payment.order === 'number' ? payment.order : payment.order?.id) || null;
       
       return {
-        id: payment.id,
-        type: 'PAYMENT' as TransactionType,
-        status: payment.status === 'PAID' ? 'COMPLETED' : payment.status,
+      id: payment.id,
+      type: 'PAYMENT' as TransactionType,
+      status: payment.status === 'PAID' ? 'COMPLETED' : payment.status,
         amount: parseFloat(payment.amount || 0),
         amount_usd: parseFloat(payment.amount || 0),
         description: orderId ? `Оплата заказа #${orderId}` : 'Платеж',
-        payment_card: payment.payment_card ? {
-          brand: payment.payment_card.brand,
-          card_number_last4: payment.payment_card.card_number_last4,
-        } : undefined,
-        payment_method: payment.payment_card ? {
-          type: (payment.payment_card.brand || 'Unknown') as PaymentMethodType,
-          last4: payment.payment_card.card_number_last4,
-        } : undefined,
+      payment_card: payment.payment_card ? {
+        brand: payment.payment_card.brand,
+        card_number_last4: payment.payment_card.card_number_last4,
+      } : undefined,
+      payment_method: payment.payment_card ? {
+        type: (payment.payment_card.brand || 'Unknown') as PaymentMethodType,
+        last4: payment.payment_card.card_number_last4,
+      } : undefined,
         order_id: orderId,
-        created_at: payment.created_at,
-        paid_at: payment.paid_at,
+      created_at: payment.created_at,
+      paid_at: payment.paid_at,
       };
     });
   }, [paymentsData]);
@@ -239,15 +239,15 @@ export default function ClientPaymentPage() {
                   Обновить
                 </Button>
               )}
-              {currentTab === 0 && (
-                <Button
-                  variant="contained"
-                  startIcon={<Iconify icon="solar:add-circle-bold" />}
-                  onClick={() => setAddModalOpen(true)}
-                >
-                  Добавить метод
-                </Button>
-              )}
+            {currentTab === 0 && (
+              <Button
+                variant="contained"
+                startIcon={<Iconify icon="solar:add-circle-bold" />}
+                onClick={() => setAddModalOpen(true)}
+              >
+                Добавить метод
+              </Button>
+            )}
             </Stack>
           </Stack>
 
