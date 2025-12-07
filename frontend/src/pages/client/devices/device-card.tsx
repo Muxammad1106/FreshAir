@@ -40,7 +40,7 @@ export function DeviceCard({ device }: DeviceCardProps) {
     {
       immediate: false,
       onSuccess: (updatedDevice: any) => {
-        // Обновляем состояние на основе ответа от сервера
+        // Update state based on server response
         if (updatedDevice?.is_power_on !== undefined) {
           setIsPowerOn(updatedDevice.is_power_on);
         } else {
@@ -54,7 +54,7 @@ export function DeviceCard({ device }: DeviceCardProps) {
   );
 
   const handleToggle = async (e: React.MouseEvent) => {
-    e.stopPropagation(); // Предотвращаем открытие модального окна при клике на переключатель
+    e.stopPropagation(); // Prevent modal opening when clicking toggle
     await toggleDevice({
       data: { is_power_on: !isPowerOn },
     });
@@ -90,7 +90,7 @@ export function DeviceCard({ device }: DeviceCardProps) {
                 size="small"
               />
             </Box>
-            <Tooltip title={isPowerOn ? 'Включено' : 'Выключено'}>
+            <Tooltip title={isPowerOn ? 'On' : 'Off'}>
               <IconButton
                 size="small"
                 sx={{
@@ -119,7 +119,7 @@ export function DeviceCard({ device }: DeviceCardProps) {
                 color="success"
               />
             }
-            label={isPowerOn ? 'Включено' : 'Выключено'}
+            label={isPowerOn ? 'On' : 'Off'}
             onClick={(e) => e.stopPropagation()}
           />
 
@@ -141,7 +141,7 @@ export function DeviceCard({ device }: DeviceCardProps) {
           {/* Serial Number */}
           <Box>
             <Typography variant="caption" color="text.disabled">
-              Серийный номер:
+              Serial Number:
             </Typography>
             <Typography variant="body2" sx={{ fontWeight: 500 }}>
               {device.serial_number || device.internal_code}
@@ -152,10 +152,10 @@ export function DeviceCard({ device }: DeviceCardProps) {
           {device.device_type.coverage_area_m2 && (
             <Box>
               <Typography variant="caption" color="text.disabled">
-                Площадь покрытия:
+                Coverage Area:
               </Typography>
               <Typography variant="body2" sx={{ fontWeight: 500 }}>
-                {device.device_type.coverage_area_m2} м²
+                {device.device_type.coverage_area_m2} m²
               </Typography>
             </Box>
           )}
@@ -166,7 +166,7 @@ export function DeviceCard({ device }: DeviceCardProps) {
           {/* Installation Date */}
           {device.installation_date && (
             <Typography variant="caption" color="text.disabled">
-              Установлено: {fDate(device.installation_date)}
+              Installed: {fDate(device.installation_date)}
             </Typography>
           )}
 
@@ -180,7 +180,7 @@ export function DeviceCard({ device }: DeviceCardProps) {
               setModalOpen(true);
             }}
           >
-            Подробнее
+            View Details
           </Button>
         </Stack>
       </CardContent>

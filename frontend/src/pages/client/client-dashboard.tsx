@@ -35,8 +35,8 @@ export function ClientDashboard({ rooms, devices, loading }: ClientDashboardProp
 
   const handleCloseCreateModal = () => {
     setCreateModalOpen(false);
-    // Не перезагружаем страницу, если заказ был создан - модальное окно заказа откроется
-    // Перезагрузка произойдет только если модальное окно закрыто без создания заказа
+    // Don't reload page if order was created - order modal will open
+    // Reload will happen only if modal is closed without creating order
   };
 
   const handleOrderCreated = (order: Order) => {
@@ -44,13 +44,13 @@ export function ClientDashboard({ rooms, devices, loading }: ClientDashboardProp
     console.log('ClientDashboard - order type:', typeof order);
     console.log('ClientDashboard - order keys:', order ? Object.keys(order) : 'null');
     
-    // Закрываем модальное окно создания
+    // Close create modal
     setCreateModalOpen(false);
     
-    // Небольшая задержка перед открытием модального окна заказа
-    // чтобы убедиться, что модальное окно создания закрылось
+    // Small delay before opening order modal
+    // to ensure create modal is closed
     setTimeout(() => {
-      // Открываем модальное окно с информацией о заказе
+      // Open modal with order information
       console.log('ClientDashboard - Setting selected order:', order);
       setSelectedOrder(order);
       console.log('ClientDashboard - Selected order set, should open modal');
@@ -78,7 +78,7 @@ export function ClientDashboard({ rooms, devices, loading }: ClientDashboardProp
         }}
       >
         <Typography variant="h6" color="text.secondary">
-          Загрузка...
+          Loading...
         </Typography>
       </Box>
     );
@@ -94,7 +94,7 @@ export function ClientDashboard({ rooms, devices, loading }: ClientDashboardProp
             startIcon={<Iconify icon="solar:add-circle-bold" />}
             onClick={handleOpenCreateModal}
           >
-            Создать заказ
+            Create Order
           </Button>
         </Stack>
 
@@ -103,7 +103,7 @@ export function ClientDashboard({ rooms, devices, loading }: ClientDashboardProp
           <Card>
             <CardContent>
               <Typography variant="h6" gutterBottom>
-                Комнаты
+                Rooms
               </Typography>
               <Typography variant="h3" color="primary">
                 {rooms.length}
@@ -116,7 +116,7 @@ export function ClientDashboard({ rooms, devices, loading }: ClientDashboardProp
           <Card>
             <CardContent>
               <Typography variant="h6" gutterBottom>
-                Устройства
+                Devices
               </Typography>
               <Typography variant="h3" color="primary">
                 {devices.length}
@@ -129,7 +129,7 @@ export function ClientDashboard({ rooms, devices, loading }: ClientDashboardProp
           <Card>
             <CardContent>
               <Typography variant="h6" gutterBottom>
-                Активные устройства
+                Active Devices
               </Typography>
               <Typography variant="h3" color="success.main">
                 {devices.filter((d) => d.is_power_on).length}

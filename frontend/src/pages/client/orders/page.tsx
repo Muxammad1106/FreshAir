@@ -44,11 +44,11 @@ export default function ClientOrdersPage() {
     {
       transformResponse: (response) => {
         const { data } = response;
-        // Если это массив - возвращаем как есть
+        // If it's an array - return as is
         if (Array.isArray(data)) {
           return data;
         }
-        // Если это объект с results (пагинация DRF)
+        // If it's an object with results (DRF pagination)
         if (data && typeof data === 'object' && 'results' in data) {
           return (data as PaginatedResponse<Order>).results || [];
         }
@@ -72,18 +72,18 @@ export default function ClientOrdersPage() {
     console.log('handleOrderCreated - order type:', typeof order);
     console.log('handleOrderCreated - order keys:', order ? Object.keys(order) : 'null');
     
-    // Закрываем модальное окно создания
+    // Close create modal
     setCreateModalOpen(false);
     
-    // Небольшая задержка перед открытием модального окна заказа
-    // чтобы убедиться, что модальное окно создания закрылось
+    // Small delay before opening order modal
+    // to ensure create modal is closed
     setTimeout(() => {
-      // Открываем модальное окно с информацией о заказе
+      // Open modal with order information
       console.log('Setting selected order:', order);
       setSelectedOrder(order);
       console.log('Selected order set, should open modal');
       
-      // Обновляем список заказов
+      // Refresh orders list
       execute();
     }, 200);
   };
@@ -94,14 +94,14 @@ export default function ClientOrdersPage() {
 
   const handleCloseOrderModal = () => {
     setSelectedOrder(null);
-    execute(); // Обновляем список заказов
+    execute(); // Refresh orders list
   };
 
-  // Автоматическое обновление заказов каждые 30 секунд
+  // Auto-refresh orders every 30 seconds
   useEffect(() => {
     const interval = setInterval(() => {
       execute();
-    }, 30000); // 30 секунд
+    }, 30000); // 30 seconds
 
     return () => clearInterval(interval);
   }, [execute]);
@@ -115,7 +115,7 @@ export default function ClientOrdersPage() {
       <Container maxWidth={settings.themeStretch ? false : 'xl'}>
         <Stack spacing={3}>
           <Stack direction="row" justifyContent="space-between" alignItems="center">
-            <Typography variant="h4">Заказы</Typography>
+            <Typography variant="h4">Orders</Typography>
             <Stack direction="row" spacing={2}>
               <Button
                 variant="outlined"
@@ -123,14 +123,14 @@ export default function ClientOrdersPage() {
                 onClick={() => execute()}
                 disabled={loading}
               >
-                Обновить
+                Refresh
               </Button>
               <Button
                 variant="contained"
                 startIcon={<Iconify icon="solar:add-circle-bold" />}
                 onClick={handleOpenCreateModal}
               >
-                Создать заказ
+                Create Order
               </Button>
             </Stack>
           </Stack>
@@ -152,7 +152,7 @@ export default function ClientOrdersPage() {
                   }}
                 >
                   <Typography variant="h6" color="text.secondary">
-                    Загрузка...
+                    Loading...
                   </Typography>
                 </Box>
               );
@@ -160,7 +160,7 @@ export default function ClientOrdersPage() {
             if (error) {
               return (
                 <Alert severity="error" sx={{ mb: 2 }}>
-                  Ошибка при загрузке заказов. Попробуйте обновить страницу.
+                  Error loading orders. Please refresh the page.
                 </Alert>
               );
             }
@@ -183,17 +183,17 @@ export default function ClientOrdersPage() {
             >
               <Iconify icon="solar:document-add-bold" width={64} sx={{ mb: 2, color: 'text.secondary' }} />
               <Typography variant="h6" color="text.secondary" gutterBottom>
-                Нет заказов
+                No Orders
               </Typography>
               <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
-                Создайте первый заказ для установки системы очистки воздуха
+                Create your first order to install an air purification system
               </Typography>
               <Button
                 variant="contained"
                 startIcon={<Iconify icon="solar:add-circle-bold" />}
                 onClick={handleOpenCreateModal}
               >
-                Создать заказ
+                Create Order
               </Button>
             </Box>
               );

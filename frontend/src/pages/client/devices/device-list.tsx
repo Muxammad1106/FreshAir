@@ -15,13 +15,13 @@ interface DeviceListProps {
 
 export function DeviceList({ devices, loading, error }: DeviceListProps) {
   if (loading) {
-    return null; // Skeleton будет отображаться отдельно
+    return null; // Skeleton will be displayed separately
   }
 
   if (error) {
     return (
       <Alert severity="error" sx={{ mb: 3 }}>
-        Ошибка при загрузке устройств. Попробуйте обновить страницу.
+        Error loading devices. Please refresh the page.
       </Alert>
     );
   }
@@ -29,7 +29,7 @@ export function DeviceList({ devices, loading, error }: DeviceListProps) {
   if (!devices || devices.length === 0) {
     return (
       <Alert severity="info">
-        У вас пока нет активных устройств. Обратитесь к администратору для установки.
+        You don&apos;t have any active devices yet. Please contact the administrator for installation.
       </Alert>
     );
   }

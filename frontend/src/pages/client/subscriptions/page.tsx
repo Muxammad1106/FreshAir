@@ -27,17 +27,17 @@ import { Subscription } from './types';
 export default function ClientSubscriptionsPage() {
   const settings = useSettingsContext();
 
-  // Загружаем подписки
+  // Load subscriptions
   const { data: subscriptions = [], loading, error, execute } = useGet<Subscription[], any>(
     API_ENDPOINTS.core.customer.subscriptions,
     {
       transformResponse: (response) => {
         const { data } = response;
-        // Если это массив - возвращаем как есть
+        // If it's an array - return as is
         if (Array.isArray(data)) {
           return data;
         }
-        // Если это объект с results (пагинация DRF)
+        // If it's an object with results (DRF pagination)
         if (data && typeof data === 'object' && 'results' in data) {
           return data.results || [];
         }
@@ -47,7 +47,7 @@ export default function ClientSubscriptionsPage() {
     }
   );
 
-  // Статистика - считаем только активные подписки (не SUSPENDED)
+  // Statistics - count only active subscriptions (not SUSPENDED)
   const activeSubscriptions = useMemo(
     () => (subscriptions || []).filter((sub) => sub.status === 'ACTIVE'),
     [subscriptions]
@@ -58,7 +58,7 @@ export default function ClientSubscriptionsPage() {
     [activeSubscriptions]
   );
 
-  // Отмена подписки
+  // Cancel subscription
   const handleCancelSubscription = async (id: number) => {
     try {
       const axiosInstance = (await import('src/utils/axios')).default;
@@ -68,34 +68,34 @@ export default function ClientSubscriptionsPage() {
         {}
       );
       
-      // Обновляем список после успешной отмены
+      // Refresh list after successful cancellation
       execute();
     } catch (err) {
       console.error('Failed to cancel subscription:', err);
-      throw err; // Пробрасываем ошибку дальше для обработки в компоненте
+      throw err; // Rethrow error for handling in component
     }
   };
 
   return (
     <>
       <Helmet>
-        <title> Подписки | Air Purifier</title>
+        <title> Subscriptions | Air Purifier</title>
       </Helmet>
 
       <Container maxWidth={settings.themeStretch ? false : 'xl'}>
         <Stack spacing={3}>
           {/* Header */}
           <Stack>
-            <Typography variant="h4">Мои подписки</Typography>
+            <Typography variant="h4">My Subscriptions</Typography>
             <Typography variant="body2" color="text.secondary">
-              Управляйте вашими активными подписками
+              Manage your active subscriptions
             </Typography>
           </Stack>
 
           {/* Error Alert */}
           {error && (
             <Alert severity="error">
-              Ошибка при загрузке подписок. Попробуйте обновить страницу.
+              Error loading subscriptions. Please refresh the page.
             </Alert>
           )}
 
@@ -109,7 +109,7 @@ export default function ClientSubscriptionsPage() {
                       <Stack direction="row" alignItems="center" spacing={1}>
                         <Iconify icon="solar:card-bold" width={24} sx={{ color: 'primary.main' }} />
                         <Typography variant="body2" color="text.secondary">
-                          Активных подписок
+                          Active Subscriptions
                         </Typography>
                       </Stack>
                       <Typography variant="h4">{activeSubscriptions.length}</Typography>
@@ -124,7 +124,7 @@ export default function ClientSubscriptionsPage() {
                       <Stack direction="row" alignItems="center" spacing={1}>
                         <Iconify icon="solar:wallet-money-bold" width={24} sx={{ color: 'success.main' }} />
                         <Typography variant="body2" color="text.secondary">
-                          Платеж в месяц
+                          Monthly Payment
                         </Typography>
                       </Stack>
                       <Typography variant="h4" color="success.main">
@@ -141,7 +141,7 @@ export default function ClientSubscriptionsPage() {
                       <Stack direction="row" alignItems="center" spacing={1}>
                         <Iconify icon="solar:document-text-bold" width={24} sx={{ color: 'warning.main' }} />
                         <Typography variant="body2" color="text.secondary">
-                          Всего подписок
+                          Total Subscriptions
                         </Typography>
                       </Stack>
                       <Typography variant="h4">{(subscriptions || []).length}</Typography>
@@ -170,7 +170,7 @@ export default function ClientSubscriptionsPage() {
               }}
             >
               <Typography variant="h6" color="text.secondary">
-                Загрузка...
+                Loading...
               </Typography>
             </Box>
           )}
@@ -194,10 +194,10 @@ export default function ClientSubscriptionsPage() {
             >
               <Iconify icon="solar:card-send-bold" width={64} sx={{ mb: 2, color: 'text.secondary' }} />
               <Typography variant="h6" color="text.secondary" gutterBottom>
-                Нет подписок
+                No Subscriptions
               </Typography>
               <Typography variant="body2" color="text.secondary">
-                У вас пока нет активных подписок
+                You don&apos;t have any active subscriptions yet
               </Typography>
             </Box>
           )}
