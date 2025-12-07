@@ -26,11 +26,11 @@ const STATUS_COLORS: Record<Transaction['status'], 'default' | 'primary' | 'seco
 };
 
 const STATUS_LABELS: Record<Transaction['status'], string> = {
-  PENDING: 'В обработке',
-  PAID: 'Оплачено',
-  COMPLETED: 'Завершена',
-  FAILED: 'Ошибка',
-  CANCELLED: 'Отменена',
+  PENDING: 'Processing',
+  PAID: 'Paid',
+  COMPLETED: 'Completed',
+  FAILED: 'Error',
+  CANCELLED: 'Cancelled',
 };
 
 const getTransactionIcon = (type: Transaction['type']): string => {
@@ -66,10 +66,10 @@ export function TransactionHistory({ transactions }: TransactionHistoryProps) {
       >
         <Iconify icon="solar:document-text-bold" width={64} sx={{ mb: 2, color: 'text.secondary' }} />
         <Typography variant="h6" color="text.secondary" gutterBottom>
-          Нет транзакций
+          No Transactions
         </Typography>
         <Typography variant="body2" color="text.secondary">
-          История ваших транзакций будет отображаться здесь
+          Your transaction history will be displayed here
         </Typography>
       </Box>
     );
@@ -108,7 +108,7 @@ export function TransactionHistory({ transactions }: TransactionHistoryProps) {
                   <Stack flex={1}>
                     <Typography variant="subtitle1">{transaction.description}</Typography>
                     <Typography variant="caption" color="text.secondary">
-                      {new Date(transaction.created_at).toLocaleString('ru-RU', {
+                      {new Date(transaction.created_at).toLocaleString('en-US', {
                         year: 'numeric',
                         month: 'long',
                         day: 'numeric',
@@ -148,7 +148,7 @@ export function TransactionHistory({ transactions }: TransactionHistoryProps) {
                       <Stack direction="row" spacing={1} alignItems="center">
                         <Iconify icon="solar:card-bold" width={16} sx={{ color: 'text.secondary' }} />
                         <Typography variant="body2" color="text.secondary">
-                          {transaction.payment_method?.type || transaction.payment_card?.brand || 'Карта'} •••• {transaction.payment_method?.last4 || transaction.payment_card?.card_number_last4}
+                          {transaction.payment_method?.type || transaction.payment_card?.brand || 'Card'} •••• {transaction.payment_method?.last4 || transaction.payment_card?.card_number_last4}
                         </Typography>
                       </Stack>
                     )}
@@ -156,7 +156,7 @@ export function TransactionHistory({ transactions }: TransactionHistoryProps) {
                       <Stack direction="row" spacing={1} alignItems="center">
                         <Iconify icon="solar:document-bold" width={16} sx={{ color: 'text.secondary' }} />
                         <Typography variant="body2" color="text.secondary">
-                          Заказ #{transaction.order_id}
+                          Order #{transaction.order_id}
                         </Typography>
                       </Stack>
                     )}

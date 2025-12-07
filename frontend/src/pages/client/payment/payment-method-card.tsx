@@ -30,7 +30,7 @@ const formatCardNumber = (last4?: string): string => {
 export function PaymentMethodCard({ paymentMethod, onDelete, onClick }: PaymentMethodCardProps) {
   const handleDelete = (e: React.MouseEvent) => {
     e.stopPropagation();
-    if (window.confirm('Вы уверены, что хотите удалить эту карту?')) {
+    if (window.confirm('Are you sure you want to delete this card?')) {
       onDelete(paymentMethod.id);
     }
   };
@@ -76,11 +76,11 @@ export function PaymentMethodCard({ paymentMethod, onDelete, onClick }: PaymentM
               <Box>
                 <Typography variant="h6">{getPaymentMethodLabel(paymentMethod.type)}</Typography>
                 {paymentMethod.is_default && (
-                  <Chip label="По умолчанию" size="small" color="primary" sx={{ mt: 0.5 }} />
+                  <Chip label="Default" size="small" color="primary" sx={{ mt: 0.5 }} />
                 )}
               </Box>
             </Stack>
-            <Tooltip title="Удалить">
+            <Tooltip title="Delete">
               <IconButton size="small" color="error" onClick={handleDelete}>
                 <Iconify icon="solar:trash-bin-trash-bold" />
               </IconButton>
@@ -93,7 +93,7 @@ export function PaymentMethodCard({ paymentMethod, onDelete, onClick }: PaymentM
           <Stack spacing={1}>
             <Stack direction="row" justifyContent="space-between" alignItems="center">
               <Typography variant="body2" color="text.secondary">
-                Номер карты:
+                Card Number:
               </Typography>
               <Typography variant="body2" fontWeight="medium">
                 {formatCardNumber(paymentMethod.last4)}
@@ -101,7 +101,7 @@ export function PaymentMethodCard({ paymentMethod, onDelete, onClick }: PaymentM
             </Stack>
             <Stack direction="row" justifyContent="space-between" alignItems="center">
               <Typography variant="body2" color="text.secondary">
-                Владелец:
+                Cardholder:
               </Typography>
               <Typography variant="body2" fontWeight="medium">
                 {paymentMethod.cardholder_name}
@@ -109,14 +109,14 @@ export function PaymentMethodCard({ paymentMethod, onDelete, onClick }: PaymentM
             </Stack>
             <Stack direction="row" justifyContent="space-between" alignItems="center">
               <Typography variant="body2" color="text.secondary">
-                Срок действия:
+                Expiry Date:
               </Typography>
               <Typography variant="body2" fontWeight="medium">
                 {String(paymentMethod.expiry_month).padStart(2, '0')}/{paymentMethod.expiry_year}
               </Typography>
             </Stack>
             <Typography variant="caption" color="text.secondary" sx={{ mt: 1 }}>
-              Добавлено: {new Date(paymentMethod.created_at).toLocaleDateString('ru-RU')}
+              Added: {new Date(paymentMethod.created_at).toLocaleDateString('en-US')}
             </Typography>
           </Stack>
         </Stack>

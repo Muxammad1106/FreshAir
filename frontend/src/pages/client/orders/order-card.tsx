@@ -16,11 +16,11 @@ const STATUS_COLORS: Record<string, 'default' | 'primary' | 'secondary' | 'error
 };
 
 const STATUS_LABELS: Record<string, string> = {
-  PENDING: 'Ожидает оплаты',
-  APPROVED: 'Одобрен',
-  INSTALLED: 'Установлен',
-  ACTIVE: 'Активен',
-  CANCELLED: 'Отменен',
+  PENDING: 'Pending Payment',
+  APPROVED: 'Approved',
+  INSTALLED: 'Installed',
+  ACTIVE: 'Active',
+  CANCELLED: 'Cancelled',
 };
 
 // ----------------------------------------------------------------------
@@ -50,9 +50,9 @@ export function OrderCard({ order, onClick }: OrderCardProps) {
         <Stack spacing={2}>
           <Stack direction="row" justifyContent="space-between" alignItems="flex-start">
             <Box>
-              <Typography variant="h6">Заказ #{order.id}</Typography>
+              <Typography variant="h6">Order #{order.id}</Typography>
               <Typography variant="caption" color="text.secondary">
-                {new Date(order.created_at).toLocaleDateString('ru-RU', {
+                {new Date(order.created_at).toLocaleDateString('en-US', {
                   year: 'numeric',
                   month: 'long',
                   day: 'numeric',
@@ -69,11 +69,11 @@ export function OrderCard({ order, onClick }: OrderCardProps) {
           <Stack spacing={1}>
             <Stack direction="row" spacing={2}>
               <Typography variant="body2" color="text.secondary">
-                Комнат: <strong>{roomsCount}</strong>
+                Rooms: <strong>{roomsCount}</strong>
               </Typography>
               {devicesCount > 0 && (
                 <Typography variant="body2" color="text.secondary">
-                  Устройств: <strong>{devicesCount}</strong>
+                  Devices: <strong>{devicesCount}</strong>
                 </Typography>
               )}
             </Stack>

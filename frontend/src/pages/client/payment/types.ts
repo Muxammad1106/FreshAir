@@ -5,7 +5,7 @@ export type PaymentMethodType = 'UZCARD' | 'VISA' | 'Mastercard' | 'American Exp
 export interface PaymentMethod {
   id: number;
   type: PaymentMethodType;
-  last4: string; // Последние 4 цифры карты
+  last4: string; // Last 4 digits of card
   cardholder_name: string;
   expiry_month: number;
   expiry_year: number;
@@ -19,11 +19,11 @@ const PAYMENT_METHOD_LABELS: Record<PaymentMethodType, string> = {
   VISA: 'Visa',
   Mastercard: 'Mastercard',
   'American Express': 'American Express',
-  Unknown: 'Карта',
+  Unknown: 'Card',
 };
 
 export function getPaymentMethodLabel(type: PaymentMethodType | string): string {
-  return PAYMENT_METHOD_LABELS[type as PaymentMethodType] || type || 'Карта';
+  return PAYMENT_METHOD_LABELS[type as PaymentMethodType] || type || 'Card';
 }
 
 // ----------------------------------------------------------------------
@@ -36,7 +36,7 @@ export interface Transaction {
   type: TransactionType;
   status: TransactionStatus;
   amount: number;
-  amount_usd?: number; // Для обратной совместимости
+  amount_usd?: number; // For backward compatibility
   description?: string;
   payment_card?: {
     brand?: string;

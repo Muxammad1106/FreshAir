@@ -37,7 +37,7 @@ export default function ClientPaymentPage() {
   const [editModalOpen, setEditModalOpen] = useState(false);
   const [selectedCard, setSelectedCard] = useState<PaymentMethod | null>(null);
 
-  // Загружаем карты
+  // Load cards
   const { data: cardsData, execute: loadCards } = useGet<any[], any>(
     API_ENDPOINTS.core.customer.paymentCards,
     {
@@ -54,27 +54,27 @@ export default function ClientPaymentPage() {
     }
   );
 
-  // Используем useRef для хранения функции loadCards, чтобы избежать бесконечных циклов
+  // Use useRef to store loadCards function to avoid infinite loops
   const loadCardsRef = useRef(loadCards);
   loadCardsRef.current = loadCards;
 
-  // Стабильная функция для загрузки карт
+  // Stable function for loading cards
   const loadCardsStable = useCallback(() => {
     loadCardsRef.current({ url: API_ENDPOINTS.core.customer.paymentCards });
   }, []);
 
-  // Загружаем карты при монтировании
+  // Load cards on mount
   useEffect(() => {
     loadCardsStable();
   }, [loadCardsStable]);
 
-  // Загружаем платежи с аналитикой
+  // Load payments with analytics
   const { data: paymentsData, execute: loadPayments, loading: paymentsLoading, error: paymentsError } = useGet<any, any>(
     API_ENDPOINTS.core.customer.payments,
     {
       transformResponse: (response) => {
         const { data } = response;
-        // Отладочная информация
+        // Debug information
         console.log('Payments API Response:', data);
         return data;
       },
@@ -84,16 +84,16 @@ export default function ClientPaymentPage() {
     }
   );
 
-  // Используем useRef для хранения функции loadPayments, чтобы избежать бесконечных циклов
+  // Use useRef to store loadPayments function to avoid infinite loops
   const loadPaymentsRef = useRef(loadPayments);
   loadPaymentsRef.current = loadPayments;
 
-  // Стабильная функция для загрузки платежей
+  // Stable function for loading payments
   const loadPaymentsStable = useCallback(() => {
     loadPaymentsRef.current({ url: API_ENDPOINTS.core.customer.payments });
   }, []);
 
-  // Обновляем платежи при фокусе страницы (если пользователь вернулся на вкладку)
+  // Update payments on page focus (if user returned to tab)
   useEffect(() => {
     const handleFocus = () => {
       if (currentTab === 1) {
@@ -107,7 +107,7 @@ export default function ClientPaymentPage() {
     };
   }, [currentTab, loadPaymentsStable]);
 
-  // Преобразуем карты из API в формат PaymentMethod
+  // Convert cards from API to PaymentMethod format
   const paymentMethods = useMemo<PaymentMethod[]>(() => {
     if (!cardsData) return [];
     return cardsData.map((card) => ({
@@ -123,14 +123,14 @@ export default function ClientPaymentPage() {
     }));
   }, [cardsData]);
 
-  // Преобразуем платежи из API в формат Transaction
+  // Convert payments from API to Transaction format
   const transactions = useMemo<Transaction[]>(() => {
     console.log('Processing paymentsData:', paymentsData);
     if (!paymentsData) {
       console.log('No paymentsData');
       return [];
     }
-    // Проверяем разные возможные форматы ответа
+    // Check different possible response formats
     const results = paymentsData.results || paymentsData.data || (Array.isArray(paymentsData) ? paymentsData : []);
     if (!results || results.length === 0) {
       console.log('No results in paymentsData');
@@ -138,7 +138,7 @@ export default function ClientPaymentPage() {
     }
     console.log('Found', results.length, 'payments');
     return results.map((payment: any) => {
-      // order может быть ID (число) или объектом в зависимости от сериализации
+      // order can be ID (number) or object depending on serialization
       const orderId = payment.order_id || (typeof payment.order === 'number' ? payment.order : payment.order?.id) || null;
       
       return {
@@ -147,7 +147,7 @@ export default function ClientPaymentPage() {
       status: payment.status === 'PAID' ? 'COMPLETED' : payment.status,
         amount: parseFloat(payment.amount || 0),
         amount_usd: parseFloat(payment.amount || 0),
-        description: orderId ? `Оплата заказа #${orderId}` : 'Платеж',
+        description: orderId ? `Payment for order #${orderId}` : 'Payment',
       payment_card: payment.payment_card ? {
         brand: payment.payment_card.brand,
         card_number_last4: payment.payment_card.card_number_last4,
@@ -163,11 +163,11 @@ export default function ClientPaymentPage() {
     });
   }, [paymentsData]);
 
-  // Аналитика из API
+  // Analytics from API
   const analytics = useMemo<PaymentAnalyticsData | null>(() => {
     console.log('Processing analytics from paymentsData:', paymentsData);
     if (!paymentsData) return null;
-    // Проверяем наличие аналитики в разных местах
+    // Check for analytics in different places
     const analyticsData = paymentsData.analytics || paymentsData.data?.analytics;
     if (!analyticsData) {
       console.log('No analytics data found');
@@ -177,7 +177,7 @@ export default function ClientPaymentPage() {
     return analyticsData;
   }, [paymentsData]);
 
-  // Удаление карты
+  // Delete card
   const { execute: deleteCard } = useDelete('', {
     immediate: false,
     onSuccess: () => {
@@ -186,7 +186,7 @@ export default function ClientPaymentPage() {
   });
 
   const handleDeletePaymentMethod = async (id: number) => {
-    if (window.confirm('Вы уверены, что хотите удалить эту карту?')) {
+    if (window.confirm('Are you sure you want to delete this card?')) {
       await deleteCard({
         url: API_ENDPOINTS.core.customer.paymentCard(id),
       });
@@ -194,7 +194,7 @@ export default function ClientPaymentPage() {
   };
 
   const handleCardAdded = (cardId: number) => {
-    // Карта уже создана через модалку, просто обновляем список
+    // Card already created through modal, just refresh the list
     loadCardsStable();
     setAddModalOpen(false);
   };
@@ -223,9 +223,9 @@ export default function ClientPaymentPage() {
           {/* Header */}
           <Stack direction="row" justifyContent="space-between" alignItems="center">
             <Stack>
-              <Typography variant="h4">Платежи</Typography>
+              <Typography variant="h4">Payments</Typography>
               <Typography variant="body2" color="text.secondary">
-                Управляйте методами оплаты и просматривайте историю транзакций
+                Manage payment methods and view transaction history
               </Typography>
             </Stack>
             <Stack direction="row" spacing={2}>
@@ -236,7 +236,7 @@ export default function ClientPaymentPage() {
                   onClick={loadPaymentsStable}
                   disabled={paymentsLoading}
                 >
-                  Обновить
+                  Refresh
                 </Button>
               )}
             {currentTab === 0 && (
@@ -245,7 +245,7 @@ export default function ClientPaymentPage() {
                 startIcon={<Iconify icon="solar:add-circle-bold" />}
                 onClick={() => setAddModalOpen(true)}
               >
-                Добавить метод
+                Add Method
               </Button>
             )}
             </Stack>
@@ -256,14 +256,14 @@ export default function ClientPaymentPage() {
             value={currentTab} 
             onChange={(_, newValue) => {
               setCurrentTab(newValue);
-              // Автоматически обновляем данные платежей при переключении на вкладку транзакций
+              // Automatically update payment data when switching to transactions tab
               if (newValue === 1) {
                 loadPaymentsStable();
               }
             }}
           >
-            <Tab label="Методы оплаты" icon={<Iconify icon="solar:card-bold" />} iconPosition="start" />
-            <Tab label="История транзакций" icon={<Iconify icon="solar:document-text-bold" />} iconPosition="start" />
+            <Tab label="Payment Methods" icon={<Iconify icon="solar:card-bold" />} iconPosition="start" />
+            <Tab label="Transaction History" icon={<Iconify icon="solar:document-text-bold" />} iconPosition="start" />
           </Tabs>
 
           {/* Tab Content */}
@@ -275,7 +275,7 @@ export default function ClientPaymentPage() {
               {/* Default Method Info */}
               {defaultMethod && (
                 <Alert severity="info" icon={<Iconify icon="solar:info-circle-bold" />}>
-                  Метод оплаты по умолчанию: <strong>{getPaymentMethodLabel(defaultMethod.type)}</strong>
+                  Default payment method: <strong>{getPaymentMethodLabel(defaultMethod.type)}</strong>
                   {defaultMethod.last4 && (
                     <> •••• {defaultMethod.last4}</>
                   )}
@@ -301,17 +301,17 @@ export default function ClientPaymentPage() {
                 >
                   <Iconify icon="solar:wallet-money-bold" width={64} sx={{ mb: 2, color: 'text.secondary' }} />
                   <Typography variant="h6" color="text.secondary" gutterBottom>
-                    Нет методов оплаты
+                    No payment methods
                   </Typography>
                   <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
-                    Добавьте метод оплаты для быстрых и удобных платежей
+                    Add a payment method for fast and convenient payments
                   </Typography>
                   <Button
                     variant="contained"
                     startIcon={<Iconify icon="solar:add-circle-bold" />}
                     onClick={() => setAddModalOpen(true)}
                   >
-                    Добавить метод оплаты
+                    Add Payment Method
                   </Button>
                 </Box>
               ) : (
@@ -332,17 +332,17 @@ export default function ClientPaymentPage() {
 
           {currentTab === 1 && (
             <Stack spacing={3}>
-              {/* Показываем ошибку, если есть */}
+              {/* Show error if exists */}
               {paymentsError && (
                 <Alert severity="error">
-                  Ошибка загрузки платежей: {paymentsError?.message || JSON.stringify(paymentsError)}
+                  Error loading payments: {paymentsError?.message || JSON.stringify(paymentsError)}
                 </Alert>
               )}
-              {/* Показываем состояние загрузки */}
+              {/* Show loading state */}
               {paymentsLoading && (
-                <Alert severity="info">Загрузка данных...</Alert>
+                <Alert severity="info">Loading data...</Alert>
               )}
-              {/* Отладочная информация */}
+              {/* Debug information */}
               {process.env.NODE_ENV === 'development' && paymentsData && (
                 <Alert severity="info" sx={{ fontSize: '0.75rem' }}>
                   Debug: paymentsData keys: {Object.keys(paymentsData).join(', ')}

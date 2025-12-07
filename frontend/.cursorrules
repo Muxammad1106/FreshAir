@@ -2,38 +2,38 @@
 
 ## Project Structure
 
-- **Pages**: `src/pages/` - основные страницы приложения
-- **Components**: `src/components/` - переиспользуемые компоненты
-- **Hooks**: `src/hooks/` - кастомные React хуки
-- **Routes**: `src/routes/` - конфигурация роутинга
-- **Utils**: `src/utils/` - утилиты и вспомогательные функции
-- **Services**: `src/services/` - сервисы для работы с API
-- **Types**: типы TypeScript должны быть в файле `types.ts` рядом с компонентом
+- **Pages**: `src/pages/` - main application pages
+- **Components**: `src/components/` - reusable components
+- **Hooks**: `src/hooks/` - custom React hooks
+- **Routes**: `src/routes/` - routing configuration
+- **Utils**: `src/utils/` - utilities and helper functions
+- **Services**: `src/services/` - API service layer
+- **Types**: TypeScript types should be in `types.ts` file next to the component
 
 ## Code Style
 
-- Используй TypeScript для всех файлов
-- Используй функциональные компоненты с хуками
-- Разделяй код на маленькие, переиспользуемые компоненты
-- Следуй правилам импортов: внешние импорты (`src/`) перед локальными (`./`)
-- Используй Material-UI компоненты из `@mui/material`
-- Используй `Iconify` для иконок (формат: `solar:icon-name`)
+- Use TypeScript for all files
+- Use functional components with hooks
+- Split code into small, reusable components
+- Follow import rules: external imports (`src/`) before local (`./`)
+- Use Material-UI components from `@mui/material`
+- Use `Iconify` for icons (format: `solar:icon-name`)
 
 ## Forms - React Hook Form
 
-### ⚠️ КРИТИЧЕСКИ ВАЖНО:
+### ⚠️ CRITICALLY IMPORTANT:
 
-**НИКОГДА не используй простые HTML формы или нативные input элементы!**
-- **ВСЕГДА** используй React Hook Form (`react-hook-form`)
-- Используй компоненты из `src/components/hook-form/` (RHFTextField, FormProvider и т.д.)
-- Если нужен новый компонент формы - создай его на основе существующих RHF компонентов
-- Все формы должны использовать `FormProvider` и `handleSubmit` из React Hook Form
+**NEVER use simple HTML forms or native input elements!**
+- **ALWAYS** use React Hook Form (`react-hook-form`)
+- Use components from `src/components/hook-form/` (RHFTextField, FormProvider, etc.)
+- If a new form component is needed - create it based on existing RHF components
+- All forms must use `FormProvider` and `handleSubmit` from React Hook Form
 
 ## HTTP Requests - useRequest Hook
 
-### ⚠️ КРИТИЧЕСКИ ВАЖНО:
+### ⚠️ CRITICALLY IMPORTANT:
 
-**НИКОГДА не пиши простые запросы напрямую через axios или fetch!**
+**NEVER write simple requests directly through axios or fetch!**
 - **ВСЕГДА** используй хук `useRequest` или его специализированные версии
 - Если нужно что-то изменить в логике запросов - **исправляй только хук**, не обходи его
 - Если хук не поддерживает нужную функциональность - **расширь хук**, не пиши обходные пути

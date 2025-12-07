@@ -18,17 +18,17 @@ import { Room, DeviceInstance, PaginatedResponse } from './devices/types';
 export default function ClientPage() {
   const settings = useSettingsContext();
 
-  // Проверяем наличие комнат
+  // Check for rooms
   const { data: rooms, loading: roomsLoading } = useGet<Room[], any>(
     API_ENDPOINTS.core.customer.rooms,
     {
       transformResponse: (response) => {
         const { data } = response;
-        // Если это массив - возвращаем как есть
+        // If it's an array - return as is
         if (Array.isArray(data)) {
           return data;
         }
-        // Если это объект с results (пагинация)
+        // If it's an object with results (pagination)
         if (data && typeof data === 'object' && 'results' in data) {
           return (data as PaginatedResponse<Room>).results || [];
         }
@@ -38,17 +38,17 @@ export default function ClientPage() {
     }
   );
 
-  // Проверяем наличие устройств
+  // Check for devices
   const { data: devices, loading: devicesLoading } = useGet<DeviceInstance[], any>(
     API_ENDPOINTS.core.customer.devices,
     {
       transformResponse: (response) => {
         const { data } = response;
-        // Если это массив - возвращаем как есть
+        // If it's an array - return as is
         if (Array.isArray(data)) {
           return data;
         }
-        // Если это объект с results (пагинация)
+        // If it's an object with results (pagination)
         if (data && typeof data === 'object' && 'results' in data) {
           return (data as PaginatedResponse<DeviceInstance>).results || [];
         }
@@ -61,10 +61,10 @@ export default function ClientPage() {
   const loading = roomsLoading || devicesLoading;
   const hasRooms = rooms && rooms.length > 0;
   const hasDevices = devices && devices.length > 0;
-  // Показываем форму только если нет комнат и устройств
+  // Show form only if no rooms and devices
   const showOrderForm = !loading && !hasRooms && !hasDevices;
   
-  // Если есть комнаты или устройства - показываем дашборд
+  // If there are rooms or devices - show dashboard
   const showDashboard = !loading && (hasRooms || hasDevices);
 
   return (

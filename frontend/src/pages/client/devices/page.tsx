@@ -29,11 +29,11 @@ export default function ClientDevicesPage() {
     {
       transformResponse: (response) => {
         const { data } = response;
-        // Если это массив - возвращаем как есть
+        // If it's an array - return as is
         if (Array.isArray(data)) {
           return data;
         }
-        // Если это объект с results (пагинация)
+        // If it's an object with results (pagination)
         if (data && typeof data === 'object' && 'results' in data) {
           return (data as PaginatedResponse<DeviceInstance>).results || [];
         }
@@ -53,12 +53,12 @@ export default function ClientDevicesPage() {
         <Stack spacing={3}>
           <Stack direction="row" justifyContent="space-between" alignItems="center">
             <Stack direction="row" spacing={1} alignItems="center">
-              <Typography variant="h4">Устройства</Typography>
+              <Typography variant="h4">Devices</Typography>
               {!loading && devices && devices.length > 0 && (
                 <Chip label={devices.length} size="small" color="primary" />
               )}
             </Stack>
-            <Tooltip title="Обновить список">
+            <Tooltip title="Refresh list">
               <IconButton onClick={() => execute()} disabled={loading}>
                 <Iconify icon="solar:refresh-bold" />
               </IconButton>

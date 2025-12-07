@@ -37,10 +37,10 @@ interface OrderModalProps {
 }
 
 const STATUS_STEPS = [
-  { key: 'PENDING', label: 'Ожидает оплаты', color: 'warning' },
-  { key: 'APPROVED', label: 'Одобрен', color: 'info' },
-  { key: 'INSTALLED', label: 'Установлен', color: 'primary' },
-  { key: 'ACTIVE', label: 'Активен', color: 'success' },
+  { key: 'PENDING', label: 'Pending Payment', color: 'warning' },
+  { key: 'APPROVED', label: 'Approved', color: 'info' },
+  { key: 'INSTALLED', label: 'Installed', color: 'primary' },
+  { key: 'ACTIVE', label: 'Active', color: 'success' },
 ];
 
 const STATUS_COLORS: Record<string, string> = {
@@ -58,9 +58,9 @@ const getStatusColor = (status: string): 'default' | 'primary' | 'secondary' | '
 };
 
 const getRoomTypeLabel = (roomType: string): string => {
-  if (roomType === 'HOME') return 'Дом';
-  if (roomType === 'COMMERCIAL') return 'Коммерческое';
-  return 'Большое предприятие';
+  if (roomType === 'HOME') return 'Home';
+  if (roomType === 'COMMERCIAL') return 'Commercial';
+  return 'Large Enterprise';
 };
 
 export function OrderModal({ open, order, onClose }: OrderModalProps) {
@@ -76,23 +76,23 @@ export function OrderModal({ open, order, onClose }: OrderModalProps) {
       onSuccess: (data: any) => {
         console.log('Payment success:', data);
         setPaymentError(null);
-        // API возвращает {order: ..., devices_created: ..., message: ...}
-        // или просто order в зависимости от формата
+        // API returns {order: ..., devices_created: ..., message: ...}
+        // or just order depending on format
         const orderData = data?.order || data;
         if (orderData) {
           console.log('Order updated:', orderData);
           console.log('Devices created:', data?.devices_created);
         }
         onClose();
-        // Небольшая задержка перед перезагрузкой, чтобы пользователь увидел успех
-        // и устройства успели создаться на бэкенде
+        // Small delay before reloading so user sees success
+        // and devices have time to be created on backend
         setTimeout(() => {
           window.location.reload();
         }, 1000);
       },
       onError: (error: any) => {
         console.error('Payment error:', error);
-        const errorMessage = error?.message || error?.detail || error?.error || 'Ошибка при оплате заказа';
+        const errorMessage = error?.message || error?.detail || error?.error || 'Error processing payment';
         setPaymentError(errorMessage);
       },
     }
@@ -109,13 +109,13 @@ export function OrderModal({ open, order, onClose }: OrderModalProps) {
       });
     } catch (error) {
       console.error('Payment failed:', error);
-      setPaymentError('Не удалось выполнить оплату. Попробуйте еще раз.');
+      setPaymentError('Failed to process payment. Please try again.');
     }
   };
 
   const handlePay = async () => {
     setPaymentError(null);
-    // Если карта не выбрана, открываем модалку выбора карты
+    // If no card selected, open card selection modal
     if (!selectedCardId) {
       setShowPaymentCardModal(true);
       return;
@@ -127,7 +127,7 @@ export function OrderModal({ open, order, onClose }: OrderModalProps) {
   const handleCardSelected = (cardId: number) => {
     setSelectedCardId(cardId);
     setShowPaymentCardModal(false);
-    // Автоматически выполняем оплату после выбора карты
+    // Automatically process payment after card selection
     setTimeout(() => {
       processPayment(cardId);
     }, 100);
@@ -144,8 +144,8 @@ export function OrderModal({ open, order, onClose }: OrderModalProps) {
   const currentStatusIndex = STATUS_STEPS.findIndex((step) => step.key === order.status);
   const progress = ((currentStatusIndex + 1) / STATUS_STEPS.length) * 100;
 
-  // Расчет стоимости на основе услуг и объема
-  // 0.10 USD за м³ для очистки/увлажнения, 0.05 USD за м³ для арома
+  // Calculate cost based on services and volume
+  // 0.10 USD per m³ for cleaning/humidification, 0.05 USD per m³ for aroma
   const calculateCost = (areaM2: number, ceilingHeightM: number, deviceTypes: any[] = []) => {
     const volumeM3 = areaM2 * (ceilingHeightM || 0);
     if (volumeM3 <= 0) return 0;
@@ -162,7 +162,7 @@ export function OrderModal({ open, order, onClose }: OrderModalProps) {
       cost += volumeM3 * 0.10;
     }
     if (hasAroma && !(hasCleaning && hasHumidifying)) {
-      // Арома отдельно только если не в подарок
+      // Aroma separately only if not free
       cost += volumeM3 * 0.05;
     }
 
@@ -191,7 +191,7 @@ export function OrderModal({ open, order, onClose }: OrderModalProps) {
     >
       <DialogTitle>
         <Stack direction="row" justifyContent="space-between" alignItems="center">
-          <Typography variant="h6">Заказ #{order.id}</Typography>
+          <Typography variant="h6">Order #{order.id}</Typography>
           <IconButton onClick={onClose}>
             <Iconify icon="solar:close-bold" />
           </IconButton>
@@ -201,7 +201,7 @@ export function OrderModal({ open, order, onClose }: OrderModalProps) {
       <DialogContent dividers>
         <Scrollbar>
           <Stack spacing={3}>
-            {/* Линейка статусов */}
+            {/* Status timeline */}
             <Box>
               <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ mb: 1 }}>
                 {STATUS_STEPS.map((step, index) => {
@@ -256,19 +256,19 @@ export function OrderModal({ open, order, onClose }: OrderModalProps) {
 
             <Divider />
 
-            {/* Ошибка оплаты */}
+            {/* Payment error */}
             {paymentError && (
               <Alert severity="error" onClose={() => setPaymentError(null)}>
                 {paymentError}
               </Alert>
             )}
 
-            {/* Информация о заказе */}
+            {/* Order information */}
             <Stack spacing={2}>
-              <Typography variant="subtitle1">Информация о заказе</Typography>
+              <Typography variant="subtitle1">Order Information</Typography>
               <Stack direction="row" spacing={2}>
                 <Typography variant="body2" color="text.secondary">
-                  Дата создания: {new Date(order.created_at).toLocaleDateString('ru-RU')}
+                  Created: {new Date(order.created_at).toLocaleDateString('en-US')}
                 </Typography>
                 <Chip
                   label={order.status}
@@ -278,18 +278,18 @@ export function OrderModal({ open, order, onClose }: OrderModalProps) {
               </Stack>
               {order.comment && (
                 <Typography variant="body2">
-                  <strong>Комментарий:</strong> {order.comment}
+                  <strong>Comment:</strong> {order.comment}
                 </Typography>
               )}
             </Stack>
 
             <Divider />
 
-            {/* Комнаты */}
+            {/* Rooms */}
             {order.rooms && order.rooms.length > 0 && (
               <Box>
                 <Typography variant="subtitle1" gutterBottom>
-                  Комнаты ({order.rooms.length})
+                  Rooms ({order.rooms.length})
                 </Typography>
                 <Grid container spacing={2}>
                   {order.rooms.map((orderRoom) => (
@@ -313,16 +313,16 @@ export function OrderModal({ open, order, onClose }: OrderModalProps) {
                               <Iconify icon="solar:arrow-right-bold" width={16} sx={{ color: 'text.secondary' }} />
                             </Stack>
                             <Typography variant="caption" color="text.secondary">
-                              Тип: {getRoomTypeLabel(orderRoom.room.room_type)}
+                              Type: {getRoomTypeLabel(orderRoom.room.room_type)}
                             </Typography>
                             <Typography variant="caption" color="text.secondary">
-                              Площадь: {orderRoom.room.area_m2} м²
+                              Area: {orderRoom.room.area_m2} m²
                             </Typography>
                             <Typography variant="caption" color="text.secondary">
-                              Высота потолка: {orderRoom.room.ceiling_height_m} м
+                              Ceiling Height: {orderRoom.room.ceiling_height_m} m
                             </Typography>
                             <Typography variant="caption" color="primary" fontWeight={600}>
-                              Стоимость: ${calculateCost(
+                              Cost: ${calculateCost(
                                 orderRoom.room.area_m2,
                                 orderRoom.room.ceiling_height_m || 0,
                                 orderRoom.device_types || []
@@ -331,7 +331,7 @@ export function OrderModal({ open, order, onClose }: OrderModalProps) {
                             {orderRoom.device_types && orderRoom.device_types.length > 0 && (
                               <Box sx={{ mt: 1 }}>
                                 <Typography variant="caption" color="text.secondary" display="block" gutterBottom>
-                                  Устройства:
+                                  Devices:
                                 </Typography>
                                 <Stack direction="row" spacing={0.5} flexWrap="wrap">
                                   {orderRoom.device_types.map((deviceType) => (
@@ -353,7 +353,7 @@ export function OrderModal({ open, order, onClose }: OrderModalProps) {
                 </Grid>
                 <Box sx={{ mt: 2, p: 2, bgcolor: 'background.neutral', borderRadius: 1 }}>
                   <Typography variant="subtitle2">
-                    Общая стоимость: <strong>${totalCost.toFixed(2)}</strong>
+                    Total Cost: <strong>${totalCost.toFixed(2)}</strong>
                   </Typography>
                 </Box>
               </Box>
@@ -361,11 +361,11 @@ export function OrderModal({ open, order, onClose }: OrderModalProps) {
 
             <Divider />
 
-            {/* Устройства (если заказ активен) */}
+            {/* Devices (if order is active) */}
             {order.status === 'ACTIVE' && order.devices && order.devices.length > 0 && (
               <Box>
                 <Typography variant="subtitle1" gutterBottom>
-                  Устройства ({order.devices.length})
+                  Devices ({order.devices.length})
                 </Typography>
                 <Grid container spacing={2}>
                   {order.devices.map((device) => (
@@ -375,11 +375,11 @@ export function OrderModal({ open, order, onClose }: OrderModalProps) {
                           <Stack spacing={1}>
                             <Typography variant="subtitle2">{device.device_type.name}</Typography>
                             <Typography variant="caption" color="text.secondary">
-                              Статус: {device.status}
+                              Status: {device.status}
                             </Typography>
                             {device.room && (
                               <Typography variant="caption" color="text.secondary">
-                                Комната: {device.room.name}
+                                Room: {device.room.name}
                               </Typography>
                             )}
                           </Stack>
@@ -402,11 +402,11 @@ export function OrderModal({ open, order, onClose }: OrderModalProps) {
             disabled={paying}
             startIcon={paying ? <Iconify icon="solar:loading-bold" /> : <Iconify icon="solar:card-bold" />}
           >
-            {paying ? 'Оплата...' : 'Оплатить'}
+            {paying ? 'Processing...' : 'Pay'}
           </Button>
         )}
         <Button onClick={onClose} disabled={paying}>
-          Закрыть
+          Close
         </Button>
       </DialogActions>
 

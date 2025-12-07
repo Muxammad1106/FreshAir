@@ -205,7 +205,7 @@ export function CreateOrderModal({ open, onClose, onOrderCreated }: CreateOrderM
           services: r.services,
         })),
       });
-      alert(`Пожалуйста, заполните все поля для комнат: ${invalidRooms.join(', ')}`);
+      alert(`Please fill in all fields for rooms: ${invalidRooms.join(', ')}`);
       return;
     }
 
@@ -306,7 +306,7 @@ export function CreateOrderModal({ open, onClose, onOrderCreated }: CreateOrderM
     >
       <DialogTitle>
         <Stack direction="row" justifyContent="space-between" alignItems="center">
-          <Typography variant="h6">Создание заказа</Typography>
+          <Typography variant="h6">Create Order</Typography>
           <IconButton onClick={onClose}>
             <Iconify icon="solar:close-bold" />
           </IconButton>
@@ -318,13 +318,13 @@ export function CreateOrderModal({ open, onClose, onOrderCreated }: CreateOrderM
           <Stack spacing={3}>
             {orderError && (
               <Alert severity="error">
-                Ошибка при создании заказа. Попробуйте еще раз.
+                Error creating order. Please try again.
               </Alert>
             )}
 
             {createdOrder && (
               <Alert severity="success">
-                Заказ успешно создан!
+                Order created successfully!
               </Alert>
             )}
 
@@ -332,7 +332,7 @@ export function CreateOrderModal({ open, onClose, onOrderCreated }: CreateOrderM
               <Box key={roomIndex} sx={{ p: 2, border: '1px solid', borderColor: 'divider', borderRadius: 1 }}>
                 <Stack spacing={2}>
                   <Stack direction="row" justifyContent="space-between" alignItems="center">
-                    <Typography variant="subtitle1">Комната {roomIndex + 1}</Typography>
+                    <Typography variant="subtitle1">Room {roomIndex + 1}</Typography>
                     {rooms.length > 1 && (
                       <IconButton
                         color="error"
@@ -345,7 +345,7 @@ export function CreateOrderModal({ open, onClose, onOrderCreated }: CreateOrderM
                   </Stack>
 
                   <TextField
-                    label="Название помещения"
+                    label="Room Name"
                     value={room.name}
                     onChange={(e) => handleRoomChange(roomIndex, 'name', e.target.value)}
                     fullWidth
@@ -354,21 +354,21 @@ export function CreateOrderModal({ open, onClose, onOrderCreated }: CreateOrderM
                   />
 
                   <FormControl fullWidth required size="small">
-                    <InputLabel>Тип помещения</InputLabel>
+                    <InputLabel>Room Type</InputLabel>
                     <Select
                       value={room.room_type}
-                      label="Тип помещения"
+                      label="Room Type"
                       onChange={(e) => handleRoomChange(roomIndex, 'room_type', e.target.value)}
                     >
-                      <MenuItem value="HOME">Дом</MenuItem>
-                      <MenuItem value="COMMERCIAL">Коммерческое</MenuItem>
-                      <MenuItem value="INDUSTRIAL">Большое предприятие</MenuItem>
+                      <MenuItem value="HOME">Home</MenuItem>
+                      <MenuItem value="COMMERCIAL">Commercial</MenuItem>
+                      <MenuItem value="INDUSTRIAL">Large Enterprise</MenuItem>
                     </Select>
                   </FormControl>
 
                   <Stack direction="row" spacing={2}>
                     <TextField
-                      label="Площадь (м²)"
+                      label="Area (m²)"
                       type="number"
                       value={room.area_m2 || ''}
                       onChange={(e) => handleRoomChange(roomIndex, 'area_m2', parseFloat(e.target.value) || 0)}
@@ -378,7 +378,7 @@ export function CreateOrderModal({ open, onClose, onOrderCreated }: CreateOrderM
                       inputProps={{ min: 0, step: 0.1 }}
                     />
                     <TextField
-                      label="Высота потолка (м)"
+                      label="Ceiling Height (m)"
                       type="number"
                       value={room.ceiling_height_m || ''}
                       onChange={(e) => handleRoomChange(roomIndex, 'ceiling_height_m', parseFloat(e.target.value) || 0)}
@@ -391,14 +391,14 @@ export function CreateOrderModal({ open, onClose, onOrderCreated }: CreateOrderM
 
                   {room.area_m2 > 0 && room.ceiling_height_m > 0 && room.services.length > 0 && (
                     <Typography variant="caption" color="text.secondary">
-                      Стоимость: ${calculateCost(room.area_m2, room.ceiling_height_m, room.services)}
+                      Cost: ${calculateCost(room.area_m2, room.ceiling_height_m, room.services)}
                     </Typography>
                   )}
 
                   <Divider />
 
                   <Typography variant="body2" fontWeight={600}>
-                    Выберите услуги
+                    Select Services
                   </Typography>
 
                   <Stack spacing={1}>
@@ -412,9 +412,9 @@ export function CreateOrderModal({ open, onClose, onOrderCreated }: CreateOrderM
                       }
                       label={
                         <Stack direction="row" spacing={1} alignItems="center">
-                          <Typography>Очистка воздуха</Typography>
+                          <Typography>Air Cleaning</Typography>
                           <Typography variant="caption" color="text.secondary">
-                            (50 центов за 5 м³)
+                            ($0.50 per 5 m³)
                           </Typography>
                         </Stack>
                       }
@@ -430,9 +430,9 @@ export function CreateOrderModal({ open, onClose, onOrderCreated }: CreateOrderM
                       }
                       label={
                         <Stack direction="row" spacing={1} alignItems="center">
-                          <Typography>Увлажнение</Typography>
+                          <Typography>Humidification</Typography>
                           <Typography variant="caption" color="text.secondary">
-                            (50 центов за 5 м³)
+                            ($0.50 per 5 m³)
                           </Typography>
                         </Stack>
                       }
@@ -441,7 +441,7 @@ export function CreateOrderModal({ open, onClose, onOrderCreated }: CreateOrderM
                     {room.services.includes('cleaning') && room.services.includes('humidifying') ? (
                       <Box sx={{ pl: 4 }}>
                         <Typography variant="body2" color="success.main">
-                          Арома добавлен в подарок
+                          Aroma added as a bonus
                         </Typography>
                       </Box>
                     ) : (
@@ -456,9 +456,9 @@ export function CreateOrderModal({ open, onClose, onOrderCreated }: CreateOrderM
                         }
                         label={
                           <Stack direction="row" spacing={1} alignItems="center">
-                            <Typography>Арома</Typography>
+                            <Typography>Aroma</Typography>
                             <Typography variant="caption" color="text.secondary">
-                              (25 центов за 5 м³)
+                              ($0.25 per 5 m³)
                             </Typography>
                           </Stack>
                         }
@@ -475,13 +475,13 @@ export function CreateOrderModal({ open, onClose, onOrderCreated }: CreateOrderM
               onClick={handleAddRoom}
               fullWidth
             >
-              Добавить еще комнату
+              Add Another Room
             </Button>
 
             {totalCost > 0 && (
               <Box sx={{ p: 2, bgcolor: 'background.neutral', borderRadius: 1 }}>
                 <Typography variant="subtitle2">
-                  Общая стоимость: <strong>${totalCost.toFixed(2)}</strong>
+                  Total Cost: <strong>${totalCost.toFixed(2)}</strong>
                 </Typography>
               </Box>
             )}
@@ -490,13 +490,13 @@ export function CreateOrderModal({ open, onClose, onOrderCreated }: CreateOrderM
       </DialogContent>
 
       <DialogActions>
-        <Button onClick={onClose}>Отмена</Button>
+        <Button onClick={onClose}>Cancel</Button>
         <Button
           variant="contained"
           onClick={handleSubmit}
           disabled={orderLoading || isSubmitting}
         >
-          {orderLoading || isSubmitting ? 'Создание...' : 'Создать заказ'}
+          {orderLoading || isSubmitting ? 'Creating...' : 'Create Order'}
         </Button>
       </DialogActions>
     </Dialog>

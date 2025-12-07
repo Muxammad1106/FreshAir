@@ -46,16 +46,16 @@ export function RoomOrderForm() {
     },
   ]);
 
-  // Загружаем типы устройств
+  // Load device types
   const { data: deviceTypes, loading: deviceTypesLoading, error: deviceTypesError } = useGet<DeviceType[], any>(
     API_ENDPOINTS.core.customer.deviceTypes,
     {
       transformResponse: (response) => {
-        // API может вернуть либо массив напрямую, либо объект с results
+        // API may return either an array directly or an object with results
         if (Array.isArray(response.data)) {
           return response.data;
         }
-        // Если это объект с results (пагинация)
+        // If it's an object with results (pagination)
         if (response.data && typeof response.data === 'object' && 'results' in response.data) {
           return (response.data as PaginatedResponse<DeviceType>).results || [];
         }
@@ -65,13 +65,13 @@ export function RoomOrderForm() {
     }
   );
 
-  // Создание заказа
+  // Create order
   const { loading: orderLoading, execute: createOrder, error: orderError, data: createdOrder } = usePost(
     API_ENDPOINTS.core.customer.orders,
     {
       immediate: false,
       onSuccess: (data) => {
-        // После успешного создания заказа обновляем страницу через небольшую задержку
+        // After successfully creating an order, refresh the page after a short delay
         setTimeout(() => {
           window.location.reload();
         }, 1000);
@@ -116,7 +116,7 @@ export function RoomOrderForm() {
   };
 
   const handleSubmit = async () => {
-    // Валидация
+    // Validation
     const hasInvalidRoom = rooms.some(
       (room) =>
         !room.name || !room.area_m2 || !room.ceiling_height_m || room.device_type_ids.length === 0
@@ -125,7 +125,7 @@ export function RoomOrderForm() {
       return;
     }
 
-    // Формируем данные для отправки
+    // Prepare data for submission
     const roomsData = rooms.map((room) => ({
       name: room.name,
       room_type: room.room_type,
@@ -141,13 +141,13 @@ export function RoomOrderForm() {
     });
   };
 
-  // Фильтруем типы устройств для удобства
+  // Filter device types for convenience
   const purifierTypes = deviceTypes?.filter((dt) => dt.device_category === 'PURIFIER') || [];
   const comboTypes = deviceTypes?.filter((dt) => dt.device_category === 'COMBO') || [];
   const humidifierTypes = deviceTypes?.filter((dt) => dt.device_category === 'HUMIDIFIER') || [];
   const aromaTypes = deviceTypes?.filter((dt) => dt.device_category === 'AROMA') || [];
 
-  // Форматируем цену
+  // Format price
   const formatPrice = (price?: string | number) => {
     if (!price) return '';
     const numPrice = typeof price === 'string' ? parseFloat(price) : price;
@@ -156,26 +156,26 @@ export function RoomOrderForm() {
 
   return (
     <Stack spacing={3}>
-      <Typography variant="h4">Создание заказа</Typography>
+      <Typography variant="h4">Create Order</Typography>
       <Typography variant="body2" color="text.secondary">
-        Заполните информацию о помещениях и выберите устройства для установки
+        Fill in room information and select devices for installation
       </Typography>
 
       {orderError && (
         <Alert severity="error" sx={{ mb: 2 }}>
-          Ошибка при создании заказа. Попробуйте еще раз.
+          Error creating order. Please try again.
         </Alert>
       )}
 
       {deviceTypesError && (
         <Alert severity="error" sx={{ mb: 2 }}>
-          Ошибка при загрузке устройств. Попробуйте обновить страницу.
+          Error loading devices. Please refresh the page.
         </Alert>
       )}
 
       {createdOrder && (
         <Alert severity="success" sx={{ mb: 2 }}>
-          Заказ успешно создан! Страница обновится через секунду...
+          Order created successfully! The page will refresh in a second...
         </Alert>
       )}
 
@@ -184,7 +184,7 @@ export function RoomOrderForm() {
           <CardContent>
             <Stack spacing={3}>
               <Stack direction="row" justifyContent="space-between" alignItems="center">
-                <Typography variant="h6">Комната {roomIndex + 1}</Typography>
+                <Typography variant="h6">Room {roomIndex + 1}</Typography>
                 {rooms.length > 1 && (
                   <IconButton
                     color="error"
@@ -197,7 +197,7 @@ export function RoomOrderForm() {
               </Stack>
 
               <TextField
-                label="Название помещения"
+                label="Room Name"
                 value={room.name}
                 onChange={(e) => handleRoomChange(roomIndex, 'name', e.target.value)}
                 fullWidth
@@ -205,21 +205,21 @@ export function RoomOrderForm() {
               />
 
               <FormControl fullWidth required>
-                <InputLabel>Тип помещения</InputLabel>
+                <InputLabel>Room Type</InputLabel>
                 <Select
                   value={room.room_type}
-                  label="Тип помещения"
+                  label="Room Type"
                   onChange={(e) => handleRoomChange(roomIndex, 'room_type', e.target.value)}
                 >
-                  <MenuItem value="HOME">Дом</MenuItem>
-                  <MenuItem value="COMMERCIAL">Коммерческое</MenuItem>
-                  <MenuItem value="INDUSTRIAL">Большое предприятие</MenuItem>
+                  <MenuItem value="HOME">Home</MenuItem>
+                  <MenuItem value="COMMERCIAL">Commercial</MenuItem>
+                  <MenuItem value="INDUSTRIAL">Large Enterprise</MenuItem>
                 </Select>
               </FormControl>
 
               <Stack direction="row" spacing={2}>
                 <TextField
-                  label="Площадь (м²)"
+                  label="Area (m²)"
                   type="number"
                   value={room.area_m2 || ''}
                   onChange={(e) => handleRoomChange(roomIndex, 'area_m2', parseFloat(e.target.value) || 0)}
@@ -228,7 +228,7 @@ export function RoomOrderForm() {
                   inputProps={{ min: 0, step: 0.1 }}
                 />
                 <TextField
-                  label="Высота потолка (м)"
+                  label="Ceiling Height (m)"
                   type="number"
                   value={room.ceiling_height_m || ''}
                   onChange={(e) => handleRoomChange(roomIndex, 'ceiling_height_m', parseFloat(e.target.value) || 0)}
@@ -240,35 +240,35 @@ export function RoomOrderForm() {
 
               <Divider />
 
-              <Typography variant="subtitle2">Выберите устройства</Typography>
+              <Typography variant="subtitle2">Select Devices</Typography>
 
               {deviceTypesLoading && (
                 <Typography variant="body2" color="text.secondary">
-                  Загрузка устройств...
+                  Loading devices...
                 </Typography>
               )}
 
               {!deviceTypesLoading && (!deviceTypes || deviceTypes.length === 0) && (
                 <Alert severity="warning">
-                  Устройства не найдены. Обратитесь к администратору.
-                  {deviceTypesError && ` Ошибка: ${JSON.stringify(deviceTypesError)}`}
+                  No devices found. Please contact the administrator.
+                  {deviceTypesError && ` Error: ${JSON.stringify(deviceTypesError)}`}
                 </Alert>
               )}
 
-              {/* Показываем все доступные устройства для отладки */}
+              {/* Show all available devices for debugging */}
               {deviceTypes && deviceTypes.length > 0 && (
                 <Box sx={{ mt: 2, p: 2, bgcolor: 'background.neutral', borderRadius: 1 }}>
                   <Typography variant="caption" color="text.secondary">
-                    Всего доступно устройств: {deviceTypes.length}
+                    Total devices available: {deviceTypes.length}
                   </Typography>
                 </Box>
               )}
 
-              {/* Очиститель */}
+              {/* Purifier */}
               {purifierTypes.length > 0 && (
                 <Box sx={{ mb: 2 }}>
                   <Typography variant="body2" sx={{ mb: 1, fontWeight: 600 }}>
-                    Только очистка воздуха
+                    Air Purification Only
                   </Typography>
                   <Stack spacing={1}>
                     {purifierTypes.map((deviceType) => (
@@ -283,7 +283,7 @@ export function RoomOrderForm() {
                         label={
                           <Stack direction="row" spacing={1} alignItems="center">
                             <Typography>
-                              {deviceType.name} (до {deviceType.recommended_max_area_m2} м²)
+                              {deviceType.name} (up to {deviceType.recommended_max_area_m2} m²)
                             </Typography>
                             {deviceType.price_usd && (
                               <Typography variant="body2" color="primary" sx={{ fontWeight: 600 }}>
@@ -298,11 +298,11 @@ export function RoomOrderForm() {
                 </Box>
               )}
 
-              {/* Комбо (очистка + увлажнение + арома) */}
+              {/* Combo (purification + humidification + aroma) */}
               {comboTypes.length > 0 && (
                 <Box sx={{ mb: 2 }}>
                   <Typography variant="body2" sx={{ mb: 1, fontWeight: 600 }}>
-                    Очистка + увлажнение + арома
+                    Purification + Humidification + Aroma
                   </Typography>
                   <Stack spacing={1}>
                     {comboTypes.map((deviceType) => (
@@ -317,7 +317,7 @@ export function RoomOrderForm() {
                         label={
                           <Stack direction="row" spacing={1} alignItems="center">
                             <Typography>
-                              {deviceType.name} (до {deviceType.recommended_max_area_m2} м²)
+                              {deviceType.name} (up to {deviceType.recommended_max_area_m2} m²)
                             </Typography>
                             {deviceType.price_usd && (
                               <Typography variant="body2" color="primary" sx={{ fontWeight: 600 }}>
@@ -332,11 +332,11 @@ export function RoomOrderForm() {
                 </Box>
               )}
 
-              {/* Увлажнитель (если есть) */}
+              {/* Humidifier (if available) */}
               {humidifierTypes.length > 0 && (
                 <Box sx={{ mb: 2 }}>
                   <Typography variant="body2" sx={{ mb: 1, fontWeight: 600 }}>
-                    Только увлажнение
+                    Humidification Only
                   </Typography>
                   <Stack spacing={1}>
                     {humidifierTypes.map((deviceType) => (
@@ -351,7 +351,7 @@ export function RoomOrderForm() {
                         label={
                           <Stack direction="row" spacing={1} alignItems="center">
                             <Typography>
-                              {deviceType.name} (до {deviceType.recommended_max_area_m2} м²)
+                              {deviceType.name} (up to {deviceType.recommended_max_area_m2} m²)
                             </Typography>
                             {deviceType.price_usd && (
                               <Typography variant="body2" color="primary" sx={{ fontWeight: 600 }}>
@@ -366,11 +366,11 @@ export function RoomOrderForm() {
                 </Box>
               )}
 
-              {/* Ароматизатор (отдельно) */}
+              {/* Aromatizer (separate) */}
               {aromaTypes.length > 0 && (
                 <Box sx={{ mb: 2 }}>
                   <Typography variant="body2" sx={{ mb: 1, fontWeight: 600 }}>
-                    Ароматизатор (отдельно)
+                    Aromatizer (Separate)
                   </Typography>
                   <Stack spacing={1}>
                     {aromaTypes.map((deviceType) => (
@@ -407,7 +407,7 @@ export function RoomOrderForm() {
         startIcon={<Iconify icon="solar:add-circle-bold" />}
         onClick={handleAddRoom}
       >
-        Добавить еще комнату
+        Add Another Room
       </Button>
 
       <Button
@@ -417,7 +417,7 @@ export function RoomOrderForm() {
         disabled={orderLoading || deviceTypesLoading}
         fullWidth
       >
-        {orderLoading ? 'Создание заказа...' : 'Создать заказ'}
+        {orderLoading ? 'Creating Order...' : 'Create Order'}
       </Button>
     </Stack>
   );

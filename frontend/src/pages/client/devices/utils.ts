@@ -1,7 +1,7 @@
 // ----------------------------------------------------------------------
 
 /**
- * Получить цвет для категории устройства
+ * Get color for device category
  */
 export function getDeviceCategoryColor(category: string): 'primary' | 'info' | 'secondary' | 'success' | 'default' {
   switch (category) {
@@ -19,18 +19,18 @@ export function getDeviceCategoryColor(category: string): 'primary' | 'info' | '
 }
 
 /**
- * Получить русское название категории устройства
+ * Get device category label in English
  */
 export function getDeviceCategoryLabel(category: string): string {
   switch (category) {
     case 'PURIFIER':
-      return 'Очиститель';
+      return 'Purifier';
     case 'HUMIDIFIER':
-      return 'Увлажнитель';
+      return 'Humidifier';
     case 'AROMA':
-      return 'Ароматизатор';
+      return 'Aromatizer';
     case 'COMBO':
-      return 'Комбо';
+      return 'Combo';
     default:
       return category;
   }
