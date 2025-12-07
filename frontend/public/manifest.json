@@ -1,6 +1,6 @@
 {
-  "name": "FreshAir",
-  "short_name": "FreshAir",
+  "name": "Airly",
+  "short_name": "Airly",
   "display": "standalone",
   "start_url": "/",
   "theme_color": "#000000",

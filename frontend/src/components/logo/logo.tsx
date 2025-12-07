@@ -115,7 +115,7 @@ const Logo = forwardRef<HTMLDivElement, LogoProps>(
           </svg>
         </Box>
 
-        {/* Текст FreshAir */}
+        {/* Текст Airly */}
         <Typography
           variant="h6"
           sx={{
@@ -128,7 +128,7 @@ const Logo = forwardRef<HTMLDivElement, LogoProps>(
             display: { xs: 'none', sm: 'block' },
           }}
         >
-          FreshAir
+          Airly
         </Typography>
       </Box>
     );

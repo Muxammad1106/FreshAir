@@ -217,7 +217,7 @@ TOKEN_EXPIRATION = 7200  # seconds
 # OPENAI
 OPENAI_API_KEY = os.environ.get('OPENAI_API_KEY', '')
 
-COMPANY_NAME = 'FreshAIR'
+COMPANY_NAME = 'Airly'
 DEFAULT_FIXTURES = [
     'company',
     'users_and_tokens',

@@ -36,7 +36,7 @@ const authJwt = {
     {
       path: 'register',
       element: (
-        <AuthClassicLayout title="Join FreshAir - Clean Air Solutions">
+        <AuthClassicLayout title="Join Airly - Clean Air Solutions">
           <JwtRegisterPage />
         </AuthClassicLayout>
       ),

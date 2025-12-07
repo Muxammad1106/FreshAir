@@ -1,6 +1,6 @@
 {
-  "name": "@freshair/frontend",
-  "author": "FreshAir",
+  "name": "@airly/frontend",
+  "author": "Airly",
   "version": "5.0.0",
   "description": "Simple Cra & TypeScript",
   "private": true,
