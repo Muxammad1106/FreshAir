@@ -102,3 +102,4 @@ export function InvestmentAnalyticsCard({ investment, analytics }: InvestmentAna
   );
 }
 
+

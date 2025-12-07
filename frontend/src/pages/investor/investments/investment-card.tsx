@@ -160,3 +160,4 @@ export function InvestmentCard({ investment, onClick }: InvestmentCardProps) {
   );
 }
 
+

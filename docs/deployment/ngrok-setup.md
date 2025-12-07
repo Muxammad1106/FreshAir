@@ -91,3 +91,4 @@ sudo systemctl restart freshair-backend
 - Для production используйте реальный домен, не ngrok
 - Страница предупреждения ngrok - это нормально для free tier
 
+

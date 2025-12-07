@@ -348,3 +348,4 @@ export function InvestmentModal({ open, investment, onClose }: InvestmentModalPr
   );
 }
 
+

@@ -6,3 +6,4 @@ ADD COLUMN IF NOT EXISTS coverage_area_m2 DOUBLE PRECISION;
 
 COMMENT ON COLUMN core_device_types.coverage_area_m2 IS 'Площадь покрытия устройства в м²';
 
+

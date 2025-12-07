@@ -1,6 +1,6 @@
 {
-  "name": "@minimal-kit/simple-cra-ts",
-  "author": "Minimals",
+  "name": "@freshair/frontend",
+  "author": "FreshAir",
   "version": "5.0.0",
   "description": "Simple Cra & TypeScript",
   "private": true,

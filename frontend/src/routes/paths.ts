@@ -10,7 +10,6 @@ const ROOTS = {
 // ----------------------------------------------------------------------
 
 export const paths = {
-  minimalUI: 'https://mui.com/store/items/minimal-dashboard/',
   // HOME
   home: {
     root: ROOTS.HOME,

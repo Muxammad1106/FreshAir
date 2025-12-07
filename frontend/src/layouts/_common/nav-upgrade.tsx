@@ -8,6 +8,7 @@ import Typography from '@mui/material/Typography';
 import { useAuthContext } from 'src/auth/hooks';
 // routes
 import { paths } from 'src/routes/paths';
+import { RouterLink } from 'src/routes/components';
 // locales
 // components
 import Label from 'src/components/label';
@@ -66,8 +67,8 @@ export default function NavUpgrade() {
           </Typography>
         </Stack>
 
-        <Button variant="contained" href={paths.minimalUI} target="_blank" rel="noopener">
-          Upgrade to Pro
+        <Button variant="outlined" component={RouterLink} href={paths.client.settings}>
+          Настройки
         </Button>
       </Stack>
     </Stack>

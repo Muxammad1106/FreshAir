@@ -83,3 +83,4 @@ sudo -u postgres psql -c "\du" | grep suv && echo "✅ User exists!" || echo "�
 echo ""
 echo "✅ Setup complete! You can now run ./start.sh"
 
+

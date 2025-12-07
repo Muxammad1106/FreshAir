@@ -85,7 +85,7 @@ export const _notifications = [...Array(9)].map((_, index) => ({
   title:
     (index === 0 && `<p><strong>Deja Brady</strong> sent you a friend request</p>`) ||
     (index === 1 &&
-      `<p><strong>Jayvon Hull</strong> mentioned you in <strong><a href='#'>Minimal UI</a></strong></p>`) ||
+      `<p><strong>Jayvon Hull</strong> mentioned you in <strong><a href='#'>FreshAir</a></strong></p>`) ||
     (index === 2 &&
       `<p><strong>Lainey Davidson</strong> added file to <strong><a href='#'>File Manager</a></strong></p>`) ||
     (index === 3 &&
@@ -248,6 +248,6 @@ export const _testimonials = [
     postedDate: _mock.time(6),
     ratingNumber: _mock.number.rating(6),
     avatarUrl: _mock.image.avatar(6),
-    content: `CEO of Codealy.io here. We’ve built a developer assessment platform that makes sense - tasks are based on git repositories and run in virtual machines. We automate the pain points - storing candidates code, running it and sharing test results with the whole team, remotely. Bought this template as we need to provide an awesome dashboard for our early customers. I am super happy with purchase. The code is just as good as the design. Thanks!`,
+    content: `FreshAir has transformed our office environment! The air quality monitoring and automatic purification system works flawlessly. Our team noticed improved productivity and fewer sick days. The dashboard is intuitive and the device management is seamless. Highly recommend for any business looking to improve indoor air quality!`,
   },
 ];
