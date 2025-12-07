@@ -22,8 +22,8 @@ export default function InvestorLandingLayout({ children }: Props) {
     <>
       <Header
         navItems={investorNavItems}
-        ctaLabel="Назад"
-        ctaHref="/"
+        ctaLabel="Become Customer"
+        ctaHref={paths.home.root}
         signInRole="investor"
       />
       <Box component="main">{children}</Box>

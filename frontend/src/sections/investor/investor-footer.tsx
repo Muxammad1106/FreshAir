@@ -28,7 +28,7 @@ export default function InvestorFooter() {
             <Stack spacing={2}>
               <Logo />
               <Typography variant="body2" color="text.secondary">
-                Инвестируйте в чистый воздух. Пассивный доход от аренды очистителей воздуха.
+                Airly - invest in clean air. Passive income from air purifier rentals with full transparency and guarantees.
               </Typography>
               <Stack direction="row" spacing={1}>
                 <Link
@@ -61,14 +61,14 @@ export default function InvestorFooter() {
 
           <Grid item xs={12} md={2}>
             <Typography variant="subtitle2" sx={{ mb: 2 }}>
-              Инвесторам
+              For Investors
             </Typography>
             <Stack spacing={1}>
               <Link component={RouterLink} href="/investor-landing" color="inherit" variant="body2">
-                Обзор
+                Overview
               </Link>
               <Link component={RouterLink} href="/investor-landing" color="inherit" variant="body2">
-                Модель дохода
+                Income Model
               </Link>
               <Link component={RouterLink} href="/investor-landing" color="inherit" variant="body2">
                 FAQ
@@ -78,37 +78,37 @@ export default function InvestorFooter() {
 
           <Grid item xs={12} md={2}>
             <Typography variant="subtitle2" sx={{ mb: 2 }}>
-              Поддержка
+              Support
             </Typography>
             <Stack spacing={1}>
               <Link component={RouterLink} href="/investor-landing" color="inherit" variant="body2">
                 FAQ
               </Link>
               <Link component={RouterLink} href="/investor-landing" color="inherit" variant="body2">
-                Помощь
+                Help
               </Link>
               <Link component={RouterLink} href="/" color="inherit" variant="body2">
-                Для клиентов
+                For Customers
               </Link>
             </Stack>
           </Grid>
 
           <Grid item xs={12} md={4}>
             <Typography variant="subtitle2" sx={{ mb: 2 }}>
-              Контакты
+              Contact
             </Typography>
             <Stack spacing={1}>
               <Stack direction="row" spacing={1} alignItems="center">
                 <Iconify icon="eva:email-fill" width={20} />
-                <Typography variant="body2">investors@airpurifier.ru</Typography>
+                <Typography variant="body2">monday@airly.com</Typography>
               </Stack>
               <Stack direction="row" spacing={1} alignItems="center">
                 <Iconify icon="eva:phone-fill" width={20} />
-                <Typography variant="body2">+7 (800) 123-45-67</Typography>
+                <Typography variant="body2">+998914418776</Typography>
               </Stack>
               <Stack direction="row" spacing={1} alignItems="center">
                 <Iconify icon="eva:pin-fill" width={20} />
-                <Typography variant="body2">Москва, ул. Примерная, 1</Typography>
+                <Typography variant="body2">Bukhara City</Typography>
               </Stack>
             </Stack>
           </Grid>
@@ -118,14 +118,14 @@ export default function InvestorFooter() {
 
         <Stack direction={{ xs: 'column', md: 'row' }} justifyContent="space-between" spacing={2}>
           <Typography variant="body2" color="text.secondary">
-            © 2024 Air Purifier. Все права защищены.
+            © 2024 Airly. Все права защищены.
           </Typography>
           <Stack direction="row" spacing={3}>
             <Link component={RouterLink} href="/investor-landing" color="inherit" variant="body2">
-              Политика конфиденциальности
+              Privacy Policy
             </Link>
             <Link component={RouterLink} href="/investor-landing" color="inherit" variant="body2">
-              Условия использования
+              Terms of Service
             </Link>
           </Stack>
         </Stack>

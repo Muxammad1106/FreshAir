@@ -15,18 +15,18 @@ import { MotionContainer, varFade } from 'src/components/animate';
 
 const STEPS = [
   {
-    title: 'Выберите тариф',
-    description: 'Выберите подходящий план подписки',
+    title: 'Choose Your Plan',
+    description: 'Select the subscription plan that fits your needs',
     icon: 'solar:check-circle-bold',
   },
   {
-    title: 'Мы доставим устройство',
-    description: 'Бесплатная доставка и установка',
+    title: 'We Deliver & Install',
+    description: 'Free delivery and professional installation',
     icon: 'solar:delivery-bold',
   },
   {
-    title: 'Вы пользуетесь — мы обслуживаем',
-    description: 'Мы следим за устройством и меняем фильтры',
+    title: 'You Use, We Maintain',
+    description: 'We monitor your device and replace filters automatically',
     icon: 'solar:settings-bold',
   },
 ];
@@ -35,12 +35,12 @@ const STEPS = [
 
 export default function HomeHowItWorks() {
   return (
-    <Box sx={{ py: { xs: 10, md: 15 }, bgcolor: 'background.default' }}>
+    <Box id="how-it-works" sx={{ py: { xs: 10, md: 15 }, bgcolor: 'background.default' }}>
       <Container component={MotionContainer}>
         <Stack spacing={5} alignItems="center">
           <m.div variants={varFade().inUp}>
             <Typography variant="h2" sx={{ textAlign: 'center', mb: 2 }}>
-              Как это работает
+              How It Works
             </Typography>
           </m.div>
 

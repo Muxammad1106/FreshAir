@@ -15,23 +15,23 @@ import { MotionContainer, varFade } from 'src/components/animate';
 
 const STEPS = [
   {
-    title: 'Покупаете устройство',
-    description: 'Вы приобретаете очиститель воздуха по цене $300',
+    title: 'Buy a Device',
+    description: 'Purchase an air purifier starting from $100 (min investment) up to $1000 (max investment)',
     icon: 'solar:cart-bold',
   },
   {
-    title: 'Мы ставим его у подписчика',
-    description: 'Мы находим подписчика и устанавливаем устройство у него',
+    title: 'We Install at Subscriber',
+    description: 'We find a subscriber and install the device at their location',
     icon: 'solar:home-smile-bold',
   },
   {
-    title: 'Вы получаете ежемесячный доход',
-    description: 'Каждый месяц вы получаете $12-18 пассивного дохода',
+    title: 'Receive Monthly Income',
+    description: 'Every month you receive passive income based on 25% profit over 6 months',
     icon: 'solar:wallet-money-bold',
   },
   {
-    title: 'Полностью пассивный процесс',
-    description: 'Мы управляем всем процессом, вам не нужно ничего делать',
+    title: 'Fully Passive Process',
+    description: 'We manage everything, you don\'t need to do anything',
     icon: 'solar:chart-2-bold',
   },
 ];
@@ -40,12 +40,12 @@ const STEPS = [
 
 export default function InvestorHowItWorks() {
   return (
-    <Box sx={{ py: { xs: 10, md: 15 }, bgcolor: 'background.default' }}>
+    <Box id="how-it-works" sx={{ py: { xs: 10, md: 15 }, bgcolor: 'background.default' }}>
       <Container component={MotionContainer}>
         <Stack spacing={5} alignItems="center">
           <m.div variants={varFade().inUp}>
             <Typography variant="h2" sx={{ textAlign: 'center', mb: 2 }}>
-              Как это работает
+              How It Works
             </Typography>
           </m.div>
 

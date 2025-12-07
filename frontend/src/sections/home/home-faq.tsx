@@ -16,43 +16,43 @@ import { MotionContainer, varFade } from 'src/components/animate';
 
 const FAQS = [
   {
-    question: 'Как работает подписка?',
+    question: 'How does the subscription work?',
     answer:
-      'Вы выбираете тариф, мы доставляем очиститель воздуха, и вы платите фиксированную ежемесячную плату. Мы берем на себя обслуживание и замену фильтров.',
+      'You choose a plan, we deliver and install the air purifier, and you pay a fixed monthly fee. We handle all maintenance and filter replacements.',
   },
   {
-    question: 'Что входит в стоимость подписки?',
+    question: 'What is included in the subscription price?',
     answer:
-      'В стоимость входит сам очиститель воздуха, его установка, регулярное обслуживание, замена фильтров и техническая поддержка.',
+      'The subscription includes the air purifier device, installation, regular maintenance, filter replacements, and technical support.',
   },
   {
-    question: 'Можно ли отменить подписку?',
+    question: 'Can I cancel my subscription?',
     answer:
-      'Да, вы можете отменить подписку в любой момент. Мы заберем устройство, и вы больше не будете платить.',
+      'Yes, you can cancel your subscription at any time. We will pick up the device and you will stop paying.',
   },
   {
-    question: 'Как часто меняются фильтры?',
+    question: 'How often are filters replaced?',
     answer:
-      'Частота замены фильтров зависит от выбранного тарифа: Basic - раз в 6 месяцев, Standard - раз в 3 месяца, Premium - раз в месяц.',
+      'Filter replacement frequency depends on your plan: Basic - every 6 months, Standard - every 3 months.',
   },
   {
-    question: 'Что делать, если устройство сломается?',
+    question: 'What if the device breaks?',
     answer:
-      'Мы полностью отвечаем за работоспособность устройства. В случае поломки мы бесплатно отремонтируем или заменим его.',
+      'We are fully responsible for device functionality. In case of breakdown, we will repair or replace it free of charge.',
   },
   {
-    question: 'Есть ли минимальный срок подписки?',
-    answer: 'Нет, минимального срока нет. Вы можете отменить подписку в любой момент.',
+    question: 'Is there a minimum subscription period?',
+    answer: 'No, there is no minimum period. You can cancel your subscription at any time.',
   },
   {
-    question: 'Доставляете ли вы в регионы?',
+    question: 'Do you deliver to all regions?',
     answer:
-      'Да, мы доставляем по всей России. Стоимость доставки зависит от региона и включена в первый месяц подписки.',
+      'Yes, we deliver to all service areas. Delivery cost depends on the region and is included in the first month subscription.',
   },
   {
-    question: 'Как происходит установка?',
+    question: 'How does installation work?',
     answer:
-      'Наш специалист приедет к вам в удобное время, установит устройство, покажет как им пользоваться и настроит мониторинг.',
+      'Our specialist will come at your convenient time, install the device, show you how to use it, and set up monitoring.',
   },
 ];
 
@@ -66,12 +66,12 @@ export default function HomeFaq() {
   };
 
   return (
-    <Box sx={{ py: { xs: 10, md: 15 }, bgcolor: 'background.default' }}>
+    <Box id="faq" sx={{ py: { xs: 10, md: 15 }, bgcolor: 'background.default' }}>
       <Container component={MotionContainer}>
         <Stack spacing={5}>
           <m.div variants={varFade().inUp}>
             <Typography variant="h2" sx={{ textAlign: 'center', mb: 2 }}>
-              Часто задаваемые вопросы
+              Frequently Asked Questions
             </Typography>
           </m.div>
 

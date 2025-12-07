@@ -15,21 +15,21 @@ import { MotionContainer, varFade } from 'src/components/animate';
 
 const RISKS = [
   {
-    title: 'Гарантия обслуживания',
+    title: 'Maintenance Guarantee',
     description:
-      'Мы полностью отвечаем за обслуживание устройств. В случае поломки мы бесплатно ремонтируем или заменяем устройство.',
+      'We are fully responsible for device maintenance. In case of breakdown, we repair or replace the device free of charge.',
     icon: 'solar:shield-check-bold',
   },
   {
-    title: 'Полный мониторинг',
+    title: 'Full Monitoring',
     description:
-      'Вы получаете доступ к дашборду, где видите статус ваших устройств, доходность и все транзакции в реальном времени.',
+      'You get access to a dashboard where you can see the status of your devices, returns, and all transactions in real-time.',
     icon: 'solar:graph-up-bold',
   },
   {
-    title: 'Консервативные риски',
+    title: 'Conservative Risks',
     description:
-      'Мы работаем только с проверенными подписчиками, используем страховку и гарантируем минимальный уровень риска.',
+      'We work only with verified subscribers, use insurance, and guarantee minimal risk level.',
     icon: 'solar:verified-check-bold',
   },
 ];
@@ -43,10 +43,10 @@ export default function InvestorRisk() {
         <Stack spacing={5} alignItems="center">
           <m.div variants={varFade().inUp}>
             <Typography variant="h2" sx={{ textAlign: 'center', mb: 2 }}>
-              Риски и прозрачность
+              Risks & Transparency
             </Typography>
             <Typography variant="body1" color="text.secondary" sx={{ textAlign: 'center' }}>
-              Мы обеспечиваем максимальную защиту ваших инвестиций
+              We ensure maximum protection for your investments
             </Typography>
           </m.div>
 

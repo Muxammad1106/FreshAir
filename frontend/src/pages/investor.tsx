@@ -8,7 +8,7 @@ export default function InvestorPage() {
   return (
     <>
       <Helmet>
-        <title> Инвестируйте в чистый воздух | Air Purifier</title>
+        <title>Airly - Invest in Clean Air</title>
       </Helmet>
 
       <InvestorView />

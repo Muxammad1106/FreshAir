@@ -16,52 +16,52 @@ import { MotionContainer, varFade } from 'src/components/animate';
 
 const FAQS = [
   {
-    question: 'Какой минимальный размер инвестиции?',
-    answer: 'Минимальная инвестиция составляет $300 за одно устройство. Вы можете инвестировать в несколько устройств.',
+    question: 'What is the minimum investment amount?',
+    answer: 'The minimum investment is $100 per device. You can invest in multiple devices. Maximum investment per device is $1000.',
   },
   {
-    question: 'Как часто выплачивается доход?',
-    answer: 'Доход выплачивается ежемесячно на ваш счет. Обычно выплаты происходят в первых числах месяца.',
+    question: 'How often is income paid?',
+    answer: 'Income is paid monthly to your account. Payments usually occur in the first days of the month.',
   },
   {
-    question: 'Что происходит, если подписчик отменит подписку?',
+    question: 'What happens if a subscriber cancels their subscription?',
     answer:
-      'Мы сразу находим нового подписчика и переустанавливаем устройство. Ваш доход не прерывается.',
+      'We immediately find a new subscriber and reinstall the device. Your income is not interrupted.',
   },
   {
-    question: 'Могу ли я продать устройство обратно?',
+    question: 'Can I sell the device back?',
     answer:
-      'Да, вы можете продать устройство обратно компании в любой момент по остаточной стоимости.',
+      'Yes, you can sell the device back to the company at any time at residual value.',
   },
   {
-    question: 'Какие гарантии я получаю?',
+    question: 'What guarantees do I get?',
     answer:
-      'Мы гарантируем обслуживание устройств, поиск подписчиков и регулярные выплаты. Все это прописано в договоре.',
+      'We guarantee device maintenance, subscriber search, and regular payments. All of this is specified in the contract.',
   },
   {
-    question: 'Как я могу отслеживать свои инвестиции?',
+    question: 'How can I track my investments?',
     answer:
-      'Вы получаете доступ к личному кабинету инвестора, где видите все свои устройства, доходность и транзакции.',
+      'You get access to an investor dashboard where you can see all your devices, returns, and transactions.',
   },
   {
-    question: 'Есть ли налоги на доход?',
+    question: 'Are there taxes on income?',
     answer:
-      'Доход от инвестиций облагается налогом согласно законодательству. Мы предоставляем все необходимые документы для налоговой.',
+      'Investment income is subject to tax according to legislation. We provide all necessary documents for tax purposes.',
   },
   {
-    question: 'Что если устройство сломается?',
+    question: 'What if the device breaks?',
     answer:
-      'Мы полностью отвечаем за работоспособность. В случае поломки мы бесплатно ремонтируем или заменяем устройство.',
+      'We are fully responsible for functionality. In case of breakdown, we repair or replace the device free of charge.',
   },
   {
-    question: 'Могу ли я инвестировать в несколько устройств?',
+    question: 'Can I invest in multiple devices?',
     answer:
-      'Да, вы можете инвестировать в любое количество устройств. Каждое устройство приносит отдельный доход.',
+      'Yes, you can invest in any number of devices. Each device generates separate income.',
   },
   {
-    question: 'Как быстро я начну получать доход?',
+    question: 'How quickly will I start receiving income?',
     answer:
-      'После покупки устройства мы находим подписчика в течение 1-2 недель, и вы начинаете получать доход со следующего месяца.',
+      'After purchasing a device, we find a subscriber within 1-2 weeks, and you start receiving income from the next month.',
   },
 ];
 
@@ -75,12 +75,12 @@ export default function InvestorFaq() {
   };
 
   return (
-    <Box sx={{ py: { xs: 10, md: 15 }, bgcolor: 'background.neutral' }}>
+    <Box id="faq" sx={{ py: { xs: 10, md: 15 }, bgcolor: 'background.neutral' }}>
       <Container component={MotionContainer}>
         <Stack spacing={5}>
           <m.div variants={varFade().inUp}>
             <Typography variant="h2" sx={{ textAlign: 'center', mb: 2 }}>
-              Часто задаваемые вопросы
+              Frequently Asked Questions
             </Typography>
           </m.div>
 

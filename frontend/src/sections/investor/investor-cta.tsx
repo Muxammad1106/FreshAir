@@ -5,6 +5,9 @@ import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
+// routes
+import { paths } from 'src/routes/paths';
+import { RouterLink } from 'src/routes/components';
 // components
 import { MotionContainer, varFade } from 'src/components/animate';
 
@@ -30,7 +33,7 @@ export default function InvestorCta() {
                 fontSize: { xs: '2rem', md: '3rem' },
               }}
             >
-              Начните инвестировать прямо сейчас
+              Start Investing Now
             </Typography>
           </m.div>
 
@@ -44,12 +47,14 @@ export default function InvestorCta() {
                 mb: 5,
               }}
             >
-              Присоединяйтесь к инвесторам, которые уже получают пассивный доход от чистого воздуха
+              Join investors who are already receiving passive income from clean air
             </Typography>
           </m.div>
 
           <m.div variants={varFade().inUp}>
             <Button
+              component={RouterLink}
+              href={`${paths.auth.jwt.register}?role=investor`}
               size="large"
               variant="contained"
               sx={{
@@ -65,7 +70,7 @@ export default function InvestorCta() {
                 },
               }}
             >
-              Начать инвестировать
+              Become Investor
             </Button>
           </m.div>
         </Stack>

@@ -13,19 +13,19 @@ import { MotionContainer, varFade } from 'src/components/animate';
 
 const BENEFITS = [
   {
-    title: 'Низкая ежемесячная стоимость',
+    title: 'Low Monthly Cost',
     icon: 'solar:wallet-bold',
   },
   {
-    title: 'Без единовременной покупки',
+    title: 'No Upfront Purchase',
     icon: 'solar:card-bold',
   },
   {
-    title: 'Бесплатное обслуживание и фильтры',
+    title: 'Free Maintenance & Filters',
     icon: 'solar:shield-check-bold',
   },
   {
-    title: 'Smart мониторинг воздуха',
+    title: 'Smart Air Monitoring',
     icon: 'solar:graph-up-bold',
   },
 ];
@@ -39,7 +39,7 @@ export default function HomeBenefits() {
         <Stack spacing={5}>
           <m.div variants={varFade().inUp}>
             <Typography variant="h2" sx={{ textAlign: 'center', mb: 2 }}>
-              Преимущества
+              Benefits
             </Typography>
           </m.div>
 

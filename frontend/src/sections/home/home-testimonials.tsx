@@ -15,21 +15,21 @@ import { MotionContainer, varFade } from 'src/components/animate';
 
 const TESTIMONIALS = [
   {
-    name: 'Анна Иванова',
-    role: 'Москва',
-    content: 'Отличный сервис! Чистый воздух в доме, и не нужно думать о замене фильтров.',
+    name: 'Sarah Johnson',
+    role: 'New York',
+    content: 'Excellent service! Clean air at home, and I don\'t have to worry about replacing filters.',
     avatar: 'https://i.pravatar.cc/150?img=1',
   },
   {
-    name: 'Дмитрий Петров',
-    role: 'Санкт-Петербург',
-    content: 'Удобная подписка, все работает как часы. Рекомендую!',
+    name: 'Michael Chen',
+    role: 'San Francisco',
+    content: 'Convenient subscription, everything works like clockwork. Highly recommend!',
     avatar: 'https://i.pravatar.cc/150?img=2',
   },
   {
-    name: 'Мария Сидорова',
-    role: 'Казань',
-    content: 'Прекрасное решение для семьи. Дети дышат чистым воздухом.',
+    name: 'Emily Rodriguez',
+    role: 'Los Angeles',
+    content: 'Perfect solution for the family. Kids breathe clean air every day.',
     avatar: 'https://i.pravatar.cc/150?img=3',
   },
 ];
@@ -43,7 +43,7 @@ export default function HomeTestimonials() {
         <Stack spacing={5} alignItems="center">
           <m.div variants={varFade().inUp}>
             <Typography variant="h2" sx={{ textAlign: 'center', mb: 2 }}>
-              Отзывы клиентов
+              Customer Reviews
             </Typography>
           </m.div>
 
